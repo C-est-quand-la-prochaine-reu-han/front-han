@@ -1,279 +1,220 @@
 <template>
-	<div id="game-container">
-		<div v-if="gameState === 'menu'" id="menu">
-			<h1>Pong Game</h1>
-			<button @click="startGame">Start Game</button>
-		</div>
-		<div v-else-if="gameState === 'playing'" id="game">
-			<div id="ball" :style="ballStyle"></div>
-			<div id="paddle-left" :style="paddleLeftStyle"></div>
-			<div id="paddle-right" :style="paddleRightStyle"></div>
-			<div id="score">{{ scoreLeft }} - {{ scoreRight }}</div>
-			<div v-if="isPaused" id="pause-screen">
-				<h2>Game Paused</h2>
-				<p>Press ESC to resume</p>
-			</div>
-		</div>
-		<div v-else-if="gameState === 'gameOver'" id="game-over">
-			<h2>Game Over!</h2>
-			<p>{{ winner }} wins!</p>
-			<button @click="restartGame">Play Again</button>
-			<button @click="goToMenu">Main Menu</button>
-		</div>
-	</div>
+  <div class="game-container">
+    <canvas ref="gameCanvas" width="600" height="400"></canvas>
+    <div v-if="gamePaused" class="overlay pause-overlay">
+      <h2>Game Paused</h2>
+      <button @click="resumeGame">Resume</button>
+    </div>
+    <div v-if="gameOver" class="overlay game-over-overlay">
+      <h2>Game Over</h2>
+      <p>{{ winner }} wins!</p>
+      <button @click="$emit('restart-game')">Play Again</button>
+    </div>
+  </div>
 </template>
 
 <script>
-	import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
+export default {
+  emits: ['score-update', 'game-over', 'restart-game'],
+  data() {
+    return {
+      canvas: null,
+      ctx: null,
+      ball: { x: 300, y: 200, radius: 10, dx: 4, dy: 4 },
+      paddle1: { x: 10, y: 150, width: 10, height: 100 },
+      paddle2: { x: 580, y: 150, width: 10, height: 100 },
+      keys: { w: false, s: false, ArrowUp: false, ArrowDown: false },
+      scoreLeft: 0,
+      scoreRight: 0,
+      gamePaused: false,
+      gameOver: false,
+      winner: '',
+      animationFrameId: null
+    };
+  },
+  mounted() {
+    this.canvas = this.$refs.gameCanvas;
+    this.ctx = this.canvas.getContext('2d');
+    this.setupEventListeners();
+    this.gameLoop();
+  },
+  methods: {
+    setupEventListeners() {
+      window.addEventListener('keydown', this.handleKeyDown);
+      window.addEventListener('keyup', this.handleKeyUp);
+    },
+    handleKeyDown(e) {
+      if (e.key in this.keys) {
+        this.keys[e.key] = true;
+      }
+      if (e.key === 'Escape') {
+        this.togglePause();
+      }
+    },
+    handleKeyUp(e) {
+      if (e.key in this.keys) {
+        this.keys[e.key] = false;
+      }
+    },
+    togglePause() {
+      if (!this.gameOver) {
+        this.gamePaused = !this.gamePaused;
+      }
+    },
+    resumeGame() {
+      this.gamePaused = false;
+    },
+    update() {
+      if (!this.gamePaused && !this.gameOver) {
+        this.movePaddles();
+        this.moveBall();
+        this.checkCollisions();
+      }
+    },
+    movePaddles() {
+      if (this.keys.w && this.paddle1.y > 0) this.paddle1.y -= 5;
+      if (this.keys.s && this.paddle1.y < this.canvas.height - this.paddle1.height) this.paddle1.y += 5;
+      if (this.keys.ArrowUp && this.paddle2.y > 0) this.paddle2.y -= 5;
+      if (this.keys.ArrowDown && this.paddle2.y < this.canvas.height - this.paddle2.height) this.paddle2.y += 5;
+    },
+    moveBall() {
+      this.ball.x += this.ball.dx;
+      this.ball.y += this.ball.dy;
+    },
+    checkCollisions() {
+      // Ball collision with top and bottom walls
+      if (this.ball.y + this.ball.radius > this.canvas.height || this.ball.y - this.ball.radius < 0) {
+        this.ball.dy *= -1;
+      }
+      
+      // Ball collision with paddles
+      if (
+        (this.ball.x - this.ball.radius < this.paddle1.x + this.paddle1.width &&
+         this.ball.y > this.paddle1.y &&
+         this.ball.y < this.paddle1.y + this.paddle1.height) ||
+        (this.ball.x + this.ball.radius > this.paddle2.x &&
+         this.ball.y > this.paddle2.y &&
+         this.ball.y < this.paddle2.y + this.paddle2.height)
+      ) {
+        this.ball.dx *= -1;
+      }
+      
+      // Score points
+      if (!this.gameOver) {
+        if (this.ball.x + this.ball.radius < 0) {
+          this.scoreRight++;
+          this.resetBall();
+        } else if (this.ball.x - this.ball.radius > this.canvas.width) {
+          this.scoreLeft++;
+          this.resetBall();
+        }
 
-	export default {
-		setup(props, { emit }) {
-			const ballX = ref(300)
-			const ballY = ref(200)
-			const ballSpeedX = ref(5)
-			const ballSpeedY = ref(5)
-			const paddleLeftY = ref(150)
-			const paddleRightY = ref(150)
-			const scoreLeft = ref(0)
-			const scoreRight = ref(0)
-			const paddleSpeed = 5
-			const keys = ref({
-				w: false,
-				s: false,
-				ArrowUp: false,
-				ArrowDown: false
-			})
-			const gameState = ref('menu')
-			const winner = ref('')
-			const isPaused = ref(false)
+        this.$emit('score-update', { left: this.scoreLeft, right: this.scoreRight });
 
-			const ballStyle = computed(() => ({
-				left: `${ballX.value}px`,
-				top: `${ballY.value}px`
-			}))
+        // Check for game over
+        if (this.scoreLeft >= 11 || this.scoreRight >= 11) {
+          this.gameOver = true;
+          this.winner = this.scoreLeft >= 11 ? 'Left player' : 'Right player';
+          this.$emit('game-over', this.winner);
+        }
+      }
+    },
+    resetBall() {
+      this.ball.x = this.canvas.width / 2;
+      this.ball.y = this.canvas.height / 2;
+      this.ball.dx = Math.random() > 0.5 ? 4 : -4;
+      this.ball.dy = Math.random() > 0.5 ? 4 : -4;
+    },
+    draw() {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      
+      // Draw middle line
+      this.ctx.beginPath();
+      this.ctx.setLineDash([5, 15]);
+      this.ctx.moveTo(this.canvas.width / 2, 0);
+      this.ctx.lineTo(this.canvas.width / 2, this.canvas.height);
+      this.ctx.strokeStyle = 'white';
+      this.ctx.lineWidth = 2;
+      this.ctx.stroke();
+      this.ctx.setLineDash([]);
 
-			const paddleLeftStyle = computed(() => ({
-				top: `${paddleLeftY.value}px`
-			}))
-
-			const paddleRightStyle = computed(() => ({
-				top: `${paddleRightY.value}px`
-			}))
-
-			const moveBall = () => {
-				ballX.value += ballSpeedX.value
-				ballY.value += ballSpeedY.value
-			}
-
-			const checkCollision = () => {
-				if (ballY.value <= 0 || ballY.value >= 390) {
-					ballSpeedY.value = -ballSpeedY.value
-				}
-
-				if (
-					(ballX.value <= 20 && ballY.value >= paddleLeftY.value && ballY.value <= paddleLeftY.value + 100) ||
-					(ballX.value >= 570 && ballY.value >= paddleRightY.value && ballY.value <= paddleRightY.value + 100)
-				) {
-					ballSpeedX.value = -ballSpeedX.value
-				}
-
-				if (ballX.value <= 0) {
-					scoreRight.value++
-					resetBall()
-				} else if (ballX.value >= 590) {
-					scoreLeft.value++
-					resetBall()
-				}
-			}
-
-			const resetBall = () => {
-				ballX.value = 300
-				ballY.value = 200
-				ballSpeedX.value = -ballSpeedX.value
-			}
-
-			const updatePaddles = () => {
-				if (keys.value.w && paddleLeftY.value > 0) {
-					paddleLeftY.value -= paddleSpeed
-				}
-				if (keys.value.s && paddleLeftY.value < 300) {
-					paddleLeftY.value += paddleSpeed
-				}
-				if (keys.value.ArrowUp && paddleRightY.value > 0) {
-					paddleRightY.value -= paddleSpeed
-				}
-				if (keys.value.ArrowDown && paddleRightY.value < 300) {
-					paddleRightY.value += paddleSpeed
-				}
-			}
-
-			const gameLoop = () => {
-				if (gameState.value === 'playing' && !isPaused.value) {
-					moveBall()
-					checkCollision()
-					updatePaddles()
-					requestAnimationFrame(gameLoop)
-				}
-			}
-
-			const handleKeyDown = (e) => {
-				if (e.key in keys.value) {
-					e.preventDefault()
-					keys.value[e.key] = true
-				} else if (e.key === 'Escape' && gameState.value === 'playing') {
-					togglePause()
-				}
-			}
-
-			const handleKeyUp = (e) => {
-				if (e.key in keys.value) {
-					keys.value[e.key] = false
-				}
-			}
-
-			const togglePause = () => {
-				isPaused.value = !isPaused.value
-				if (!isPaused.value) {
-					gameLoop()
-				}
-			}
-
-			const startGame = () => {
-				gameState.value = 'playing'
-				resetGame()
-				gameLoop()
-			}
-
-			const resetGame = () => {
-				scoreLeft.value = 0
-				scoreRight.value = 0
-				winner.value = ''
-				isPaused.value = false
-				resetBall()
-			}
-
-			const restartGame = () => {
-				resetGame()
-				gameState.value = 'playing'
-				gameLoop()
-			}
-
-			const goToMenu = () => {
-				gameState.value = 'menu'
-			}
-
-			watch([scoreLeft, scoreRight], ([newScoreLeft, newScoreRight]) => {
-				if (newScoreLeft === 11) {
-					gameState.value = 'gameOver'
-					winner.value = 'Left player'
-				} else if (newScoreRight === 11) {
-					gameState.value = 'gameOver'
-					winner.value = 'Right player'
-				}
-
-				// HERE !
-
-				emit('score-update', { left: newScoreLeft, right: newScoreRight})
-			})
-
-
-			onMounted(() => {
-				window.addEventListener('keydown', handleKeyDown)
-				window.addEventListener('keyup', handleKeyUp)
-			})
-
-			onUnmounted(() => {
-				window.removeEventListener('keydown', handleKeyDown)
-				window.removeEventListener('keyup', handleKeyUp)
-			})
-
-			return {
-				ballStyle,
-				paddleLeftStyle,
-				paddleRightStyle,
-				scoreLeft,
-				scoreRight,
-				gameState,
-				winner,
-				isPaused,
-				startGame,
-				restartGame,
-				goToMenu
-			}
-		}
-	}
+      // Draw paddles
+      this.ctx.fillStyle = 'white';
+      this.ctx.fillRect(this.paddle1.x, this.paddle1.y, this.paddle1.width, this.paddle1.height);
+      this.ctx.fillRect(this.paddle2.x, this.paddle2.y, this.paddle2.width, this.paddle2.height);
+      
+      // Draw ball
+      this.ctx.beginPath();
+      this.ctx.arc(this.ball.x, this.ball.y, this.ball.radius, 0, Math.PI * 2);
+      this.ctx.fillStyle = 'white';
+      this.ctx.fill();
+      this.ctx.closePath();
+    },
+    gameLoop() {
+      this.update();
+      this.draw();
+      this.animationFrameId = requestAnimationFrame(this.gameLoop);
+    },
+    restartGame() {
+      this.scoreLeft = 0;
+      this.scoreRight = 0;
+      this.gameOver = false;
+      this.winner = '';
+      this.resetBall();
+      this.paddle1.y = 150;
+      this.paddle2.y = 150;
+    }
+  },
+  beforeUnmount() {
+    window.removeEventListener('keydown', this.handleKeyDown);
+    window.removeEventListener('keyup', this.handleKeyUp);
+    cancelAnimationFrame(this.animationFrameId);
+  }
+};
 </script>
 
 <style scoped>
-	#game-container {
-		width: 600px;
-		height: 400px;
-		background-color: black;
-		position: relative;
-		margin: auto;
-	}
+.game-container {
+  position: relative;
+  width: 600px;
+  height: 400px;
+}
 
-	#ball {
-		width: 10px;
-		height: 10px;
-		background-color: white;
-		position: absolute;
-		border-radius: 50%;
-	}
+canvas {
+  background-color: var(--vt-c-black);
+  border-style: solid;
+}
 
-	#paddle-left, #paddle-right {
-		width: 10px;
-		height: 100px;
-		background-color: white;
-		position: absolute;
-	}
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+}
 
-	#paddle-left {
-		left: 10px;
-	}
+.pause-overlay, .game-over-overlay {
+  z-index: 10;
+}
 
-	#paddle-right {
-		right: 10px;
-	}
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px;
+}
 
-	#score {
-		color: white;
-		font-size: 24px;
-		position: absolute;
-		top: 10px;
-		left: 50%;
-		transform: translateX(-50%);
-	}
-
-	#menu, #game-over, #pause-screen {
-		color: white;
-		text-align: center;
-		padding-top: 100px;
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background-color: rgba(0, 0, 0, 0.8);
-	}
-
-	button {
-		background-color: white;
-		color: black;
-		border: none;
-		padding: 10px 20px;
-		font-size: 16px;
-		cursor: pointer;
-		margin: 10px;
-	}
-
-	h1 {
-		font-size: 48px;
-		margin-bottom: 20px;
-	}
-
-	h2 {
-		font-size: 36px;
-		margin-bottom: 20px;
-	}
+button:hover {
+  background-color: #45a049;
+}
 </style>

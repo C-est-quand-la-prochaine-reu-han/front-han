@@ -1,21 +1,34 @@
 <script setup>
-	import { RouterLink, RouterView } from 'vue-router'
-	import { ref } from 'vue'
-	import GameView from './views/GameView.vue'
+import { ref } from 'vue'
+import GameView from './views/GameView.vue'
 
-	const isLightMode = ref(false)
-	const scoreLeft = ref(0)
-	const scoreRight = ref(0)
+const isLightMode = ref(false)
+const scoreLeft = ref(0)
+const scoreRight = ref(0)
+const gameWinner = ref('')
+const gameStarted = ref(false)
 
-	function toggleTheme() {
-		isLightMode.value = !isLightMode.value
-		document.body.classList.toggle('light-mode')
-	}
+function toggleTheme() {
+  isLightMode.value = !isLightMode.value
+  document.body.classList.toggle('light-mode')
+}
 
-	function handleScoreUpdate(scores) {
-		scoreLeft.value = scores.left
-		scoreRight.value = scores.right
-	}
+function updateScore(scores) {
+  scoreLeft.value = scores.left
+  scoreRight.value = scores.right
+}
+
+function handleGameOver(winner) {
+  gameWinner.value = winner
+  gameStarted.value = false
+}
+
+function startGame() {
+  scoreLeft.value = 0
+  scoreRight.value = 0
+  gameWinner.value = ''
+  gameStarted.value = true
+}
 </script>
 
 <template>
@@ -38,16 +51,23 @@
 		</div>
 	</header>
 
-	<main>
-		<div>
-			<RouterLink to="/game"></RouterLink>
-		</div>
-		<RouterView @score-update="handleScoreUpdate" />
-	</main>
+  <main>
+    <div v-if="!gameStarted" class="game-start">
+      <button @click="startGame">Start Game</button>
+      <p v-if="gameWinner">{{ gameWinner }} a gagné la partie !</p>
+    </div>
+    <GameView v-if="gameStarted" 
+      @score-update="updateScore" 
+      @game-over="handleGameOver" 
+    />
+  </main>
 
-	<footer>
-		<div>
-			<p>Gauche: {{ scoreLeft }} - Droite : {{ scoreRight }}</p>
-		</div>
+  <footer>
+    <div>
+      <p>{{ scoreLeft }}</p>
+    </div>
+    <div class="vertical-bar">
+      <p>{{ scoreRight }}</p>
+    </div>
 	</footer>
 </template>
