@@ -1,34 +1,34 @@
 <script setup>
-import { ref } from 'vue'
-import GameView from './views/GameView.vue'
+  import { ref } from 'vue'
+  import GameView from './views/GameView.vue'
 
-const isLightMode = ref(false)
-const scoreLeft = ref(0)
-const scoreRight = ref(0)
-const gameWinner = ref('')
-const gameStarted = ref(false)
+  const isLightMode = ref(false)
+  const scoreLeft = ref(0)
+  const scoreRight = ref(0)
+  const gameWinner = ref('')
+  const gameStarted = ref(false)
 
-function toggleTheme() {
-  isLightMode.value = !isLightMode.value
-  document.body.classList.toggle('light-mode')
-}
+  function toggleTheme() {
+    isLightMode.value = !isLightMode.value
+    document.body.classList.toggle('light-mode')
+  }
 
-function updateScore(scores) {
-  scoreLeft.value = scores.left
-  scoreRight.value = scores.right
-}
+  function updateScore(scores) {
+    scoreLeft.value = scores.left
+    scoreRight.value = scores.right
+  }
 
-function handleGameOver(winner) {
-  gameWinner.value = winner
-  gameStarted.value = false
-}
+  function handleGameOver(winner) {
+    gameWinner.value = winner
+    gameStarted.value = false
+  }
 
-function startGame() {
-  scoreLeft.value = 0
-  scoreRight.value = 0
-  gameWinner.value = ''
-  gameStarted.value = true
-}
+  function startGame() {
+    scoreLeft.value = 0
+    scoreRight.value = 0
+    gameWinner.value = ''
+    gameStarted.value = true
+  }
 </script>
 
 <template>

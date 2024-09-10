@@ -14,163 +14,163 @@
 </template>
 
 <script>
-export default {
-  emits: ['score-update', 'game-over', 'restart-game'],
-  data() {
-    return {
-      canvas: null,
-      ctx: null,
-      ball: { x: 300, y: 200, radius: 10, dx: 4, dy: 4 },
-      paddle1: { x: 10, y: 150, width: 10, height: 100 },
-      paddle2: { x: 580, y: 150, width: 10, height: 100 },
-      keys: { w: false, s: false, ArrowUp: false, ArrowDown: false },
-      scoreLeft: 0,
-      scoreRight: 0,
-      gamePaused: false,
-      gameOver: false,
-      winner: '',
-      animationFrameId: null
-    };
-  },
-  mounted() {
-    this.canvas = this.$refs.gameCanvas;
-    this.ctx = this.canvas.getContext('2d');
-    this.setupEventListeners();
-    this.gameLoop();
-  },
-  methods: {
-    setupEventListeners() {
-      window.addEventListener('keydown', this.handleKeyDown);
-      window.addEventListener('keyup', this.handleKeyUp);
+  export default {
+    emits: ['score-update', 'game-over', 'restart-game'],
+    data() {
+      return {
+        canvas: null,
+        ctx: null,
+        ball: { x: 300, y: 200, radius: 10, dx: 4, dy: 4 },
+        paddle1: { x: 10, y: 150, width: 10, height: 100 },
+        paddle2: { x: 580, y: 150, width: 10, height: 100 },
+        keys: { w: false, s: false, ArrowUp: false, ArrowDown: false },
+        scoreLeft: 0,
+        scoreRight: 0,
+        gamePaused: false,
+        gameOver: false,
+        winner: '',
+        animationFrameId: null
+      };
     },
-    handleKeyDown(e) {
-      if (e.key in this.keys) {
-        this.keys[e.key] = true;
-      }
-      if (e.key === 'Escape') {
-        this.togglePause();
-      }
+    mounted() {
+      this.canvas = this.$refs.gameCanvas;
+      this.ctx = this.canvas.getContext('2d');
+      this.setupEventListeners();
+      this.gameLoop();
     },
-    handleKeyUp(e) {
-      if (e.key in this.keys) {
-        this.keys[e.key] = false;
-      }
-    },
-    togglePause() {
-      if (!this.gameOver) {
-        this.gamePaused = !this.gamePaused;
-      }
-    },
-    resumeGame() {
-      this.gamePaused = false;
-    },
-    update() {
-      if (!this.gamePaused && !this.gameOver) {
-        this.movePaddles();
-        this.moveBall();
-        this.checkCollisions();
-      }
-    },
-    movePaddles() {
-      if (this.keys.w && this.paddle1.y > 0) this.paddle1.y -= 5;
-      if (this.keys.s && this.paddle1.y < this.canvas.height - this.paddle1.height) this.paddle1.y += 5;
-      if (this.keys.ArrowUp && this.paddle2.y > 0) this.paddle2.y -= 5;
-      if (this.keys.ArrowDown && this.paddle2.y < this.canvas.height - this.paddle2.height) this.paddle2.y += 5;
-    },
-    moveBall() {
-      this.ball.x += this.ball.dx;
-      this.ball.y += this.ball.dy;
-    },
-    checkCollisions() {
-      // Ball collision with top and bottom walls
-      if (this.ball.y + this.ball.radius > this.canvas.height || this.ball.y - this.ball.radius < 0) {
-        this.ball.dy *= -1;
-      }
-      
-      // Ball collision with paddles
-      if (
-        (this.ball.x - this.ball.radius < this.paddle1.x + this.paddle1.width &&
-         this.ball.y > this.paddle1.y &&
-         this.ball.y < this.paddle1.y + this.paddle1.height) ||
-        (this.ball.x + this.ball.radius > this.paddle2.x &&
-         this.ball.y > this.paddle2.y &&
-         this.ball.y < this.paddle2.y + this.paddle2.height)
-      ) {
-        this.ball.dx *= -1;
-      }
-      
-      // Score points
-      if (!this.gameOver) {
-        if (this.ball.x + this.ball.radius < 0) {
-          this.scoreRight++;
-          this.resetBall();
-        } else if (this.ball.x - this.ball.radius > this.canvas.width) {
-          this.scoreLeft++;
-          this.resetBall();
+    methods: {
+      setupEventListeners() {
+        window.addEventListener('keydown', this.handleKeyDown);
+        window.addEventListener('keyup', this.handleKeyUp);
+      },
+      handleKeyDown(e) {
+        if (e.key in this.keys) {
+          this.keys[e.key] = true;
         }
-
-        this.$emit('score-update', { left: this.scoreLeft, right: this.scoreRight });
-
-        // Check for game over
-        if (this.scoreLeft >= 11 || this.scoreRight >= 11) {
-          this.gameOver = true;
-          this.winner = this.scoreLeft >= 11 ? 'Left player' : 'Right player';
-          this.$emit('game-over', this.winner);
+        if (e.key === 'Escape') {
+          this.togglePause();
         }
+      },
+      handleKeyUp(e) {
+        if (e.key in this.keys) {
+          this.keys[e.key] = false;
+        }
+      },
+      togglePause() {
+        if (!this.gameOver) {
+          this.gamePaused = !this.gamePaused;
+        }
+      },
+      resumeGame() {
+        this.gamePaused = false;
+      },
+      update() {
+        if (!this.gamePaused && !this.gameOver) {
+          this.movePaddles();
+          this.moveBall();
+          this.checkCollisions();
+        }
+      },
+      movePaddles() {
+        if (this.keys.w && this.paddle1.y > 0) this.paddle1.y -= 5;
+        if (this.keys.s && this.paddle1.y < this.canvas.height - this.paddle1.height) this.paddle1.y += 5;
+        if (this.keys.ArrowUp && this.paddle2.y > 0) this.paddle2.y -= 5;
+        if (this.keys.ArrowDown && this.paddle2.y < this.canvas.height - this.paddle2.height) this.paddle2.y += 5;
+      },
+      moveBall() {
+        this.ball.x += this.ball.dx;
+        this.ball.y += this.ball.dy;
+      },
+      checkCollisions() {
+        // Ball collision with top and bottom walls
+        if (this.ball.y + this.ball.radius > this.canvas.height || this.ball.y - this.ball.radius < 0) {
+          this.ball.dy *= -1;
+        }
+        
+        // Ball collision with paddles
+        if (
+          (this.ball.x - this.ball.radius < this.paddle1.x + this.paddle1.width &&
+          this.ball.y > this.paddle1.y &&
+          this.ball.y < this.paddle1.y + this.paddle1.height) ||
+          (this.ball.x + this.ball.radius > this.paddle2.x &&
+          this.ball.y > this.paddle2.y &&
+          this.ball.y < this.paddle2.y + this.paddle2.height)
+        ) {
+          this.ball.dx *= -1;
+        }
+        
+        // Score points
+        if (!this.gameOver) {
+          if (this.ball.x + this.ball.radius < 0) {
+            this.scoreRight++;
+            this.resetBall();
+          } else if (this.ball.x - this.ball.radius > this.canvas.width) {
+            this.scoreLeft++;
+            this.resetBall();
+          }
+
+          this.$emit('score-update', { left: this.scoreLeft, right: this.scoreRight });
+
+          // Check for game over
+          if (this.scoreLeft >= 11 || this.scoreRight >= 11) {
+            this.gameOver = true;
+            this.winner = this.scoreLeft >= 11 ? 'Left player' : 'Right player';
+            this.$emit('game-over', this.winner);
+          }
+        }
+      },
+      resetBall() {
+        this.ball.x = this.canvas.width / 2;
+        this.ball.y = this.canvas.height / 2;
+        this.ball.dx = Math.random() > 0.5 ? 4 : -4;
+        this.ball.dy = Math.random() > 0.5 ? 4 : -4;
+      },
+      draw() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Draw middle line
+        this.ctx.beginPath();
+        this.ctx.setLineDash([5, 15]);
+        this.ctx.moveTo(this.canvas.width / 2, 0);
+        this.ctx.lineTo(this.canvas.width / 2, this.canvas.height);
+        this.ctx.strokeStyle = 'white';
+        this.ctx.lineWidth = 2;
+        this.ctx.stroke();
+        this.ctx.setLineDash([]);
+
+        // Draw paddles
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillRect(this.paddle1.x, this.paddle1.y, this.paddle1.width, this.paddle1.height);
+        this.ctx.fillRect(this.paddle2.x, this.paddle2.y, this.paddle2.width, this.paddle2.height);
+        
+        // Draw ball
+        this.ctx.beginPath();
+        this.ctx.arc(this.ball.x, this.ball.y, this.ball.radius, 0, Math.PI * 2);
+        this.ctx.fillStyle = 'white';
+        this.ctx.fill();
+        this.ctx.closePath();
+      },
+      gameLoop() {
+        this.update();
+        this.draw();
+        this.animationFrameId = requestAnimationFrame(this.gameLoop);
+      },
+      restartGame() {
+        this.scoreLeft = 0;
+        this.scoreRight = 0;
+        this.gameOver = false;
+        this.winner = '';
+        this.resetBall();
+        this.paddle1.y = 150;
+        this.paddle2.y = 150;
       }
     },
-    resetBall() {
-      this.ball.x = this.canvas.width / 2;
-      this.ball.y = this.canvas.height / 2;
-      this.ball.dx = Math.random() > 0.5 ? 4 : -4;
-      this.ball.dy = Math.random() > 0.5 ? 4 : -4;
-    },
-    draw() {
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      
-      // Draw middle line
-      this.ctx.beginPath();
-      this.ctx.setLineDash([5, 15]);
-      this.ctx.moveTo(this.canvas.width / 2, 0);
-      this.ctx.lineTo(this.canvas.width / 2, this.canvas.height);
-      this.ctx.strokeStyle = 'white';
-      this.ctx.lineWidth = 2;
-      this.ctx.stroke();
-      this.ctx.setLineDash([]);
-
-      // Draw paddles
-      this.ctx.fillStyle = 'white';
-      this.ctx.fillRect(this.paddle1.x, this.paddle1.y, this.paddle1.width, this.paddle1.height);
-      this.ctx.fillRect(this.paddle2.x, this.paddle2.y, this.paddle2.width, this.paddle2.height);
-      
-      // Draw ball
-      this.ctx.beginPath();
-      this.ctx.arc(this.ball.x, this.ball.y, this.ball.radius, 0, Math.PI * 2);
-      this.ctx.fillStyle = 'white';
-      this.ctx.fill();
-      this.ctx.closePath();
-    },
-    gameLoop() {
-      this.update();
-      this.draw();
-      this.animationFrameId = requestAnimationFrame(this.gameLoop);
-    },
-    restartGame() {
-      this.scoreLeft = 0;
-      this.scoreRight = 0;
-      this.gameOver = false;
-      this.winner = '';
-      this.resetBall();
-      this.paddle1.y = 150;
-      this.paddle2.y = 150;
+    beforeUnmount() {
+      window.removeEventListener('keydown', this.handleKeyDown);
+      window.removeEventListener('keyup', this.handleKeyUp);
+      cancelAnimationFrame(this.animationFrameId);
     }
-  },
-  beforeUnmount() {
-    window.removeEventListener('keydown', this.handleKeyDown);
-    window.removeEventListener('keyup', this.handleKeyUp);
-    cancelAnimationFrame(this.animationFrameId);
-  }
-};
+  };
 </script>
 
 <style scoped>
