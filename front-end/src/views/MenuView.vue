@@ -2,21 +2,31 @@
 	// import ProfilView from './ProfilView.vue'
 	// import StatsView from './StatsView.vue'
 
-	defineProps(['isVisible'])
-
 	// const isProfilOpened = ref(false)
 	// const isStatsOpened = ref(false)
+
+	// function toggleProfil() {
+	// 	isProfilOpened = !isProfilOpened
+	// }
+
+	// function toggleStats() {
+	// 	isStatsOpened = !isStatsOpened
+	// }
 </script>
 
 <template>
-	<div class="menu-overlay" v-if="isVisible">
+	<div class="menu-overlay" v-if="!isProfilOpened && !isStatsOpened">
 		<div>
-			<button>Profil</button>
+			<button @click="toggleProfil">Profil</button>
 		</div>
 		<div>
-			<button>Statistiques</button>
+			<button @click="toggleStats">Statistiques</button>
 		</div>
 	</div>
+<!-- 
+	<ProfilView v-if="isVisible && isProfilOpened && !isStatsOpened"></ProfilView>
+
+	<StatsView v-if="isVisible && !isProfilOpened && isStatsOpened"></StatsView> -->
 </template>
 
 <style scoped>
@@ -43,5 +53,6 @@
 
 	button:hover {
 		background-color: rgba(100, 100, 100, 0.5);
+		transition: background-color 0.5s;
 	}
 </style>

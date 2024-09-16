@@ -1,63 +1,13 @@
 <script setup>
-	import { ref, onMounted, onUnmounted } from 'vue'
+	import { ref } from 'vue'
 	import GameView from './views/GameView.vue'
-	import MenuView from './views/MenuView.vue'
 
 	const isLightMode = ref(false)
-	const scoreLeft = ref(0)
-	const scoreRight = ref(0)
-	const gameWinner = ref('')
-	const gameStarted = ref(false)
-	const isMenuVisible = ref(false)
-	const isGamePaused = ref(false)
 
 	function toggleTheme() {
 		isLightMode.value = !isLightMode.value
 		document.body.classList.toggle('light-mode')
 	}
-
-	function updateScore(scores) {
-		scoreLeft.value = scores.left
-		scoreRight.value = scores.right
-	}
-
-	function handleGameOver(winner) {
-		gameWinner.value = winner
-		gameStarted.value = false
-	}
-
-	function startGame() {
-		scoreLeft.value = 0
-		scoreRight.value = 0
-		gameWinner.value = ''
-		gameStarted.value = true
-	}
-
-	function toggleMenu() {
-		isMenuVisible.value = !isMenuVisible.value
-		if (isMenuVisible.value) {
-			isGamePaused.value = true
-		} else {
-			isGamePaused.value = false
-		}
-	}
-
-	function handleKeyEscape(event) {
-		if (event.key === 'Escape') {
-			if (gameStarted.value) {
-				isGamePaused.value = !isGamePaused.value
-			}
-			toggleMenu()
-		}
-	}
-
-	onMounted(() => {
-		document.addEventListener('keydown', handleKeyEscape)
-	})
-
-	onUnmounted(() => {
-		document.removeEventListener('keydown', handleKeyEscape)
-	})
 </script>
 
 <template>
@@ -80,27 +30,5 @@
 		</div>
 	</header>
 
-	<MenuView :isVisible="isMenuVisible" />
-
-	<main>
-		<div v-if="!gameStarted" class="game-start">
-			<button @click="startGame">Start Game</button>
-			<p v-if="gameWinner">{{ gameWinner }} a gagné la partie !</p>
-		</div>
-		<GameView v-if="gameStarted"
-			@score-update="updateScore"
-			@game-over="handleGameOver"
-			:isMenuOpen="isMenuVisible"
-			:isPaused="isGamePaused"
-		/>
-	</main>
-
-	<footer>
-		<div>
-			<p>{{ scoreLeft }}</p>
-		</div>
-		<div class="vertical-bar">
-			<p>{{ scoreRight }}</p>
-		</div>
-	</footer>
+	<GameView />
 </template>
