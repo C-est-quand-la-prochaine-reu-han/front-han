@@ -1,49 +1,47 @@
-<script setup>
-	// import ProfilView from './ProfilView.vue'
-	// import StatsView from './StatsView.vue'
-
-	// const isProfilOpened = ref(false)
-	// const isStatsOpened = ref(false)
-
-	// function toggleProfil() {
-	// 	isProfilOpened = !isProfilOpened
-	// }
-
-	// function toggleStats() {
-	// 	isStatsOpened = !isStatsOpened
-	// }
+<script>
+	import ProfilView from './ProfilView.vue';
+	import StatsView from './StatsView.vue';
 </script>
 
 <template>
-	<div class="menu-overlay" v-if="!isProfilOpened && !isStatsOpened">
-		<div>
-			<button @click="toggleProfil">Profil</button>
+	<div class="menu-container">
+		<div class="menu-item">
+			<button>PROFIL</button>
 		</div>
-		<div>
-			<button @click="toggleStats">Statistiques</button>
+		<div class="menu-item">
+			<button>STATISTIQUES</button>
+		</div>
+		<div class="menu-item">
+			<button>PARTIE RAPIDE (IA)</button>
+		</div>
+		<div class="menu-item">
+			<button>PARTIE RAPIDE (INVITE)</button>
+		</div>
+		<div class="menu-item">
+			<button>TOURNOIS</button>
 		</div>
 	</div>
-<!-- 
-	<ProfilView v-if="isVisible && isProfilOpened && !isStatsOpened"></ProfilView>
-
-	<StatsView v-if="isVisible && !isProfilOpened && isStatsOpened"></StatsView> -->
 </template>
 
 <style scoped>
-	.menu-overlay {
-		position: fixed;
-		top: 50px;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background-color: rgba(0, 0, 0, 0.7);
-		z-index: 100;
-		display: flex;
-		justify-content: center;
+	.menu-container {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: 1fr 1fr 1fr;
+		height: 100vh;
+		width: 100vw;
+		box-sizing: border-box;
 	}
 
-	.menu-overlay > div {
-		width: 100%;
+	.menu-item {
+		background-color: transparent;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.menu-item:nth-child(3) {
+		grid-column: 1 / span 2;
 	}
 
 	button {
@@ -52,7 +50,6 @@
 	}
 
 	button:hover {
-		background-color: rgba(100, 100, 100, 0.5);
-		transition: background-color 0.5s;
+		background-color: var(--vt-c-black-mute);
 	}
 </style>
