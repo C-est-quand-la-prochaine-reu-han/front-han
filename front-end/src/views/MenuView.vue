@@ -1,26 +1,60 @@
-<script>
+<script setup>
+	import { ref } from 'vue'
 	import ProfilView from './ProfilView.vue';
-	import StatsView from './StatsView.vue';
+
+	const showMainMenu = ref(true)
+	const showProfil = ref(false)
+	const showStats = ref(false)
+	const showPlayNowSolo = ref(false)
+	const showPlayNowDuo = ref(false)
+	const showTournament = ref(false)
+
+	function toggleProfil() {
+		showProfil.value = !showProfil.value
+		showMainMenu.value = !showMainMenu.value
+	}
+
+	function toggleStats() {
+		showStats.value = !showStats.value
+		showMainMenu.value = !showMainMenu.value
+	}
+
+	function togglePlayNowSolo() {
+		showPlayNowSolo.value = !showPlayNowSolo.value
+		showMainMenu.value = !showMainMenu.value
+	}
+
+	function togglePlayNowDuo() {
+		showPlayNowDuo.value = !showPlayNowDuo.value
+		showMainMenu.value = !showMainMenu.value
+	}
+
+	function togglesTournament() {
+		showTournament.value = !showTournament.value
+		showMainMenu.value = !showMainMenu.value
+	}
 </script>
 
 <template>
-	<div class="menu-container">
+	<div v-if="showMainMenu" class="menu-container">
 		<div class="menu-item">
-			<button>PROFIL</button>
+			<button @click="toggleProfil">PROFIL</button>
 		</div>
 		<div class="menu-item">
 			<button>STATISTIQUES</button>
 		</div>
 		<div class="menu-item">
-			<button>PARTIE RAPIDE (IA)</button>
+			<button>PARTIE RAPIDE (SOLO)</button>
 		</div>
 		<div class="menu-item">
-			<button>PARTIE RAPIDE (INVITE)</button>
+			<button>PARTIE RAPIDE (DUO)</button>
 		</div>
 		<div class="menu-item">
 			<button>TOURNOIS</button>
 		</div>
 	</div>
+
+	<ProfilView v-if="showProfil" @close="toggleProfil" />
 </template>
 
 <style scoped>
@@ -51,5 +85,6 @@
 
 	button:hover {
 		background-color: var(--vt-c-black-mute);
+		transition: background-color 0.3s;
 	}
 </style>
