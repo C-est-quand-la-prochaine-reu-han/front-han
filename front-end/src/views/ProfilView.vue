@@ -2,7 +2,12 @@
 	<div class="profil-container">
 		<div class="left-part">
 			<div class="profil-picture">
-				<img src="../assets/business-cat.png" alt="Photo de profil">
+				<button class="profile-image-container">
+					<img src="../assets/business-cat.png" alt="Photo de profil">
+					<div class="overlay">
+						<img src="../assets/pencil.svg" alt="">
+					</div>
+				</button>
 				<p>DISPLAYNAME</p>
 			</div>
 			<div class="personal-data">
@@ -45,9 +50,74 @@
 	.profil-container {
 		display: flex;
 		flex-direction: row;
+		margin: auto;
+	}
+
+	.profil-picture {
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+	}
+
+	.profil-picture button {
+		margin-bottom: 20px;
+		border-radius: 100px;
+	}
+
+	.profil-picture button:hover {
+		background-color: rgba(0, 0, 0, 0.2);
+	}
+
+	.profil-picture img {
+		border-radius: 100px;
 	}
 
 	img {
 		width: 100px;
 	}
+
+	.profile-image-container {
+		position: relative;
+		width: 100px;
+		height: 100px;
+		border-radius: 50%;
+		overflow: hidden;
+		cursor: pointer;
+	}
+
+	.profile-image-container img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: filter 0.3s ease;
+	}
+
+	.overlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.5);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		opacity: 0;
+		transition: opacity 0.3s linear;
+	}
+
+	.overlay img {
+		height: 50px;
+		width: 50px;
+		object-fit: contain;
+	}
+
+	.profile-image-container:hover img {
+		filter: brightness(50%);
+	}
+
+	.profile-image-container:hover .overlay {
+		opacity: 1;
+	}
+
 </style>

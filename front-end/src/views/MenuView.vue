@@ -85,6 +85,6 @@
 
 	button:hover {
 		background-color: var(--vt-c-black-mute);
-		transition: background-color 0.3s;
+		transition: background-color 0.3s linear;
 	}
 </style>
