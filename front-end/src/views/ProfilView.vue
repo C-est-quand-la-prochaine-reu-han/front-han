@@ -1,16 +1,15 @@
 <template>
 	<div class="profil-container">
 		<div class="left-part">
+			<button class="back-button" @click="$emit('close')">Retour au menu</button>
 			<div class="resume-container">
 				<button class="profile-image-container">
 					<img src="../assets/business-cat.png" alt="Photo de profil">
-					<div class="overlay">
-						<p>Modifier</p>
-					</div>
+					<p class="overlay">Modifier</p>
 				</button>
 				<div class="resume-name">
-					<p>SURNOM</p>
-					<p>NOM D'UTILISATEUR</p>
+					<h1>SURNOM</h1>
+					<h2>NOM D'UTILISATEUR</h2>
 				</div>
 			</div>
 			<div class="modif-data">
@@ -35,7 +34,7 @@
 						<button type="submit">Soumettre</button>
 					</div>
 				</form>
-		</div>
+			</div>
 
 		</div>
 		<div class="right-part">
@@ -62,12 +61,29 @@
 		margin: auto;
 	}
 
+	.back-button {
+		position: absolute;
+		padding: 10px;
+		background-color: var(--vt-c-black-soft);
+		border: none;
+		cursor: pointer;
+		z-index: 10;
+	}
+
+	.back-button:hover {
+		background-color: var(--vt-c-black-mute);
+		transition: background-color 0.3 linear;
+	}
+
 	.left-part {
 		width: 50%;
+		padding-right: 25px;
+		box-sizing: border-box;
 	}
 
 	.right-part {
 		width: 50%;
+		padding-left: 25px;
 	}
 
 	.resume-container {
@@ -96,8 +112,17 @@
 		align-items: center;
 	}
 
-	.resume-name p {
+	.resume-name h1, h2 {
 		margin: 0;
+	}
+
+	.resume-name h1 {
+		font-size: 1.6em;
+	}
+
+	.resume-name h2 {
+		font-size: 1em;
+		color: var(--vt-c-text-dark-2);
 	}
 
 	img {
@@ -148,25 +173,32 @@
 		opacity: 1;
 	}
 
-	.left-part {
-		width: 50%;
-		padding-right: 20px; /* Ajoute un peu d'espace à droite */
-		box-sizing: border-box; /* Inclut le padding dans la largeur */
+	.modif-data {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: 20px;
+		width: 100%;
+		max-width: 800px; /* Ajustez selon vos besoins */
+		margin: 0 auto;
 	}
 
-	.modif-data {
-		max-width: 100%; /* Change de 500px à 100% */
-		margin: 0 auto;
+	.modif-form {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.form-title {
+		margin-bottom: 10px;
+		font-size: 1.2em;
 	}
 
 	.form-group {
 		display: flex;
 		gap: 10px;
-		flex-direction: row;
 	}
 
 	input {
-		flex: 1; /* Permet à l'input de prendre tout l'espace disponible */
+		flex: 1;
 		padding: 10px;
 		border: 1px solid var(--vt-c-divider-dark-1);
 		background: transparent;
@@ -180,6 +212,11 @@
 		border: none;
 		color: var(--vt-c-text-dark-1);
 		cursor: pointer;
-		white-space: nowrap; /* Empêche le texte de passer à la ligne */
+		white-space: nowrap;
+	}
+
+	.form-group button:hover {
+		background-color: var(--vt-c-black-mute);
+		transition: background-color 0.3s linear;
 	}
 </style>

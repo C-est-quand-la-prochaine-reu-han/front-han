@@ -4,35 +4,35 @@
 
 	const showMainMenu = ref(true)
 	const showProfil = ref(false)
-	const showStats = ref(false)
-	const showPlayNowSolo = ref(false)
-	const showPlayNowDuo = ref(false)
-	const showTournament = ref(false)
+	// const showStats = ref(false)
+	// const showPlayNowSolo = ref(false)
+	// const showPlayNowDuo = ref(false)
+	// const showTournament = ref(false)
 
 	function toggleProfil() {
 		showProfil.value = !showProfil.value
 		showMainMenu.value = !showMainMenu.value
 	}
 
-	function toggleStats() {
-		showStats.value = !showStats.value
-		showMainMenu.value = !showMainMenu.value
-	}
+	// function toggleStats() {
+	// 	showStats.value = !showStats.value
+	// 	showMainMenu.value = !showMainMenu.value
+	// }
 
-	function togglePlayNowSolo() {
-		showPlayNowSolo.value = !showPlayNowSolo.value
-		showMainMenu.value = !showMainMenu.value
-	}
+	// function togglePlayNowSolo() {
+	// 	showPlayNowSolo.value = !showPlayNowSolo.value
+	// 	showMainMenu.value = !showMainMenu.value
+	// }
 
-	function togglePlayNowDuo() {
-		showPlayNowDuo.value = !showPlayNowDuo.value
-		showMainMenu.value = !showMainMenu.value
-	}
+	// function togglePlayNowDuo() {
+	// 	showPlayNowDuo.value = !showPlayNowDuo.value
+	// 	showMainMenu.value = !showMainMenu.value
+	// }
 
-	function togglesTournament() {
-		showTournament.value = !showTournament.value
-		showMainMenu.value = !showMainMenu.value
-	}
+	// function togglesTournament() {
+	// 	showTournament.value = !showTournament.value
+	// 	showMainMenu.value = !showMainMenu.value
+	// }
 </script>
 
 <template>
