@@ -26,8 +26,7 @@
 		padding: 10px;
 		border: 1px solid var(--vt-c-divider-dark-1);
 		background: transparent;
-		color: var(--vt-c-text-dark-1);
-		transition: border-color 0.3s ease, box-shadow 0.3s ease;
+		color: var(--vt-c-text-dark-2);
 	}
 
 	button {

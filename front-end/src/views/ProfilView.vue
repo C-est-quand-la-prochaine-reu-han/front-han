@@ -1,33 +1,42 @@
 <template>
 	<div class="profil-container">
 		<div class="left-part">
-			<div class="profil-picture">
+			<div class="resume-container">
 				<button class="profile-image-container">
 					<img src="../assets/business-cat.png" alt="Photo de profil">
 					<div class="overlay">
-						<img src="../assets/pencil.svg" alt="">
+						<p>Modifier</p>
 					</div>
 				</button>
-				<p>DISPLAYNAME</p>
-			</div>
-			<div class="personal-data">
-				<div>
-					<p>Username : USERNAME</p>
-				</div>
-				<div>
-					<p>Modifier le surnom :</p>
-					<input type="text" placeholder="Nouveau surnom">
-				</div>
-				<div>
-					<p>Modifier le nom d'utilisateur :</p>
-					<input type="text" placeholder="Nouveau nom d'utilisateur">
-				</div>
-				<div>
-					<p>Modifier le mot de passe :</p>
-					<input type="password" placeholder="Mot de passe actuel">
-					<input type="password" placeholder="Nouveau mot de passe">
+				<div class="resume-name">
+					<p>SURNOM</p>
+					<p>NOM D'UTILISATEUR</p>
 				</div>
 			</div>
+			<div class="modif-data">
+				<form class="modif-form">
+					<h2 class="form-title">Modifier le surnom</h2>
+					<div class="form-group">
+						<input type="text" id="nickname" name="nickname" placeholder="Nouveau surnom">
+						<button type="submit">Soumettre</button>
+					</div>
+				</form>
+				<form class="modif-form">
+					<h2 class="form-title">Modifier le nom d'utilisateur</h2>
+					<div class="form-group">
+						<input type="text" id="username" name="username" placeholder="Nouveau nom d'utilisateur">
+						<button type="submit">Soumettre</button>
+					</div>
+				</form>
+				<form class="modif-form">
+					<h2 class="form-title">Modifier le mot de passe</h2>
+					<div class="form-group">
+						<input type="password" id="new-password" name="new-password" placeholder="Nouveau mot de passe">
+						<button type="submit">Soumettre</button>
+					</div>
+				</form>
+		</div>
+
 		</div>
 		<div class="right-part">
 			<div>
@@ -53,23 +62,42 @@
 		margin: auto;
 	}
 
-	.profil-picture {
+	.left-part {
+		width: 50%;
+	}
+
+	.right-part {
+		width: 50%;
+	}
+
+	.resume-container {
 		display: flex;
 		align-items: center;
 		flex-direction: column;
 	}
 
-	.profil-picture button {
+	.resume-container button {
 		margin-bottom: 20px;
 		border-radius: 100px;
 	}
 
-	.profil-picture button:hover {
+	.resume-container button:hover {
 		background-color: rgba(0, 0, 0, 0.2);
 	}
 
-	.profil-picture img {
+	.resume-container img {
 		border-radius: 100px;
+	}
+
+	.resume-name {
+		margin-bottom: 20px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.resume-name p {
+		margin: 0;
 	}
 
 	img {
@@ -120,4 +148,38 @@
 		opacity: 1;
 	}
 
+	.left-part {
+		width: 50%;
+		padding-right: 20px; /* Ajoute un peu d'espace à droite */
+		box-sizing: border-box; /* Inclut le padding dans la largeur */
+	}
+
+	.modif-data {
+		max-width: 100%; /* Change de 500px à 100% */
+		margin: 0 auto;
+	}
+
+	.form-group {
+		display: flex;
+		gap: 10px;
+		flex-direction: row;
+	}
+
+	input {
+		flex: 1; /* Permet à l'input de prendre tout l'espace disponible */
+		padding: 10px;
+		border: 1px solid var(--vt-c-divider-dark-1);
+		background: transparent;
+		color: var(--vt-c-text-dark-2);
+	}
+
+	.form-group button {
+		width: 100px;
+		padding: 10px;
+		background-color: var(--vt-c-black-soft);
+		border: none;
+		color: var(--vt-c-text-dark-1);
+		cursor: pointer;
+		white-space: nowrap; /* Empêche le texte de passer à la ligne */
+	}
 </style>
