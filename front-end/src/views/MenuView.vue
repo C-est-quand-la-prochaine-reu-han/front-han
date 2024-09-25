@@ -85,7 +85,7 @@
 
 	button:hover {
 		background-color: var(--vt-c-black-mute);
-		transition: background-color 0.3s linear;
+		transition: background-color 0.4s linear;
 	}
 
 	body.light-mode button:hover {
