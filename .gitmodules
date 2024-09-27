@@ -1,0 +1,3 @@
+[submodule "front-end/src/jspong"]
+	path = front-end/src/jspong
+	url = git@github.com:C-est-quand-la-prochaine-reu-han/jspong
