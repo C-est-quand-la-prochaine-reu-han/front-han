@@ -1,8 +1,5 @@
 <template>
 	<div class="left-part">
-		<button class="back-button" @click="$emit('close')">
-			<h1>←</h1>
-		</button>
 		<div class="resume-container">
 			<button class="profile-image-container">
 				<img src="../assets/business-cat.png" alt="Photo de profil">
@@ -44,23 +41,6 @@
 		width: 50%;
 		padding-right: 25px;
 		box-sizing: border-box;
-	}
-
-	.back-button {
-		position: absolute;
-		padding: 0 15px;
-		border: none;
-		cursor: pointer;
-		z-index: 10;
-	}
-
-	.back-button:hover {
-		background-color: var(--vt-c-black-mute);
-		transition: background-color 0.3s linear;
-	}
-
-	body.light-mode .back-button:hover {
-		background-color: var(--vt-c-white-mute);
 	}
 
 	.resume-container {
