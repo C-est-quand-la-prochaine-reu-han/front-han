@@ -1,10 +1,10 @@
 <script setup>
 	import { get_user_by_id } from '/src/jspong/main.js';
-	let id = 0;
-	let me = get_user_by_id(id);
-	function updateProfile() {
-		get();
-	}
+// 	let id = 0;
+// 	let me = get_user_by_id(id);
+// 	function updateProfile() {
+// 		get();
+// 	}
 </script>
 
 <template>
@@ -15,8 +15,8 @@
 				<p class="overlay">Modifier</p>
 			</button>
 			<div class="resume-name">
-				<h1>{{ me.user_nick }}</h1>
-				<h2>{{ me.user.username }}</h2>
+				<h1>gisele</h1>
+				<h2>gisele</h2>
 			</div>
 		</div>
 		<div class="modif-data">
@@ -38,7 +38,7 @@
 				<h2 class="form-title">Modifier le mot de passe</h2>
 				<div class="form-group">
 					<input type="password" id="new-password" name="new-password" placeholder="Nouveau mot de passe">
-					<button @click="updateProfile">Soumettre</button>
+					<button>Soumettre</button>
 				</div>
 			</form>
 		</div>
