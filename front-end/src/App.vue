@@ -3,16 +3,26 @@
 	import MenuView from './views/MenuView.vue'
 	import LogInView from './views/LogInView.vue'
 
+	// Importation directe des images du dossier src/assets
+	import franceFlag from '@/assets/france.svg'
+	import australiaFlag from '@/assets/australia-aboriginal.svg'
+	import normandieFlag from '@/assets/normandie.svg'
+	import nordPasDeCalaisFlag from '@/assets/nord-pas-de-calais.svg'
+	import picardieFlag from '@/assets/picardie.svg'
+	import blackCatFlag from '@/assets/black-cat.svg'
+	import sunIcon from '@/assets/sun.svg'
+	import moonIcon from '@/assets/moon.svg'
+
 	const isLightMode = ref(false)
 	const isConnected = ref(true)
 
 	const flagImages = {
-		0: '/src/assets/france.svg',
-		1: '/src/assets/australia-aboriginal.svg',
-		2: '/src/assets/normandie.svg',
-		3: '/src/assets/nord-pas-de-calais.svg',
-		4: '/src/assets/picardie.svg',
-		5: '/src/assets/black-cat.svg'
+		0: franceFlag,
+		1: australiaFlag,
+		2: normandieFlag,
+		3: nordPasDeCalaisFlag,
+		4: picardieFlag,
+		5: blackCatFlag
 	};
 
 	const currentIndex = ref(0);
@@ -27,26 +37,26 @@
 		document.body.classList.toggle('light-mode')
 	}
 
-	function toggleConnection() {
-		isConnected.value = !isConnected.value
-	}
+	// function toggleConnection() {
+	// 	isConnected.value = !isConnected.value
+	// }
 </script>
 
 <template>
 	<header>
 		<div>
-			<button @click="nextImage">
-				<img :src="currentFlag" alt="Easter egg" class="icon">
-			</button>
+		<button @click="nextImage">
+			<img :src="currentFlag" alt="Easter egg" class="icon">
+		</button>
 		</div>
 		<div>
-			<h1>ft_transcendence</h1>
+		<h1>ft_transcendence</h1>
 		</div>
 		<div>
-			<button @click="toggleTheme">
-				<img v-if="isLightMode" src="/src/assets/sun.svg" alt="Mode clair" class="icon">
-				<img v-else src="/src/assets/moon.svg" alt="Mode sombre" class="icon">
-			</button>
+		<button @click="toggleTheme">
+			<img v-if="isLightMode" :src="sunIcon" alt="Mode clair" class="icon">
+			<img v-else :src="moonIcon" alt="Mode sombre" class="icon">
+		</button>
 		</div>
 	</header>
 
@@ -54,3 +64,27 @@
 
 	<LogInView v-else />
 </template>
+
+<style scoped>
+	header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1rem;
+	}
+
+	.icon {
+	width: 24px;
+	height: 24px;
+	}
+
+	button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	}
+
+	h1 {
+	margin: 0;
+	}
+</style>

@@ -1,11 +1,11 @@
-<script setup>
+<!-- <script setup>
 	import { get_user_by_id } from '/src/jspong/main.js';
 // 	let id = 0;
 // 	let me = get_user_by_id(id);
 // 	function updateProfile() {
 // 		get();
 // 	}
-</script>
+</script> -->
 
 <template>
 	<div class="left-part">
@@ -24,13 +24,6 @@
 				<h2 class="form-title">Modifier le surnom</h2>
 				<div class="form-group">
 					<input type="text" id="nickname" name="nickname" placeholder="Nouveau surnom">
-					<button type="submit">Soumettre</button>
-				</div>
-			</form>
-			<form class="modif-form">
-				<h2 class="form-title">Modifier le nom d'utilisateur</h2>
-				<div class="form-group">
-					<input type="text" id="username" name="username" placeholder="Nouveau nom d'utilisateur">
 					<button type="submit">Soumettre</button>
 				</div>
 			</form>
