@@ -2,7 +2,7 @@
 	<div class="right-part">
 		<div class="friends-list-container">
 			<div>
-				<h2>Liste d'ami(s)</h2>
+				<h2>Liste d'ami·e·s</h2>
 			</div>
 			<div class="friends-list">
 				<div class="data-profil">
@@ -33,56 +33,56 @@
 		</div>
 		<div class="pending-list-container">
 			<div>
-				<h2>Liste d'ami(s) en attente</h2>
+				<h2>Liste d'ami·e·s en attente</h2>
 			</div>
 			<div class="friends-list">
 				<div class="data-profil">
 					<img src="../assets/business-cat.png" alt="Photo de profil">
 					<p>Gisele</p>
-					<button>Oui</button>
-					<button>Non</button>
+					<button>✔</button>
+					<button>✘</button>
 				</div>
 				<div class="data-profil">
 					<img src="../assets/business-cat.png" alt="Photo de profil">
 					<p>Gisele</p>
-					<button>Oui</button>
-					<button>Non</button>
+					<button>✔</button>
+					<button>✘</button>
 				</div>
 				<div class="data-profil">
 					<img src="../assets/business-cat.png" alt="Photo de profil">
 					<p>Gisele</p>
-					<button>Oui</button>
-					<button>Non</button>
+					<button>✔</button>
+					<button>✘</button>
 				</div>
 				<div class="data-profil">
 					<img src="../assets/business-cat.png" alt="Photo de profil">
 					<p>Gisele</p>
-					<button>Oui</button>
-					<button>Non</button>
+					<button>✔</button>
+					<button>✘</button>
 				</div>
 				<div class="data-profil">
 					<img src="../assets/business-cat.png" alt="Photo de profil">
 					<p>Gisele</p>
-					<button>Oui</button>
-					<button>Non</button>
+					<button>✔</button>
+					<button>✘</button>
 				</div>
 				<div class="data-profil">
 					<img src="../assets/business-cat.png" alt="Photo de profil">
 					<p>Gisele</p>
-					<button>Oui</button>
-					<button>Non</button>
+					<button>✔</button>
+					<button>✘</button>
 				</div>
 				<div class="data-profil">
 					<img src="../assets/business-cat.png" alt="Photo de profil">
 					<p>Gisele</p>
-					<button>Oui</button>
-					<button>Non</button>
+					<button>✔</button>
+					<button>✘</button>
 				</div>
 				<div class="data-profil">
 					<img src="../assets/business-cat.png" alt="Photo de profil">
 					<p>Gisele</p>
-					<button>Oui</button>
-					<button>Non</button>
+					<button>✔</button>
+					<button>✘</button>
 				</div>
 			</div>
 		</div>
@@ -102,14 +102,14 @@
 	}
 
 	.friends-list-container {
-		height: 276px;
+		height: 284px;
 		display: flex;
 		flex-direction: column;
 		padding-bottom: 20px;
 	}
 
 	.pending-list-container {
-		height: 184px;
+		height: 176px;
 		display: flex;
 		flex-direction: column;
 	}
@@ -151,5 +151,11 @@
 		margin: auto;
 		margin-left: 20px;
 		margin-right: 20px;
+	}
+
+	.data-profil button {
+		margin: auto;
+		padding-right: 30px;
+		font-size: 1.4em;
 	}
 </style>

@@ -32,8 +32,6 @@ footer {
 	display: flex;
 	flex-direction: row;
 	height: 50px;
-	background-color: var(--vt-c-black-soft);
-	transition: background-color 0.5s linear;
 	padding: 1px;
 }
 
@@ -44,6 +42,7 @@ body.light-mode footer {
 
 header {
 	justify-content: space-between;
+	background-color: var(--vt-c-black-soft);
 }
 
 footer {

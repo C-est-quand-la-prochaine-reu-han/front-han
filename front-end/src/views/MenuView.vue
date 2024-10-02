@@ -1,11 +1,12 @@
 <script setup>
 	import { ref } from 'vue'
 	import ProfilView from './ProfilView.vue';
+	import GameView from './GameView.vue';
 
 	const showMainMenu = ref(true)
 	const showProfil = ref(false)
 	// const showStats = ref(false)
-	// const showPlayNowSolo = ref(false)
+	const showPlayNowSolo = ref(false)
 	// const showPlayNowDuo = ref(false)
 	// const showTournament = ref(false)
 
@@ -19,10 +20,10 @@
 	// 	showMainMenu.value = !showMainMenu.value
 	// }
 
-	// function togglePlayNowSolo() {
-	// 	showPlayNowSolo.value = !showPlayNowSolo.value
-	// 	showMainMenu.value = !showMainMenu.value
-	// }
+	function togglePlayNowSolo() {
+		showPlayNowSolo.value = !showPlayNowSolo.value
+		showMainMenu.value = !showMainMenu.value
+	}
 
 	// function togglePlayNowDuo() {
 	// 	showPlayNowDuo.value = !showPlayNowDuo.value
@@ -44,7 +45,7 @@
 			<button>STATISTIQUES</button>
 		</div>
 		<div class="menu-item">
-			<button>PARTIE RAPIDE (SOLO)</button>
+			<button @click="togglePlayNowSolo">PARTIE RAPIDE (SOLO)</button>
 		</div>
 		<div class="menu-item">
 			<button>PARTIE RAPIDE (DUO)</button>
@@ -55,6 +56,8 @@
 	</div>
 
 	<ProfilView v-if="showProfil" @close="toggleProfil" />
+
+	<GameView v-if="showPlayNowSolo" @close="togglePlayNowSolo" />
 </template>
 
 <style scoped>

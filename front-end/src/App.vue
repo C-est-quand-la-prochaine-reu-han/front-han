@@ -67,24 +67,24 @@
 
 <style scoped>
 	header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 1rem;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 1rem;
 	}
 
 	.icon {
-	width: 24px;
-	height: 24px;
+		width: 40px;
+		height: 40px;
 	}
 
 	button {
-	background: none;
-	border: none;
-	cursor: pointer;
+		background: none;
+		border: none;
+		cursor: pointer;
 	}
 
 	h1 {
-	margin: 0;
+		margin: 0;
 	}
 </style>

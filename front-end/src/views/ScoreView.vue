@@ -1,13 +1,30 @@
 <template>
-	<div>
-		<p>LEFT SCORE</p>
-	</div>
-	<div class="vertical-bar">
-		<p>RIGHT SCORE</p>
+	<div class="score-container">
+		<div>
+			<p>Meow</p>
+		</div>
+		<div class="vertical-bar">
+			<p>Woof</p>
+		</div>
 	</div>
 </template>
 
 <style scoped>
+	.score-container {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		height: 50px;
+	}
+
+	.score-container div {
+		width: 100%;
+	}
+
+	.score-container p {
+		text-align: center;
+	}
+
 	.vertical-bar {
 		border-left: 1px;
 		border-style: solid;

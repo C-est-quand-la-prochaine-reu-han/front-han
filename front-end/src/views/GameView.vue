@@ -1,13 +1,13 @@
-<script>
+<script setup>
 	import ScoreView from './ScoreView.vue';
 </script>
 
 <template>
-	<main>
+	<div>
 		<p>THE GAME</p>
-	</main>
+	</div>
 
-	<footer>
+	<div>
 		<ScoreView />
-	</footer>
+	</div>
 </template>

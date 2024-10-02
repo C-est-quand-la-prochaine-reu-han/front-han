@@ -15,25 +15,27 @@
 				<p class="overlay">Modifier</p>
 			</button>
 			<div class="resume-name">
-				<h1>gisele</h1>
-				<h2>gisele</h2>
+				<h1>Gisele</h1>
+				<h2>Gisele</h2>
 			</div>
 		</div>
-		<div class="modif-data">
-			<form class="modif-form">
-				<h2 class="form-title">Modifier le surnom</h2>
-				<div class="form-group">
-					<input type="text" id="nickname" name="nickname" placeholder="Nouveau surnom">
-					<button type="submit">Soumettre</button>
-				</div>
-			</form>
-			<form class="modif-form">
-				<h2 class="form-title">Modifier le mot de passe</h2>
-				<div class="form-group">
-					<input type="password" id="new-password" name="new-password" placeholder="Nouveau mot de passe">
-					<button>Soumettre</button>
-				</div>
-			</form>
+		<div>
+			<div class="modif-data">
+				<form class="modif-form">
+					<h2 class="form-title">Modifier le surnom</h2>
+					<div class="form-group">
+						<input type="text" id="nickname" name="nickname" placeholder="Nouveau surnom">
+						<button type="submit">Soumettre</button>
+					</div>
+				</form>
+				<form class="modif-form">
+					<h2 class="form-title">Modifier le mot de passe</h2>
+					<div class="form-group">
+						<input type="password" id="new-password" name="new-password" placeholder="Nouveau mot de passe">
+						<button>Soumettre</button>
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
 </template>
@@ -43,6 +45,9 @@
 		width: 50%;
 		padding-right: 25px;
 		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
 	}
 
 	.resume-container {
@@ -72,7 +77,7 @@
 	}
 
 	.resume-name h1 {
-		font-size: 1.6em;
+		font-size: 2em;
 	}
 
 	.resume-name h2 {
@@ -90,8 +95,8 @@
 
 	.profile-image-container {
 		position: relative;
-		width: 100px;
-		height: 100px;
+		width: 150px;
+		height: 150px;
 		border-radius: 50%;
 		overflow: hidden;
 		cursor: pointer;
