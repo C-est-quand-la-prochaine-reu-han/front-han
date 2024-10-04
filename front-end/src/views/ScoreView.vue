@@ -1,9 +1,9 @@
 <template>
 	<div class="score-container">
-		<div>
+		<div class="score-item">
 			<p>Meow</p>
 		</div>
-		<div class="vertical-bar">
+		<div class="score-item vertical-bar">
 			<p>Woof</p>
 		</div>
 	</div>
@@ -17,12 +17,16 @@
 		height: 50px;
 	}
 
-	.score-container div {
+	.score-item {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		width: 100%;
 	}
 
-	.score-container p {
+	.score-item p {
 		text-align: center;
+		margin: auto;
 	}
 
 	.vertical-bar {

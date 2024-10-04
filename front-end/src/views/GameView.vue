@@ -1,13 +1,10 @@
 <script setup>
 	import ScoreView from './ScoreView.vue';
+	import PongView from './PongView.vue';
 </script>
 
 <template>
-	<div>
-		<p>THE GAME</p>
-	</div>
+	<PongView />
 
-	<div>
-		<ScoreView />
-	</div>
+	<ScoreView />
 </template>

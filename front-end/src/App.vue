@@ -45,18 +45,18 @@
 <template>
 	<header>
 		<div>
-		<button @click="nextImage">
-			<img :src="currentFlag" alt="Easter egg" class="icon">
-		</button>
+			<button @click="nextImage">
+				<img :src="currentFlag" alt="Easter egg" class="icon">
+			</button>
 		</div>
 		<div>
-		<h1>ft_transcendence</h1>
+			<h1>ft_transcendence</h1>
 		</div>
 		<div>
-		<button @click="toggleTheme">
-			<img v-if="isLightMode" :src="sunIcon" alt="Mode clair" class="icon">
-			<img v-else :src="moonIcon" alt="Mode sombre" class="icon">
-		</button>
+			<button @click="toggleTheme">
+				<img v-if="isLightMode" :src="sunIcon" alt="Mode clair" class="icon">
+				<img v-else :src="moonIcon" alt="Mode sombre" class="icon">
+			</button>
 		</div>
 	</header>
 
@@ -85,6 +85,7 @@
 	}
 
 	h1 {
+		font-family: 'VT323';
 		margin: 0;
 	}
 </style>
