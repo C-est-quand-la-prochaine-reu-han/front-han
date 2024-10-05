@@ -1,12 +1,16 @@
 <template>
-	<div></div>
+	<div class="ball"></div>
 </template>
 
 <style scoped>
-	div {
+	.ball {
 		width: 30px;
 		height: 30px;
 		border-radius: 50%;
-		background-color: green;
+		background-color: var(--vt-c-white);
+	}
+
+	body.light-mode .ball {
+		background-color: var(--vt-c-indigo);
 	}
 </style>

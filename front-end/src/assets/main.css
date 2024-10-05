@@ -27,31 +27,17 @@ main {
 	align-items: center;
 }
 
-header,
-footer {
+header {
 	display: flex;
 	flex-direction: row;
+	justify-content: space-between;
 	height: 50px;
 	padding: 1px;
-}
-
-body.light-mode header,
-body.light-mode footer {
-	background-color: var(--vt-c-white-soft);
-}
-
-header {
-	justify-content: space-between;
 	background-color: var(--vt-c-black-soft);
 }
 
-footer {
-	justify-content: space-around;
-	text-align: center;
-}
-
-footer > div {
-	width: 100%;
+body.light-mode header {
+	background-color: var(--vt-c-white-soft);
 }
 
 .icon {

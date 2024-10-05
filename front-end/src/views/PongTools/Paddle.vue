@@ -1,11 +1,15 @@
 <template>
-	<div></div>
+	<div class="paddle"></div>
 </template>
 
 <style scoped>
-	div {
-		width: 30px;
+	.paddle {
+		width: 20px;
 		height: 150px;
-		background-color: red;
+		background-color: var(--vt-c-white);
+	}
+
+	body.light-mode .paddle {
+		background-color: var(--vt-c-indigo);
 	}
 </style>

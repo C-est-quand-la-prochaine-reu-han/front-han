@@ -3,7 +3,6 @@
 	import MenuView from './views/MenuView.vue'
 	import LogInView from './views/LogInView.vue'
 
-	// Importation directe des images du dossier src/assets
 	import franceFlag from '@/assets/france.svg'
 	import australiaFlag from '@/assets/australia-aboriginal.svg'
 	import normandieFlag from '@/assets/normandie.svg'

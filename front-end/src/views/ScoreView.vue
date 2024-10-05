@@ -1,10 +1,10 @@
 <template>
 	<div class="score-container">
 		<div class="score-item">
-			<p>Meow</p>
+			<h1>3</h1>
 		</div>
 		<div class="score-item vertical-bar">
-			<p>Woof</p>
+			<h1>6</h1>
 		</div>
 	</div>
 </template>
@@ -24,9 +24,10 @@
 		width: 100%;
 	}
 
-	.score-item p {
+	.score-item h1 {
 		text-align: center;
 		margin: auto;
+		font-size: 1.8em;
 	}
 
 	.vertical-bar {
