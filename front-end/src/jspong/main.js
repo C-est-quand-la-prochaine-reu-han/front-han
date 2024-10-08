@@ -1,5 +1,6 @@
 let token = "9e81fbfd3c32255e0393b64ecd6f76e5267a0262";
-let path = "http://localhost:8000/appong/api/";
+let host = "https://localhost:8443/";
+let path = host + "api/appong/api/";
 let debug = false;
 
 
@@ -237,9 +238,9 @@ export async function login(username, password) {
         "username": username,
         "password": password
     };    
-    let response = await fetch(path + 'user/', {
+    let response = await fetch(host + 'api/appong/api-auth/', {
         method: 'POST',
-        headers: headers,
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify(data)
     });
     if (response.status != 200)

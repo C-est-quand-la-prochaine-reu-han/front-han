@@ -35,10 +35,6 @@
 		isLightMode.value = !isLightMode.value
 		document.body.classList.toggle('light-mode')
 	}
-
-	// function toggleConnection() {
-	// 	isConnected.value = !isConnected.value
-	// }
 </script>
 
 <template>
@@ -59,7 +55,7 @@
 		</div>
 	</header>
 
-	<MenuView v-if="isConnected" />
+	<MenuView v-if="!isConnected" />
 
 	<LogInView v-else />
 </template>

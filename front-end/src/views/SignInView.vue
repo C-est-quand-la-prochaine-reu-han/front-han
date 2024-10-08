@@ -1,7 +1,12 @@
-<script>
+<script setup>
+	import { login } from '/src/jspong/main.js'
 	// const handleSubmit() {
 		
 	// }
+
+	function toggleConnection() {
+		login("user1", "Thisisapassword");
+	}
 </script>
 <!-- @submit.prevent="handleSubmit" -->
 <template>
@@ -12,7 +17,7 @@
 		<div>
 			<input type="password" placeholder="Mot de passe" required>
 		</div>
-		<button type="submit">Se connecter</button>
+		<button type="button" @click="toggleConnection">Se connecter</button>
 	</form>
 </template>
 
