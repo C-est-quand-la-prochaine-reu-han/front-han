@@ -251,8 +251,7 @@ export async function get_nickname_by_id(id, token) {
     return user.user.user_nick;
 }
 
-export async function login(username, password, token) {
-    headers.Authorization += token;
+export async function login(username, password) {
     let data = {
         "username": username,
         "password": password
@@ -272,8 +271,7 @@ export async function login(username, password, token) {
 
 
 
-export async function create_user(username, user_nick, password, token) {
-    headers.Authorization += token;
+export async function create_user(username, user_nick, password) {
     let data = {
         "user": {
             "username": username,
@@ -342,5 +340,3 @@ export async function delete_user(id, token) {
         throw "Problem with the deletion of the user (" + response.status + ")";
     return true;
 }
-
-

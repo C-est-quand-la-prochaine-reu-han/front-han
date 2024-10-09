@@ -13,7 +13,7 @@
 	import moonIcon from '@/assets/moon.svg'
 
 	const isLightMode = ref(false)
-	const isConnected = ref(true)
+	const isConnected = ref(false)
 
 	const flagImages = {
 		0: franceFlag,
@@ -31,9 +31,17 @@
 		currentIndex.value = (currentIndex.value + 1) % Object.keys(flagImages).length;
 	};
 
+	let token;
+
 	function toggleTheme() {
 		isLightMode.value = !isLightMode.value
 		document.body.classList.toggle('light-mode')
+	}
+
+	function toggleConnection(receivedToken) {
+		token = receivedToken;
+		isConnected.value = true;
+		console.log('haaaaaaa!');
 	}
 </script>
 
@@ -55,9 +63,9 @@
 		</div>
 	</header>
 
-	<MenuView v-if="!isConnected" />
+	<MenuView v-if="isConnected" />
 
-	<LogInView v-else />
+	<LogInView @isConnected="toggleConnection" v-else />
 </template>
 
 <style scoped>

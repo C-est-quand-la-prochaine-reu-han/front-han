@@ -1,21 +1,34 @@
 <script setup>
-	import { login } from '/src/jspong/main.js'
-	// const handleSubmit() {
-		
-	// }
+	import { ref, defineEmits } from 'vue';
+	import { login } from '/src/jspong/main.js';
 
-	function toggleConnection() {
-		login("user1", "Thisisapassword");
+	const username = ref('');
+	const password = ref('');
+	
+	const emit = defineEmits(['isConnected']);
+
+	let token;
+
+	async function toggleConnection() {
+		try {
+			token = await login(username.value, password.value);
+			alert("You are connected ! Congrats !");
+			emit('isConnected', token);
+		}
+		catch(error) {
+			alert("Username or password incorrect dummy !");
+			console.error(error);
+		}
 	}
 </script>
-<!-- @submit.prevent="handleSubmit" -->
+
 <template>
-	<form >
+	<form>
 		<div class="input-wrapper">
-			<input type="text" placeholder="Nom d'utilisateur" required>
+			<input type="text" v-model="username" placeholder="Nom d'utilisateur" required>
 		</div>
 		<div>
-			<input type="password" placeholder="Mot de passe" required>
+			<input type="password" v-model="password" placeholder="Mot de passe" required>
 		</div>
 		<button type="button" @click="toggleConnection">Se connecter</button>
 	</form>
