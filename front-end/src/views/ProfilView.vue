@@ -1,10 +1,12 @@
 <script setup>
 	import ProfilLeftView from './ProfilLeftView.vue';
 	import ProfilRightView from './ProfilRightView.vue';
+
+	import { useAuthStore } from '../stores/auth.js';
 </script>
 
 <template>
-	<button class="back-button" @click="$emit('close')">
+	<button class="back-button">
 		<h1>←</h1>
 	</button>
 

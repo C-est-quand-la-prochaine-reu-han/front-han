@@ -1,6 +1,6 @@
 let host = "https://localhost:8443/";
 let path = host + "api/appong/api/";
-let debug = false;
+let debug = true;
 
 
 let headers = {
@@ -27,7 +27,7 @@ export async function get_all_users(token) {
 
 export async function get_dashboard(token) {
     headers.Authorization += token;
-    let response = await fetch(path + 'dashboard/', { headers : headers });
+    let response = await fetch(path + 'user/2/dashboard/', { headers : headers });
     let data = await response.json();
     if (debug)
         console.log(data);
@@ -265,10 +265,9 @@ export async function login(username, password) {
         throw "Problem with the creation of the user (" + response.status + ")";
     let user = await response.json();
     if (debug)
-        console.log(user);
-    return user;
+        console.log(user.token);
+    return user.token;
 }
-
 
 
 export async function create_user(username, user_nick, password) {
@@ -279,7 +278,7 @@ export async function create_user(username, user_nick, password) {
         },
         "user_nick": user_nick
     };    
-    let response = await fetch(path + 'api/appong/api/register/', {
+    let response = await fetch(path + 'register/', {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(data)
@@ -288,8 +287,8 @@ export async function create_user(username, user_nick, password) {
         throw "Problem with the creation of the user (" + response.status + ")";
     let user = await response.json();
     if (debug)
-        console.log(user);
-    return user;
+        console.log(user.token);
+    return user.token;
 }
 // TODO: Gerer les pending
 export async function create_tournament(name, pending, token) {

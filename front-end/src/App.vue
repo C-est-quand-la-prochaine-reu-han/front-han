@@ -1,4 +1,5 @@
 <script setup>
+	import { useAuthStore } from '/src/stores/auth.js'
 	import { ref, computed } from 'vue'
 	import MenuView from './views/MenuView.vue'
 	import LogInView from './views/LogInView.vue'
@@ -12,8 +13,10 @@
 	import sunIcon from '@/assets/sun.svg'
 	import moonIcon from '@/assets/moon.svg'
 
+	const authStore = useAuthStore()
+	
 	const isLightMode = ref(false)
-	const isConnected = ref(false)
+	const isConnected = computed(() => authStore.isConnected);
 
 	const flagImages = {
 		0: franceFlag,
@@ -39,10 +42,14 @@
 	}
 
 	function toggleConnection(receivedToken) {
-		token = receivedToken;
-		isConnected.value = true;
-		console.log('haaaaaaa!');
+		console.log('Function Toggle Connection App.vue!');
 	}
+
+	// function toggleConnection(receivedToken) {
+	// 	token = receivedToken;
+	// 	isConnected.value = true;
+	// 	console.log('haaaaaaa!');
+	// }
 </script>
 
 <template>
@@ -64,8 +71,7 @@
 	</header>
 
 	<MenuView v-if="isConnected" />
-
-	<LogInView @isConnected="toggleConnection" v-else />
+	<LogInView v-else />
 </template>
 
 <style scoped>

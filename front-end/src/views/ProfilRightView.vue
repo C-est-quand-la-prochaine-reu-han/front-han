@@ -1,3 +1,19 @@
+<script setup>
+
+	import { useAuthStore } from '../stores/auth.js';
+	import { get_dashboard } from '/src/jspong/main.js';
+	import { get_all_users } from '/src/jspong/main.js';
+
+	const authStore = useAuthStore();
+	const token = authStore.token;
+
+	console.log('Token:', token);
+	console.log('All users:');
+	get_all_users(token)
+
+
+</script>
+
 <template>
 	<div class="right-part">
 		<div class="friends-list-container">

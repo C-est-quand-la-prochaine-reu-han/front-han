@@ -1,19 +1,18 @@
 <script setup>
-	import { ref, defineEmits } from 'vue';
+	import { ref } from 'vue';
 	import { login } from '/src/jspong/main.js';
+	import { useAuthStore } from '../stores/auth.js';
 
 	const username = ref('');
 	const password = ref('');
+	const authStore = useAuthStore();
 	
-	const emit = defineEmits(['isConnected']);
-
 	let token;
 
 	async function toggleConnection() {
 		try {
 			token = await login(username.value, password.value);
-			alert("You are connected ! Congrats !");
-			emit('isConnected', token);
+			authStore.setToken(token);
 		}
 		catch(error) {
 			alert("Username or password incorrect dummy !");
