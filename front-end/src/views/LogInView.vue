@@ -1,5 +1,13 @@
-<script>
-	import { RouterLink, RouterView } from 'vue-router'
+<script setup>
+	import { RouterLink, RouterView } from 'vue-router';
+
+	let token;
+
+	function testEmits(receivedToken) {
+		token = receivedToken;
+		console.log('Token recu : ', token);
+		emit('isConnected', token);
+	}
 </script>
 
 <template>
@@ -9,7 +17,7 @@
 			<RouterLink to="/signup">S'inscrire</RouterLink>
 		</nav>
 
-		<RouterView />
+		<RouterView @isConnected="testEmits"/>
 	</div>
 </template>
 
