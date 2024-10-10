@@ -26,8 +26,10 @@ export async function get_me(token) {
         } 
     });
     if (response.status != 200)
+    {
         console.log('JE SUIS PAS 200');
         throw "Problem with the request (" + response.status + ")";
+    }
     let data = await response.json();
     if (debug)
         console.log(data);
