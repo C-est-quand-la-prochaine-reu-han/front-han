@@ -1,21 +1,33 @@
 <script setup>
-	import { login } from '/src/jspong/main.js'
-	// const handleSubmit() {
-		
-	// }
+	import { ref } from 'vue';
+	import { login } from '/src/jspong/main.js';
+	import { useAuthStore } from '../stores/auth.js';
 
-	function toggleConnection() {
-		login("user1", "Thisisapassword");
+	const username = ref('');
+	const password = ref('');
+	const authStore = useAuthStore();
+	
+	let token;
+
+	async function toggleConnection() {
+		try {
+			token = await login(username.value, password.value);
+			authStore.setToken(token);
+		}
+		catch(error) {
+			alert("Username or password incorrect dummy !");
+			console.error(error);
+		}
 	}
 </script>
-<!-- @submit.prevent="handleSubmit" -->
+
 <template>
-	<form >
+	<form>
 		<div class="input-wrapper">
-			<input type="text" placeholder="Nom d'utilisateur" required>
+			<input type="text" v-model="username" placeholder="Nom d'utilisateur" required>
 		</div>
 		<div>
-			<input type="password" placeholder="Mot de passe" required>
+			<input type="password" v-model="password" placeholder="Mot de passe" required>
 		</div>
 		<button type="button" @click="toggleConnection">Se connecter</button>
 	</form>

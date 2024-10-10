@@ -1,3 +1,48 @@
+<script setup>
+
+	import { get_all_users } from '@/jspong/main.js';
+	import { useAuthStore } from '../stores/auth.js';
+	import { get_me, get_user_by_id, request_pending_friend } from '/src/jspong/main.js';
+
+	const authStore = useAuthStore();
+	const token = authStore.token;
+
+	try {
+		request_pending_friend(1, token);
+	} catch (error) {
+		console.log('No user found');
+	}
+
+	let friends_confirmed;
+	let friends_pending;
+
+	console.log(token);
+	try {
+		let me = await get_me(token);
+		console.log(me);
+		if (me) {
+			friends_confirmed = me.friends_confirmed;
+			let friend = [];
+			for (let i = 0; i < friends_confirmed.length; i++) {
+				let new_friend = get_user_by_id(me.friends_confirmed[i]);
+				friend.push(new_friend);
+			}
+			friends_pending = me.friends_pending;
+			let pending = [];
+			for (let i = 0; i < friends_pending.length; i++) {
+				new_pending = get_user_by_id(pending[i]);
+				pending.push(new_pending);
+			}
+		} else {
+			console.log('No user found');
+		}
+	} catch (error) {
+		console.log('No user found');
+	}
+
+
+</script>
+
 <template>
 	<div class="right-part">
 		<div class="friends-list-container">
@@ -5,29 +50,10 @@
 				<h2>Liste d'ami·e·s</h2>
 			</div>
 			<div class="friends-list">
-				<div class="data-profil">
-					<img src="../assets/business-cat.png" alt="Photo de profil">
-					<p>Gisele</p>
-				</div>
-				<div class="data-profil">
-					<img src="../assets/business-cat.png" alt="Photo de profil">
-					<p>Gisele</p>
-				</div>
-				<div class="data-profil">
-					<img src="../assets/business-cat.png" alt="Photo de profil">
-					<p>Gisele</p>
-				</div>
-				<div class="data-profil">
-					<img src="../assets/business-cat.png" alt="Photo de profil">
-					<p>Gisele</p>
-				</div>
-				<div class="data-profil">
-					<img src="../assets/business-cat.png" alt="Photo de profil">
-					<p>Gisele</p>
-				</div>
-				<div class="data-profil">
-					<img src="../assets/business-cat.png" alt="Photo de profil">
-					<p>Gisele</p>
+				<p v-if="friends_confirmed.length == 0" class="data-no-friend">Tu n'as pas d'ami·e LOOSER</p>
+				<div class="data-profil" v-for="friend in friends_confirmed">
+					<img :src="friend.avatar" alt="Photo de profil">
+					<p>{{ friend.username }}</p>
 				</div>
 			</div>
 		</div>
@@ -36,51 +62,10 @@
 				<h2>Liste d'ami·e·s en attente</h2>
 			</div>
 			<div class="friends-list">
-				<div class="data-profil">
-					<img src="../assets/business-cat.png" alt="Photo de profil">
-					<p>Gisele</p>
-					<button>✔</button>
-					<button>✘</button>
-				</div>
-				<div class="data-profil">
-					<img src="../assets/business-cat.png" alt="Photo de profil">
-					<p>Gisele</p>
-					<button>✔</button>
-					<button>✘</button>
-				</div>
-				<div class="data-profil">
-					<img src="../assets/business-cat.png" alt="Photo de profil">
-					<p>Gisele</p>
-					<button>✔</button>
-					<button>✘</button>
-				</div>
-				<div class="data-profil">
-					<img src="../assets/business-cat.png" alt="Photo de profil">
-					<p>Gisele</p>
-					<button>✔</button>
-					<button>✘</button>
-				</div>
-				<div class="data-profil">
-					<img src="../assets/business-cat.png" alt="Photo de profil">
-					<p>Gisele</p>
-					<button>✔</button>
-					<button>✘</button>
-				</div>
-				<div class="data-profil">
-					<img src="../assets/business-cat.png" alt="Photo de profil">
-					<p>Gisele</p>
-					<button>✔</button>
-					<button>✘</button>
-				</div>
-				<div class="data-profil">
-					<img src="../assets/business-cat.png" alt="Photo de profil">
-					<p>Gisele</p>
-					<button>✔</button>
-					<button>✘</button>
-				</div>
-				<div class="data-profil">
-					<img src="../assets/business-cat.png" alt="Photo de profil">
-					<p>Gisele</p>
+				<p v-if="friends_pending.length == 0" class="data-no-friend">Tu n'as pas d'ami·e en attente</p>
+				<div class="data-profil" v-for="pending in friends_pending">
+					<img :src="pending.avatar" alt="Photo de profil">
+					<p>{{ pending.username }}</p>
 					<button>✔</button>
 					<button>✘</button>
 				</div>
@@ -157,5 +142,12 @@
 		margin: auto;
 		padding-right: 30px;
 		font-size: 1.4em;
+	}
+
+	.data-no-friend {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
 	}
 </style>

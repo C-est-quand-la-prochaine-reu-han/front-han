@@ -1,6 +1,6 @@
 let host = "https://localhost:8443/";
 let path = host + "api/appong/api/";
-let debug = false;
+let debug = true;
 
 
 let headers = {
@@ -10,6 +10,23 @@ let headers = {
 
 export async function get(token) {
     let response = await fetch(path, { headers : headers });
+    let data = await response.json();
+    if (debug)
+        console.log(data);
+    return data;
+}
+
+export async function get_me(token) {
+    headers.Authorization += token;
+    let response = await fetch(path + 'user/me/', {
+        headers : {
+            'Authorization': 'Token ' + token,
+            'Content-Type':'application/json',
+            'Accept': 'application/json'
+        } 
+    });
+    if (response.status != 200)
+        throw "Problem with the request (" + response.status + ")";
     let data = await response.json();
     if (debug)
         console.log(data);
@@ -27,7 +44,7 @@ export async function get_all_users(token) {
 
 export async function get_dashboard(token) {
     headers.Authorization += token;
-    let response = await fetch(path + 'dashboard/', { headers : headers });
+    let response = await fetch(path + 'user/2/dashboard/', { headers : headers });
     let data = await response.json();
     if (debug)
         console.log(data);
@@ -251,8 +268,7 @@ export async function get_nickname_by_id(id, token) {
     return user.user.user_nick;
 }
 
-export async function login(username, password, token) {
-    headers.Authorization += token;
+export async function login(username, password) {
     let data = {
         "username": username,
         "password": password
@@ -266,14 +282,12 @@ export async function login(username, password, token) {
         throw "Problem with the creation of the user (" + response.status + ")";
     let user = await response.json();
     if (debug)
-        console.log(user);
-    return user;
+        console.log(user.token);
+    return user.token;
 }
 
 
-
-export async function create_user(username, user_nick, password, token) {
-    headers.Authorization += token;
+export async function create_user(username, user_nick, password) {
     let data = {
         "user": {
             "username": username,
@@ -281,7 +295,7 @@ export async function create_user(username, user_nick, password, token) {
         },
         "user_nick": user_nick
     };    
-    let response = await fetch(path + 'api/appong/api/register/', {
+    let response = await fetch(path + 'register/', {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(data)
@@ -290,8 +304,8 @@ export async function create_user(username, user_nick, password, token) {
         throw "Problem with the creation of the user (" + response.status + ")";
     let user = await response.json();
     if (debug)
-        console.log(user);
-    return user;
+        console.log(user.token);
+    return user.token;
 }
 // TODO: Gerer les pending
 export async function create_tournament(name, pending, token) {
@@ -343,4 +357,24 @@ export async function delete_user(id, token) {
     return true;
 }
 
-
+export async function request_pending_friend(friend_id, token) {
+    let me = await get_me(token);
+    let actuel_pending = me.friends_pending;
+    actuel_pending.push(friend_id);
+    let data = {
+        "friends_pending": actuel_pending
+    }
+    console.log(token)
+    let response = await fetch(path + 'user/friends_pending/', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Token ' + token,
+            'Content-Type':'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+    if (response.status != 200)
+        throw "Problem with the addition of the friend (" + response.status + ")";
+    return true;
+}
