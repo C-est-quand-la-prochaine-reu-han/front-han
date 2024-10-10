@@ -356,10 +356,9 @@ export async function create_user(username, user_nick, password) {
     let response = await fetch(path + 'register/', {
         method: 'POST',
         headers: {
-            'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
-            'Accept': 'application/json'
-         },
+            'Accept':'application/json',
+        },
         body: JSON.stringify(data)
     });
     if (response.status != 201)

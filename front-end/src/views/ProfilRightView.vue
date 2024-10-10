@@ -7,12 +7,6 @@
 	const authStore = useAuthStore();
 	const token = authStore.token;
 
-	try {
-		request_pending_friend(1, token);
-	} catch (error) {
-		console.log('No user found');
-	}
-
 	let friends_confirmed;
 	let friends_pending;
 

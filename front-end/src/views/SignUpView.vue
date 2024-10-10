@@ -16,7 +16,6 @@
 		try {
 			token = await create_user(username.value, userNick.value, password.value);
 			authStore.setToken(token);
-			alert("User created !");
 		} catch (error) {
 			alert("Error creating user !");
 			console.error(error);
