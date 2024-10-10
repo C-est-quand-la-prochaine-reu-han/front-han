@@ -1,3 +1,47 @@
+<script setup>
+
+	// import { get_all_users } from '@/jspong/main.js';
+	// import { useAuthStore } from '../stores/auth.js';
+	// import { get_me, get_user_by_id, request_pending_friend } from '/src/jspong/main.js';
+
+	// const authStore = useAuthStore();
+	// const token = authStore.token;
+
+	// try {
+	// 	request_pending_friend(1, token);
+	// } catch (error) {
+	// 	console.log('No user found');
+	// }
+
+	// let friends_confirmed;
+	// let friends_pending;
+
+	// console.log(token);
+	// try {
+	// 	let me = await get_me(token);
+	// 	console.log(me);
+	// 	if (me) {
+	// 		friends_confirmed = me.friends_confirmed;
+	// 		let friend = [];
+	// 		for (let i = 0; i < friends_confirmed.length; i++) {
+	// 			let new_friend = get_user_by_id(me.friends_confirmed[i]);
+	// 			friend.push(new_friend);
+	// 		}
+	// 		friends_pending = me.friends_pending;
+	// 		let pending = [];
+	// 		for (let i = 0; i < friends_pending.length; i++) {
+	// 			new_pending = get_user_by_id(pending[i]);
+	// 			pending.push(new_pending);
+	// 		}
+	// 	} else {
+	// 		console.log('No user found');
+	// 	}
+	// } catch (error) {
+	// 	console.log('No user found');
+	// }
+
+</script>
+
 <template>
 	<div class="right-part">
 		<div class="friends-list-container">

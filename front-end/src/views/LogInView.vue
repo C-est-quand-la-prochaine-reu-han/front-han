@@ -3,10 +3,9 @@
 
 	let token;
 
-	function testEmits(receivedToken) {
+	function test(receivedToken) {
 		token = receivedToken;
 		console.log('Token recu : ', token);
-		emit('isConnected', token);
 	}
 </script>
 
@@ -17,7 +16,7 @@
 			<RouterLink to="/signup">S'inscrire</RouterLink>
 		</nav>
 
-		<RouterView @isConnected="testEmits"/>
+		<RouterView @isConnected="test"/>
 	</div>
 </template>
 
