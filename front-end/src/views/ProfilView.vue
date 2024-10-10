@@ -6,7 +6,7 @@
 </script>
 
 <template>
-	<button class="back-button">
+	<button class="back-button" @click="$emit('close')">
 		<h1>←</h1>
 	</button>
 

@@ -36,23 +36,6 @@ export async function get_me(token) {
     return data;
 }
 
-export async function get_me(token) {
-    headers.Authorization += token;
-    let response = await fetch(path + 'user/me/', {
-        headers : {
-            'Authorization': 'Token ' + token,
-            'Content-Type':'application/json',
-            'Accept': 'application/json'
-        } 
-    });
-    if (response.status != 200)
-        throw "Problem with the request (" + response.status + ")";
-    let data = await response.json();
-    if (debug)
-        console.log(data);
-    return data;
-}
-
 export async function get_all_users(token) {
     let response = await fetch(path + 'user/', {
         headers : {
