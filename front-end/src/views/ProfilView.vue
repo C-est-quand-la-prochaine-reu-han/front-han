@@ -12,7 +12,9 @@
 
 	<div class="profil-container">
 
-		<ProfilLeftView />
+		<Suspense>
+			<ProfilLeftView />
+		</Suspense>
 
 		<Suspense>
 			<ProfilRightView />

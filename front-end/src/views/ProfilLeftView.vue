@@ -1,24 +1,79 @@
 <script setup>
 	import { ref } from 'vue';
 	import AddFriendsView from './AddFriendsView.vue';
+	import { useAuthStore } from '../stores/auth.js';
+	import { get_me, delete_user, change_user_nick, change_password } from '/src/jspong/main.js';
 
 	const isAddFriendsViewShows = ref(false);
 
 	function toggleAddFriends() {
 		isAddFriendsViewShows.value = !isAddFriendsViewShows.value;
 	}
+
+	const authStore = useAuthStore();
+	const token = authStore.token;
+
+	let user_Nickname;
+	let username;
+	let avatar;
+
+	const new_nickname = ref('');
+	const new_password = ref('');
+
+	try {
+		let me = await get_me(token);
+		if (me) {
+			user_Nickname = me.user_nick;
+			username = me.user.username;
+			avatar = me.avatar;
+		} else {
+			console.log('No user found');
+		}
+	} catch (error) {
+		console.log('No user found');
+	}
+
+	function submitPassword() {
+		console.log('submit password');
+		console.log(token);
+		if (new_password.value === '') {
+			alert('Password cannot be empty');
+			return;
+		}
+		let response = change_password(new_password.value, token);
+		console.log(response);
+		console.log(new_password.value);
+	}
+
+	function submitUserNick() {
+		console.log('submit nickname');
+		console.log(token);
+		if (new_nickname.value === '') {
+			alert('Nickname cannot be empty');
+			return;
+		}
+		let response = change_user_nick(new_nickname.value, token);
+		console.log(response);
+		console.log(new_nickname.value);
+	}
+
+	function deleteAccount() {
+		delete_user(token);
+		authStore.clearToken();
+	}
+
 </script>
 
 <template>
 	<div class="left-part">
 		<div class="resume-container">
 			<button class="profile-image-container">
-				<img src="../assets/business-cat.png" alt="Photo de profil">
+				<img :src=avatar alt="Photo de profil">
 				<p class="overlay">Modifier</p>
 			</button>
 			<div class="resume-name">
-				<h1>Gisele</h1>
-				<h2>Gisele</h2>
+				<h1>{{ user_Nickname }}</h1>
+				<h2>{{ username }}</h2>
 			</div>
 		</div>
 		<div>
@@ -26,24 +81,24 @@
 				<form class="modif-form">
 					<h2 class="form-title">Modifier le surnom</h2>
 					<div class="form-group">
-						<input type="text" id="nickname" name="nickname" placeholder="Nouveau surnom">
-						<button type="submit">Soumettre</button>
+						<input type="text" v-model="new_nickname" id="nickname" name="nickname" placeholder="Nouveau surnom">
+						<button type="button" @click="submitUserNick">Soumettre</button>
 					</div>
 				</form>
 				<form class="modif-form">
 					<h2 class="form-title">Modifier le mot de passe</h2>
 					<div class="form-group">
-						<input type="password" id="new-password" name="new-password" placeholder="Nouveau mot de passe">
-						<button type="submit">Soumettre</button>
+						<input type="password" v-model="new_password" id="new-password" name="new-password" placeholder="Nouveau mot de passe">
+						<button type="button" @click="submitPassword">Soumettre</button>
 					</div>
 				</form>
 			</div>
 			<div class="bottom-button">
 				<div class="form-group">
-					<button @click="toggleAddFriends">Ajouter un·e ami·e</button>
+					<button type="button" @click="toggleAddFriends">Ajouter un·e ami·e</button>
 				</div>
 				<div class="form-group remove-account">
-					<button>Supprimer le compte</button>
+					<button type="button" @click="deleteAccount">Supprimer le compte</button>
 				</div>
 			</div>
 		</div>

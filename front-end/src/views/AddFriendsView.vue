@@ -1,4 +1,31 @@
 <script setup>
+
+import { ref } from 'vue';	
+import { useAuthStore } from '../stores/auth.js';
+import { request_pending_friend, get_id_by_username } from '/src/jspong/main.js';
+
+const friend_username = ref('');
+const authStore = useAuthStore();
+const token = authStore.token;
+
+async function submitFriendRequest() {
+	console.log('submit friend request');
+	console.log(friend_username.value);
+	if (friend_username.value === '') {
+		alert('Username cannot be empty');
+		return;
+	}
+	let friend_id;
+	friend_id = await get_id_by_username(friend_username.value, token);
+	if (friend_id === undefined) {
+		alert('User not found');
+		return;
+	}
+	console.log(friend_id);
+	let response = await request_pending_friend(friend_id, token);
+	console.log(response);
+}
+
 </script>
 
 <template>
@@ -8,8 +35,8 @@
 				<h1>←</h1>
 			</button>
 			<div class="input-container">
-				<input type="text" placeholder="Rechercher un nom d'utilisateur">
-				<button>Rechercher</button>
+				<input type="text" v-model="friend_username" placeholder="Rechercher un nom d'utilisateur">
+				<button type="button" @click="submitFriendRequest">Rechercher</button>
 			</div>
 		</div>
 	</div>
