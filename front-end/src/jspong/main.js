@@ -51,7 +51,6 @@ export async function get_all_users(token) {
 }
 
 export async function get_dashboard(token) {
-<<<<<<< HEAD
     let response = await fetch(path + 'user/2/dashboard/', {
         headers : {
             'Authorization': 'Token ' + token,
@@ -59,10 +58,6 @@ export async function get_dashboard(token) {
             'Accept': 'application/json'
          } 
     });
-=======
-    headers.Authorization += token;
-    let response = await fetch(path + 'user/2/dashboard/', { headers : headers });
->>>>>>> origin/ccormon
     let data = await response.json();
     if (debug)
         console.log(data);
@@ -349,16 +344,9 @@ export async function create_user(username, user_nick, password) {
     let response = await fetch(path + 'register/', {
         method: 'POST',
         headers: {
-<<<<<<< HEAD
-            'Authorization': 'Token ' + token,
-            'Content-Type':'application/json',
-            'Accept': 'application/json'
-         },
-=======
             'Content-Type':'application/json',
             'Accept':'application/json',
         },
->>>>>>> origin/ccormon
         body: JSON.stringify(data)
     });
     if (response.status != 201)
