@@ -1,11 +1,13 @@
-<!-- <script setup>
-	import { get_user_by_id } from '/src/jspong/main.js';
-// 	let id = 0;
-// 	let me = get_user_by_id(id);
-// 	function updateProfile() {
-// 		get();
-// 	}
-</script> -->
+<script setup>
+	import { ref } from 'vue';
+	import AddFriendsView from './AddFriendsView.vue';
+
+	const isAddFriendsViewShows = ref(false);
+
+	function toggleAddFriends() {
+		isAddFriendsViewShows.value = !isAddFriendsViewShows.value;
+	}
+</script>
 
 <template>
 	<div class="left-part">
@@ -32,12 +34,22 @@
 					<h2 class="form-title">Modifier le mot de passe</h2>
 					<div class="form-group">
 						<input type="password" id="new-password" name="new-password" placeholder="Nouveau mot de passe">
-						<button>Soumettre</button>
+						<button type="submit">Soumettre</button>
 					</div>
 				</form>
 			</div>
+			<div class="bottom-button">
+				<div class="form-group">
+					<button @click="toggleAddFriends">Ajouter un·e ami·e</button>
+				</div>
+				<div class="form-group remove-account">
+					<button>Supprimer le compte</button>
+				</div>
+			</div>
 		</div>
 	</div>
+
+	<AddFriendsView v-if="isAddFriendsViewShows" @close="toggleAddFriends" />
 </template>
 
 <style scoped>
@@ -95,8 +107,8 @@
 
 	.profile-image-container {
 		position: relative;
-		width: 150px;
-		height: 150px;
+		width: 120px;
+		height: 120px;
 		border-radius: 50%;
 		overflow: hidden;
 		cursor: pointer;
@@ -199,5 +211,19 @@
 
 	body.light-mode .form-group button:hover {
 		background-color: var(--vt-c-white-mute);
+	}
+
+	.bottom-button {
+		display: flex;
+		gap: 10px;
+		margin-top: 20px;
+	}
+
+	.bottom-button .form-group button {
+		width: 100%;
+	}
+
+	.remove-account button:hover {
+		background-color: rgba(255, 0, 0, 0.5);
 	}
 </style>

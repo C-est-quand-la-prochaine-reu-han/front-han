@@ -34,7 +34,6 @@
 		console.log('No user found');
 	}
 
-
 </script>
 
 <template>
