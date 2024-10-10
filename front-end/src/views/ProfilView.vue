@@ -14,7 +14,9 @@
 
 		<ProfilLeftView />
 
-		<ProfilRightView />
+		<Suspense>
+			<ProfilRightView />
+		</Suspense>
 
 	</div>
 </template>
