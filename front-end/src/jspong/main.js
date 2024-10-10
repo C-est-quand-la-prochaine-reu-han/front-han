@@ -3,13 +3,14 @@ let path = host + "api/appong/api/";
 let debug = true;
 
 
-let headers = {
-    'Authorization': 'Token ',
-    'Content-Type':'application/json'
-}
-
 export async function get(token) {
-    let response = await fetch(path, { headers : headers });
+    let response = await fetch(path, {
+         headers : {
+            'Authorization': 'Token ' + token,
+            'Content-Type':'application/json',
+            'Accept': 'application/json'
+         } 
+        });
     let data = await response.json();
     if (debug)
         console.log(data);
@@ -17,7 +18,6 @@ export async function get(token) {
 }
 
 export async function get_me(token) {
-    headers.Authorization += token;
     let response = await fetch(path + 'user/me/', {
         headers : {
             'Authorization': 'Token ' + token,
@@ -26,7 +26,10 @@ export async function get_me(token) {
         } 
     });
     if (response.status != 200)
+    {
+        console.log('JE SUIS PAS 200');
         throw "Problem with the request (" + response.status + ")";
+    }
     let data = await response.json();
     if (debug)
         console.log(data);
@@ -34,8 +37,13 @@ export async function get_me(token) {
 }
 
 export async function get_all_users(token) {
-    headers.Authorization += token;
-    let response = await fetch(path + 'user/', { headers : headers });
+    let response = await fetch(path + 'user/', {
+        headers : {
+            'Authorization': 'Token ' + token,
+            'Content-Type':'application/json',
+            'Accept': 'application/json'
+         }  
+    });
     let data = await response.json();
     if (debug)
         console.log(data);
@@ -43,8 +51,13 @@ export async function get_all_users(token) {
 }
 
 export async function get_dashboard(token) {
-    headers.Authorization += token;
-    let response = await fetch(path + 'user/2/dashboard/', { headers : headers });
+    let response = await fetch(path + 'user/2/dashboard/', {
+        headers : {
+            'Authorization': 'Token ' + token,
+            'Content-Type':'application/json',
+            'Accept': 'application/json'
+         } 
+    });
     let data = await response.json();
     if (debug)
         console.log(data);
@@ -52,8 +65,11 @@ export async function get_dashboard(token) {
 }
 
 export async function get_all_tournament(token) {
-    headers.Authorization += token;
-    let response = await fetch(path + 'tournament/', { headers : headers });
+    let response = await fetch(path + 'tournament/', { headers : {
+        'Authorization': 'Token ' + token,
+        'Content-Type':'application/json',
+        'Accept': 'application/json'
+     } });
     let data = await response.json();
     if (debug)
         console.log(data);
@@ -61,8 +77,13 @@ export async function get_all_tournament(token) {
 }
 
 export async function get_number_of_matches(token) {
-    headers.Authorization += token;
-    let response = await fetch(path + 'match/', { headers : headers });
+    let response = await fetch(path + 'match/', {
+        headers : {
+            'Authorization': 'Token ' + token,
+            'Content-Type':'application/json',
+            'Accept': 'application/json'
+         }
+    });
     let data = await response.json();
     if (debug)
         console.log(data.length);
@@ -71,8 +92,14 @@ export async function get_number_of_matches(token) {
 
 
 export async function get_number_of_users(token) {
-    headers.Authorization += token;
-    let response = await fetch(path + 'user/', { headers : headers });
+    
+    let response = await fetch(path + 'user/', {
+        headers : {
+            'Authorization': 'Token ' + token,
+            'Content-Type':'application/json',
+            'Accept': 'application/json'
+         } 
+    });
     let data = await response.json();
     if (debug)
         console.log(data.length);
@@ -80,8 +107,13 @@ export async function get_number_of_users(token) {
 }
 
 export async function get_number_of_tournaments(token) {
-    headers.Authorization += token;
-    let response = await fetch(path + 'tournament/', { headers : headers });
+    let response = await fetch(path + 'tournament/', {
+        headers : {
+            'Authorization': 'Token ' + token,
+            'Content-Type':'application/json',
+            'Accept': 'application/json'
+         }
+    });
     let data = await response.json();
     if (debug)
         console.log(data.length);
@@ -89,8 +121,13 @@ export async function get_number_of_tournaments(token) {
 }
 
 export async function get_user_by_id(id, token) {
-    headers.Authorization += token;
-    let response = await fetch(path + 'user/', { headers : headers });
+    let response = await fetch(path + 'user/', {
+        headers : {
+            'Authorization': 'Token ' + token,
+            'Content-Type':'application/json',
+            'Accept': 'application/json'
+         }
+    });
     let data = await response.json();
     for (let i = 0; i < data.length; i++) {
         if (data[i].pk === id) {
@@ -103,8 +140,11 @@ export async function get_user_by_id(id, token) {
 }
 
 export async function get_tournament_by_id(id, token) {
-    headers.Authorization += token;
-    let response = await fetch(path + 'tournament/' + id, { headers : headers });
+    let response = await fetch(path + 'tournament/' + id, { headers : {
+        'Authorization': 'Token ' + token,
+        'Content-Type':'application/json',
+        'Accept': 'application/json'
+     }});
     if (response.status == 404)
         throw "Tournament not found";
     let data = await response.json();
@@ -114,8 +154,12 @@ export async function get_tournament_by_id(id, token) {
 }
 
 export async function get_all_matches_of_user(id, token) {
-    headers.Authorization += token;
-    let response = await fetch(path + 'match/', { headers : headers });
+    let response = await fetch(path + 'match/', { headers : 
+        {
+        'Authorization': 'Token ' + token,
+        'Content-Type':'application/json',
+        'Accept': 'application/json'
+     } });
     let data = await response.json();
     let matches = [];
     for (let i = 0; i < data.length; i++) {
@@ -129,9 +173,12 @@ export async function get_all_matches_of_user(id, token) {
 }
 
 export async function is_match_tournament(id, token) {
-    headers.Authorization += token;
     let value = false;
-    let response = await fetch(path + 'match/' + id, { headers : headers });
+    let response = await fetch(path + 'match/' + id, { headers : {
+        'Authorization': 'Token ' + token,
+        'Content-Type':'application/json',
+        'Accept': 'application/json'
+     } });
     if (response.status == 404)
         throw "Match not found";
     let data = await response.json();
@@ -144,8 +191,12 @@ export async function is_match_tournament(id, token) {
 
 
 export async function get_all_matches_of_tournament(id, token) {
-    headers.Authorization += token;
-    let response = await fetch(path + 'match/', { headers : headers });
+    let response = await fetch(path + 'match/', { headers :
+        {
+            'Authorization': 'Token ' + token,
+            'Content-Type':'application/json',
+            'Accept': 'application/json'
+        }});
     let data = await response.json();
     let matches = [];
     for (let i = 0; i < data.length; i++) {
@@ -159,7 +210,6 @@ export async function get_all_matches_of_tournament(id, token) {
 }
 
 export async function get_all_tournaments_from_creator(id, token) {
-    headers.Authorization += token;
     let data = await get_all_tournament(token);
     let tournaments = [];
     for (let i = 0; i < data.length; i++) {
@@ -173,7 +223,6 @@ export async function get_all_tournaments_from_creator(id, token) {
 }
 
 export async function get_all_tournaments_confirm_of_user(id, token) {
-    headers.Authorization += token;
     let data = await get_all_tournament(token);
     let tournaments = [];
     for (let i = 0; i < data.length; i++) {
@@ -187,7 +236,6 @@ export async function get_all_tournaments_confirm_of_user(id, token) {
 }
 
 export async function get_all_tournaments_pending_of_user(id, token) {
-    headers.Authorization += token;
     let data = await get_all_tournament(token);
     let tournaments = [];
     for (let i = 0; i < data.length; i++) {
@@ -201,7 +249,6 @@ export async function get_all_tournaments_pending_of_user(id, token) {
 }
 
 export async function get_all_users_of_tournament(id, token) {
-    headers.Authorization += token;
     let data = await get_all_matches_of_tournament(id, token);
     let users = [];
     let usersID = [];
@@ -231,8 +278,11 @@ export async function get_all_users_of_tournament(id, token) {
  * @return Un json contenant les informations du match.
  */
 export async function get_match_by_id(id, token) {
-    headers.Authorization += token;
-    let response = await fetch(path + 'match/' + id, { headers : headers });
+    let response = await fetch(path + 'match/' + id, { headers : {
+        'Authorization': 'Token ' + token,
+        'Content-Type':'application/json',
+        'Accept': 'application/json'
+     } });
     if (response.status == 404)
         throw "Match not found";
     let data = await response.json();
@@ -242,7 +292,6 @@ export async function get_match_by_id(id, token) {
 }
 
 export async function get_all_users_of_match(id, token) {
-    headers.Authorization += token;
     let data = await get_match_by_id(id, token);
     let user1 = await get_user_by_id(data.player1, token);
     let user2 = await get_user_by_id(data.player2, token);
@@ -252,16 +301,13 @@ export async function get_all_users_of_match(id, token) {
 }
 
 export async function get_username_by_id(id, token) {
-    headers.Authorization += token;
     let user = await get_user_by_id(id, token);
     if (debug)
         console.log(user.user.username);
     return user.user.username;
 }
 
-
 export async function get_nickname_by_id(id, token) {
-    headers.Authorization += token;
     let user = await get_user_by_id(id, token);
     if (debug)
         console.log(user.user.username);
@@ -298,9 +344,10 @@ export async function create_user(username, user_nick, password) {
     let response = await fetch(path + 'register/', {
         method: 'POST',
         headers: {
+            'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
-            'Accept':'application/json',
-        },
+            'Accept': 'application/json'
+         },
         body: JSON.stringify(data)
     });
     if (response.status != 201)
@@ -312,14 +359,17 @@ export async function create_user(username, user_nick, password) {
 }
 // TODO: Gerer les pending
 export async function create_tournament(name, pending, token) {
-    headers.Authorization += token;
     let data = {
         "name": name,
         "pending": pending
     };
     let response = await fetch(path + 'tournament/', {
         method: 'POST',
-        headers: headers,
+        headers: {
+            'Authorization': 'Token ' + token,
+            'Content-Type':'application/json',
+            'Accept': 'application/json'
+        },
         body: JSON.stringify(data)
     });
     if (response.status != 201)
@@ -332,7 +382,6 @@ export async function create_tournament(name, pending, token) {
 
 
 export async function create_match(player1, player2, tournament, token) {
-    headers.Authorization += token;
     let data = {
         "tournament": tournament,
         "player1": player1,
@@ -340,7 +389,11 @@ export async function create_match(player1, player2, tournament, token) {
     };
     let response = await fetch(path + 'match/', {
         method: 'POST',
-        headers: headers,
+        headers: {
+            'Authorization': 'Token ' + token,
+            'Content-Type':'application/json',
+            'Accept': 'application/json'
+         },
         body: JSON.stringify(data)
     });
     let match = await response.json();
@@ -350,10 +403,13 @@ export async function create_match(player1, player2, tournament, token) {
 }
 
 export async function delete_user(id, token) {
-    headers.Authorization += token;
     let response = await fetch(path + 'user/' + id, {
         method: 'DELETE',
-        headers: headers
+        headers: {
+            'Authorization': 'Token ' + token,
+            'Content-Type':'application/json',
+            'Accept': 'application/json'
+         }
     });
     if (response.status != 204)
         throw "Problem with the deletion of the user (" + response.status + ")";
