@@ -3,6 +3,7 @@
 	import ProfilView from './ProfilView.vue';
 	import GameView from './GameView.vue';
 	import StatsView from './StatsView.vue';
+	import TournamentView from './TournamentView.vue';
 
 	const showMainMenu = ref(true)
 	const showProfil = ref(false)
@@ -31,10 +32,10 @@
 	// 	showMainMenu.value = !showMainMenu.value
 	// }
 
-	// function togglesTournament() {
-	// 	showTournament.value = !showTournament.value
-	// 	showMainMenu.value = !showMainMenu.value
-	// }
+	function toggleTournament() {
+		showTournament.value = !showTournament.value
+		showMainMenu.value = !showMainMenu.value
+	}
 </script>
 
 <template>
@@ -52,7 +53,7 @@
 			<button>PARTIE RAPIDE (DUO)</button>
 		</div>
 		<div class="menu-item">
-			<button>TOURNOIS</button>
+			<button @click="toggleTournament">TOURNOIS</button>
 		</div>
 	</div>
 
@@ -61,6 +62,8 @@
 	<GameView v-if="showPlayNowSolo" @close="togglePlayNowSolo" />
 
 	<StatsView v-if="showStats" @close="toggleStats" />
+
+	<TournamentView v-if="showTournament" @close="toggleTournament" />
 </template>
 
 <style scoped>
