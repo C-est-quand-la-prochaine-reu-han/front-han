@@ -1,13 +1,14 @@
 <script setup>
 
-	import { get_dashboard } from '@/jspong/main';
+	import { get_dashboard, get_me } from '@/jspong/main';
 	import { useAuthStore } from '../stores/auth.js';
 
 	const authStore = useAuthStore();
 	const token = authStore.token;
 
+	let me = await get_me(token);
 
-	let dashboard = await get_dashboard(token);
+	let dashboard = await get_dashboard(me.pk, token);
 	console.log(dashboard);
 
 	let fastest_ball;
@@ -23,20 +24,12 @@
 	fastest_ball = dashboard.fastest_ball;
 	match_played = dashboard.match_played;
 	match_wins = dashboard.match_wins;
-	perfect_hit_ratio = dashboard.perfect_hit_ratio.toFixed(2);
+	perfect_hit_ratio = (dashboard.perfect_hit_ratio * 100).toFixed(2);
 	perfect_hits = dashboard.perfect_hits;
 	total_hits = dashboard.total_hits;
 	total_score = dashboard.total_score;
-	win_ratio = dashboard.win_ratio.toFixed(2);
+	win_ratio = (dashboard.win_ratio * 100).toFixed(2);
 
-	console.log(fastest_ball);
-	console.log(match_played);
-	console.log(match_wins);
-	console.log(perfect_hit_ratio);
-	console.log(perfect_hits);
-	console.log(total_hits);
-	console.log(total_score);
-	console.log(win_ratio);
 
 </script>
 
