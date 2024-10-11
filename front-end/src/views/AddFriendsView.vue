@@ -75,7 +75,15 @@ async function submitFriendRequest() {
 
 	.input-container button {
 		padding: 10px;
-		background-color: red;
+		background-color: var(--vt-c-black-soft);
+	}
+
+	body.light-mode .input-container button {
+		background-color: var(--vt-c-white-soft);
+	}
+
+	.input-container button:hover {
+		background-color: var(--vt-c-black-mute);
 	}
 
 	input {
