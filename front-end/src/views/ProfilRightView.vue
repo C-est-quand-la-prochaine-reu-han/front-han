@@ -2,7 +2,7 @@
 
 	import { get_all_users } from '@/jspong/main.js';
 	import { useAuthStore } from '../stores/auth.js';
-	import { get_me, get_user_by_id, request_pending_friend } from '/src/jspong/main.js';
+	import { get_me, get_user_by_id, request_refuse_friend, request_confirm_friend } from '/src/jspong/main.js';
 
 	const authStore = useAuthStore();
 	const token = authStore.token;
@@ -34,6 +34,21 @@
 		console.log('No user found');
 	}
 
+
+	async function rejectFriend(friend_id) {
+		console.log('refuse friend');
+		console.log(friend_id);
+		console.log(token);
+		request_refuse_friend(friend_id, token);
+	}
+
+	async function acceptFriend(friend_id) {
+		console.log('accept friend');
+		console.log(friend_id);
+		console.log(token);
+		request_confirm_friend(friend_id, token);
+	}
+
 </script>
 
 <template>
@@ -59,8 +74,8 @@
 				<div class="data-profil" v-for="pending in friends_pending">
 					<img :src="pending.avatar" alt="Photo de profil">
 					<p>{{ pending.username }}</p>
-					<button>✔</button>
-					<button>✘</button>
+					<button @click="acceptFriend(pending)">✔</button>
+					<button @click="rejectFriend(pending)">✘</button>
 				</div>
 			</div>
 		</div>

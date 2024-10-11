@@ -61,7 +61,9 @@
 
 	<GameView v-if="showPlayNowSolo" @close="togglePlayNowSolo" />
 
-	<StatsView v-if="showStats" @close="toggleStats" />
+	<Suspense>
+		<StatsView v-if="showStats" @close="toggleStats" />
+	</Suspense>
 
 	<TournamentView v-if="showTournament" @close="toggleTournament" />
 </template>
