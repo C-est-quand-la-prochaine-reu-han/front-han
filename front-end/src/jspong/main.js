@@ -298,7 +298,7 @@ export async function get_all_users_of_tournament(id, token) {
  * @return Un json contenant les informations du match.
  */
 export async function get_match_by_id(id, token) {
-    let response = await fetch(path + 'match/' + id, { headers : {
+    let response = await fetch(path + 'match/' + id + '/', { headers : {
         'Authorization': 'Token ' + token,
         'Content-Type':'application/json',
         'Accept': 'application/json'
