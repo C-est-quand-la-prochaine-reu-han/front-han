@@ -2,10 +2,11 @@
 	import { ref } from 'vue'
 	import ProfilView from './ProfilView.vue';
 	import GameView from './GameView.vue';
+	import StatsView from './StatsView.vue';
 
 	const showMainMenu = ref(true)
 	const showProfil = ref(false)
-	// const showStats = ref(false)
+	const showStats = ref(false)
 	const showPlayNowSolo = ref(false)
 	// const showPlayNowDuo = ref(false)
 	// const showTournament = ref(false)
@@ -15,10 +16,10 @@
 		showMainMenu.value = !showMainMenu.value
 	}
 
-	// function toggleStats() {
-	// 	showStats.value = !showStats.value
-	// 	showMainMenu.value = !showMainMenu.value
-	// }
+	function toggleStats() {
+		showStats.value = !showStats.value
+		showMainMenu.value = !showMainMenu.value
+	}
 
 	function togglePlayNowSolo() {
 		showPlayNowSolo.value = !showPlayNowSolo.value
@@ -42,7 +43,7 @@
 			<button @click="toggleProfil">PROFIL</button>
 		</div>
 		<div class="menu-item">
-			<button>STATISTIQUES</button>
+			<button @click="toggleStats">STATISTIQUES</button>
 		</div>
 		<div class="menu-item">
 			<button @click="togglePlayNowSolo">PARTIE RAPIDE (SOLO)</button>
@@ -58,6 +59,8 @@
 	<ProfilView v-if="showProfil" @close="toggleProfil" />
 
 	<GameView v-if="showPlayNowSolo" @close="togglePlayNowSolo" />
+
+	<StatsView v-if="showStats" @close="toggleStats" />
 </template>
 
 <style scoped>
