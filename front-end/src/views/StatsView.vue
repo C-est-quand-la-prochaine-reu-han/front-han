@@ -125,15 +125,12 @@
 	.border-ver-left {
 		border-left: 2px solid var(--vt-c-divider-dark-1);
 	}
-</style>
 
-<!--
-match_played FLOAT,
-match_wins FLOAT,
-total_hits FLOAT,
-perfect_hits FLOAT,
-total_score FLOAT,
-fastest_ball FLOAT,
-win_ratio FLOAT,
-perfect_hit_ratio FLOAT
--->
+	body.light-mode .border-ver-right {
+		border-right-color: var(--vt-c-divider-light-1);
+	}
+
+	body.light-mode .border-ver-left {
+		border-left-color: var(--vt-c-divider-light-1);
+	}
+</style>
