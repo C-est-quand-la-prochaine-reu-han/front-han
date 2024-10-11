@@ -7,29 +7,21 @@
 	</button>
 
 	<div class="main-container">
-		<div class="data-match-title">
-			<p>Date</p>
-			<p>Joueur 1</p>
-			<p>Score J1</p>
-			<p>Hit J1</p>
-			<p>Perfect hit J1</p>
-			<p>Joueur 2</p>
-			<p>Score J2</p>
-			<p>Hit J2</p>
-			<p>Perfect hit J2</p>
+		<div class="data-players-title">
+			<p>Photo de profil</p>
+			<p>Nom d'utilisateur</p>
+			<p>Surnom</p>
+			<p>Matchs gagnés</p>
+			<p>Matchs gagnés (%)</p>
 		</div>
-		<div class="data-match-container">
+		<div class="data-players-container">
 			<!-- <p v-if="friends_confirmed.length == 0" class="data-no-friend">Tu n'as pas d'ami·e LOOSER</p> -->
-			<div class="data-match">
-				<p>23-09-1998</p>
+			<div class="data-players">
+				<img src="/src/assets/business-cat.png" alt="Photo de profil">
 				<p>Gisele</p>
+				<p>Gigi</p>
 				<p>42</p>
 				<p>42</p>
-				<p>42</p>
-				<p>Albert</p>
-				<p>21</p>
-				<p>42</p>
-				<p>0</p>
 			</div>
 		</div>
 	</div>
@@ -67,41 +59,47 @@
 		margin: auto;
 	}
 
-	.data-match-title {
+	.data-players-title {
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 		padding: 10px;
 		border-bottom: 2px solid var(--vt-c-divider-dark-1);
 		text-align: center;
 	}
 
-	body.light-mode .data-match-title {
+	body.light-mode .data-players-title {
 		border-bottom-color: var(--vt-c-divider-light-1);
 	}
 
-	.data-match-container {
+	.data-players-container {
 		width: 100%;
 		height: 100%;
 		overflow-y: auto;
 	}
 
-	.data-match {
+	.data-players {
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 		padding: 10px;
 		text-align: center;
 	}
 
-	.data-match:hover {
+	.data-players:hover {
 		background-color: var(--vt-c-black-mute);
 		transition: background-color 0.3s linear;
 	}
 
-	.data-match p {
+	.data-players p {
 		margin: 0;
 	}
 
-	body.light-mode .data-match:hover {
+	.data-players img {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+	}
+
+	body.light-mode .data-players:hover {
 		background-color: var(--vt-c-white-mute);
 	}
 </style>
