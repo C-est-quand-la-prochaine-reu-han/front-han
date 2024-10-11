@@ -497,3 +497,56 @@ export async function request_pending_friend(friend_id, token) {
         throw "Problem with the addition of the friend (" + response.status + ")";
     return true;
 }
+
+export async function request_confirm_friend(friend_id, token) {
+    let me = await get_me(token);
+    let pending = me.friends_pending;
+    if (!pending.includes(friend_id)) {
+        throw "Friend not in pending list";
+    }
+    let actuel_confirm = me.friends_confirmed;
+    actuel_confirm.push(friend_id);
+    let data = {
+        "friends_confirm": actuel_confirm
+    }
+    let response = await fetch(path + 'user/friends_confirm/', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Token ' + token,
+            'Content-Type':'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+    if (response.status != 200)
+        throw "Problem with the addition of the friend (" + response.status + ")";
+    request_refuse_friend(friend_id, token);
+    return true;
+}
+
+export async function request_refuse_friend(friend_id, token) {
+    let me = await get_me(token);
+    let pending = me.friends_pending;
+    if (!pending.includes(friend_id)) {
+        throw "Friend not in pending list";
+    }
+    let index = pending.indexOf(friend_id);
+    pending.splice(index, 1);
+    if (debug)
+        console.log("PENDING > " + pending);
+    let data = {
+        "friends_pending": pending
+    }
+    let response = await fetch(path + 'user/friends_pending/', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Token ' + token,
+            'Content-Type':'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+    if (response.status != 200)
+        throw "Problem with the addition of the friend (" + response.status + ")";
+    return true;
+}
