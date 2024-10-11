@@ -49,8 +49,8 @@ export async function get_all_users(token) {
     return data;
 }
 
-export async function get_dashboard(token) {
-    let response = await fetch(path + 'user/2/dashboard/', {
+export async function get_dashboard(id, token) {
+    let response = await fetch(path + 'user/' + id +'/dashboard/', {
         headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -520,7 +520,6 @@ export async function request_confirm_friend(friend_id, token) {
     });
     if (response.status != 200)
         throw "Problem with the addition of the friend (" + response.status + ")";
-    request_refuse_friend(friend_id, token);
     return true;
 }
 
