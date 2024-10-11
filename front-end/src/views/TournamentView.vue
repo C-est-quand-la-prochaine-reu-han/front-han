@@ -1,14 +1,16 @@
 <script setup>
+	import { ref } from 'vue';
+	import CreateTournamentView from './CreateTournamentView.vue';
 
+	const canCreateTournament = ref(true);
 </script>
 
 <template>
 	<button class="back-button" @click="$emit('close')">
 		<h1>←</h1>
 	</button>
-	<div>
-		SALUT
-	</div>
+
+	<CreateTournamentView />
 </template>
 
 <style>
