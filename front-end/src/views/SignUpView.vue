@@ -1,7 +1,7 @@
 <script setup>
 
 	import { ref } from 'vue';
-	import { create_user } from '/src/jspong/main.js';
+	import { create_user, login } from '/src/jspong/main.js';
 	import { useAuthStore } from '../stores/auth.js';
 
 	const username = ref('');
@@ -14,7 +14,8 @@
 	async function handleSubmit() {
 		console.log('Creating user...');
 		try {
-			token = await create_user(username.value, userNick.value, password.value);
+			await create_user(username.value, userNick.value, password.value);
+			token = await login(username.value, password.value);
 			authStore.setToken(token);
 			alert("User created !");
 		} catch (error) {
