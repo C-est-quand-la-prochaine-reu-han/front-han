@@ -39,7 +39,7 @@
 
 	<div v-if="showProfil">
 		<button @click="toggleStats">Statistiques</button>
-
+		
 		<button @click="toggleMatchHistory">Historique des matchs</button>
 	</div>
 
