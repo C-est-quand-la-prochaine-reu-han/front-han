@@ -507,7 +507,7 @@ export async function request_confirm_friend(friend_id, token) {
     let actuel_confirm = me.friends_confirmed;
     actuel_confirm.push(friend_id);
     let data = {
-        "friends_confirm": actuel_confirm
+        "friends_confirm": [friend_id]
     }
     let response = await fetch(path + 'user/friends_confirm/', {
         method: 'POST',
