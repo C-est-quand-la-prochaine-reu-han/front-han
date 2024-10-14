@@ -1,39 +1,41 @@
 <script setup>
-	import { ref } from 'vue'
+	import { ref } from 'vue';
 	import ProfilView from './ProfilView.vue';
+	import AllPlayersView from './AllPlayersView.vue';
 	import GameView from './GameView.vue';
+	import TournamentView from './TournamentView.vue';
 
-	const showMainMenu = ref(true)
-	const showProfil = ref(false)
-	// const showStats = ref(false)
-	const showPlayNowSolo = ref(false)
-	// const showPlayNowDuo = ref(false)
-	// const showTournament = ref(false)
+	const showMainMenu = ref(true);
+	const showProfil = ref(false);
+	const showAllPlayers = ref(false);
+	const showPlayNowSolo = ref(false);
+	// const showPlayNowDuo = ref(false);
+	const showTournament = ref(false);
 
 	function toggleProfil() {
-		showProfil.value = !showProfil.value
-		showMainMenu.value = !showMainMenu.value
+		showProfil.value = !showProfil.value;
+		showMainMenu.value = !showMainMenu.value;
 	}
 
-	// function toggleStats() {
-	// 	showStats.value = !showStats.value
-	// 	showMainMenu.value = !showMainMenu.value
-	// }
+	function toggleAllPlayers() {
+		showAllPlayers.value = !showAllPlayers.value;
+		showMainMenu.value = !showMainMenu.value;
+	}
 
 	function togglePlayNowSolo() {
-		showPlayNowSolo.value = !showPlayNowSolo.value
-		showMainMenu.value = !showMainMenu.value
+		showPlayNowSolo.value = !showPlayNowSolo.value;
+		showMainMenu.value = !showMainMenu.value;
 	}
 
 	// function togglePlayNowDuo() {
-	// 	showPlayNowDuo.value = !showPlayNowDuo.value
-	// 	showMainMenu.value = !showMainMenu.value
+	// 	showPlayNowDuo.value = !showPlayNowDuo.value;
+	// 	showMainMenu.value = !showMainMenu.value;
 	// }
 
-	// function togglesTournament() {
-	// 	showTournament.value = !showTournament.value
-	// 	showMainMenu.value = !showMainMenu.value
-	// }
+	function toggleTournament() {
+		showTournament.value = !showTournament.value;
+		showMainMenu.value = !showMainMenu.value;
+	}
 </script>
 
 <template>
@@ -42,7 +44,7 @@
 			<button @click="toggleProfil">PROFIL</button>
 		</div>
 		<div class="menu-item">
-			<button>STATISTIQUES</button>
+			<button @click="toggleAllPlayers">Liste des joueur·e·s</button>
 		</div>
 		<div class="menu-item">
 			<button @click="togglePlayNowSolo">PARTIE RAPIDE (SOLO)</button>
@@ -51,13 +53,23 @@
 			<button>PARTIE RAPIDE (DUO)</button>
 		</div>
 		<div class="menu-item">
-			<button>TOURNOIS</button>
+			<button @click="toggleTournament">TOURNOIS</button>
 		</div>
 	</div>
 
 	<ProfilView v-if="showProfil" @close="toggleProfil" />
 
+	<Suspense>
+		<AllPlayersView v-if="showAllPlayers" @close="toggleAllPlayers" />
+	</Suspense>
+
 	<GameView v-if="showPlayNowSolo" @close="togglePlayNowSolo" />
+
+	<Suspense>
+		<StatsView v-if="showStats" @close="toggleStats" />
+	</Suspense>
+
+	<TournamentView v-if="showTournament" @close="toggleTournament" />
 </template>
 
 <style scoped>

@@ -27,7 +27,6 @@ export async function get_me(token) {
     });
     if (response.status != 200)
     {
-        console.log('JE SUIS PAS 200');
         throw "Problem with the request (" + response.status + ")";
     }
     let data = await response.json();
@@ -120,13 +119,34 @@ export async function get_number_of_tournaments(token) {
     return data.length;
 }
 
-export async function get_user_by_id(id, token) {
+export async function get_id_by_username(username, token) {
     let response = await fetch(path + 'user/', {
         headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
             'Accept': 'application/json'
          }
+    });
+    if (response.status != 200)
+        throw "Problem with the request (" + response.status + ")";
+    let data = await response.json();
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].user.username === username) {
+            if (debug)
+                console.log(data[i].pk);
+            return data[i].pk;
+        }
+    }
+    throw "User not found";
+}
+
+export async function get_user_by_id(id, token) {
+    let response = await fetch(path + 'user/', {
+        headers : {
+            'Authorization': 'Token ' + token,
+            'Content-Type':'application/json',
+            'Accept': 'application/json'
+        }
     });
     let data = await response.json();
     for (let i = 0; i < data.length; i++) {
@@ -325,11 +345,52 @@ export async function login(username, password) {
         body: JSON.stringify(data)
     });
     if (response.status != 200)
-        throw "Problem with the creation of the user (" + response.status + ")";
+        throw "Problem with the authentification of the user (" + response.status + ")";
     let user = await response.json();
     if (debug)
         console.log(user.token);
     return user.token;
+}
+
+export async function change_password(password, token) {
+    let data = {
+        "user": {
+            "password": password
+        },
+    };
+    console.log(data);
+    let response = await fetch(path + 'user/update_user/', {
+        method: 'PUT',
+        headers: {
+            'Authorization': 'Token ' + token,
+            'Content-Type':'application/json',
+            'Accept': 'application/json'
+         },
+        body: JSON.stringify(data)
+    });
+    if (response.status != 201)
+        throw "Problem with the change of the password (" + response.status + ")";
+    if (debug)
+        console.log("Password changed");
+    return true;
+}
+
+export async function change_user_nick(user_nick, token) {
+    let data = {
+        "user_nick": user_nick
+    };
+    let response = await fetch(path + 'user/update_user/', {
+        method: 'PUT',
+        headers: {
+            'Authorization': 'Token ' + token,
+            'Content-Type':'application/json',
+            'Accept': 'application/json'
+         },
+        body: JSON.stringify(data)
+    });
+    if (response.status != 201)
+        throw "Problem with the change of the user nick (" + response.status + ")";
+    return true;
 }
 
 
@@ -344,10 +405,9 @@ export async function create_user(username, user_nick, password) {
     let response = await fetch(path + 'register/', {
         method: 'POST',
         headers: {
-            'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
-            'Accept': 'application/json'
-         },
+            'Accept':'application/json',
+        },
         body: JSON.stringify(data)
     });
     if (response.status != 201)
@@ -402,8 +462,8 @@ export async function create_match(player1, player2, tournament, token) {
     return match;
 }
 
-export async function delete_user(id, token) {
-    let response = await fetch(path + 'user/' + id, {
+export async function delete_user(token) {
+    let response = await fetch(path + 'user/1/', {
         method: 'DELETE',
         headers: {
             'Authorization': 'Token ' + token,
@@ -424,6 +484,59 @@ export async function request_pending_friend(friend_id, token) {
         "friends_pending": actuel_pending
     }
     console.log(token)
+    let response = await fetch(path + 'user/friends_pending/', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Token ' + token,
+            'Content-Type':'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+    if (response.status != 200)
+        throw "Problem with the addition of the friend (" + response.status + ")";
+    return true;
+}
+
+export async function request_confirm_friend(friend_id, token) {
+    let me = await get_me(token);
+    let pending = me.friends_pending;
+    if (!pending.includes(friend_id)) {
+        throw "Friend not in pending list";
+    }
+    let actuel_confirm = me.friends_confirmed;
+    actuel_confirm.push(friend_id);
+    let data = {
+        "friends_confirm": actuel_confirm
+    }
+    let response = await fetch(path + 'user/friends_confirm/', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Token ' + token,
+            'Content-Type':'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+    if (response.status != 200)
+        throw "Problem with the addition of the friend (" + response.status + ")";
+    request_refuse_friend(friend_id, token);
+    return true;
+}
+
+export async function request_refuse_friend(friend_id, token) {
+    let me = await get_me(token);
+    let pending = me.friends_pending;
+    if (!pending.includes(friend_id)) {
+        throw "Friend not in pending list";
+    }
+    let index = pending.indexOf(friend_id);
+    pending.splice(index, 1);
+    if (debug)
+        console.log("PENDING > " + pending);
+    let data = {
+        "friends_pending": pending
+    }
     let response = await fetch(path + 'user/friends_pending/', {
         method: 'POST',
         headers: {
