@@ -51,7 +51,7 @@ console.log(data)
 		<div class="data-players-container">
 			<p v-if="data.length === 0" class="data-no-matches">Aucun utilisateur trouvé</p>
 			<div v-else class="data-players" v-for="user in data" :key="user.pk">
-				<img src="/src/assets/business-cat.png" alt="Photo de profil">
+				<img :src="user.avatar" alt="Photo de profil">
 				<p>{{ user.username }}</p>
 				<p>{{ user.nickname }}</p>
 				<p>{{ user.match_wins }}</p>
