@@ -1,8 +1,9 @@
 <script setup>
-	import { ref } from 'vue';
+	import { ref, defineComponent } from 'vue';
 	import AddFriendsView from './AddFriendsView.vue';
 	import { useAuthStore } from '../stores/auth.js';
 	import { get_me, delete_user, change_user_nick, change_password } from '/src/jspong/main.js';
+	
 
 	const isAddFriendsViewShows = ref(false);
 
@@ -62,18 +63,34 @@
 		authStore.clearToken();
 	}
 
+	const fileInput = ref(null);
+
+	function triggerFileInput() {
+		const fileInput = ref('fileInput');
+		fileInput.value.click();
+	}
+
 </script>
 
 <template>
 	<div class="left-part">
 		<div class="resume-container">
-			<button class="profile-image-container">
-				<img :src=avatar alt="Photo de profil">
+			<button class="profile-image-container" @click="triggerFileInput">
+				<img :src="avatar" alt="Photo de profil">
 				<p class="overlay">Modifier</p>
 			</button>
+			<input type="file" ref="fileInput" @change="handleFileChange" style="display: none;">
 			<div class="resume-name">
 				<h1>{{ user_Nickname }}</h1>
 				<h2>{{ username }}</h2>
+			</div>
+			<div>
+				<input
+				type="file"
+				@change="onFileChanged($event)"
+				accept="image/*"
+				capture
+				/>
 			</div>
 		</div>
 		<div>

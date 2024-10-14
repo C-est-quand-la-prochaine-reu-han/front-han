@@ -11,28 +11,30 @@
 	let friends_pending;
 
 	console.log(token);
+	let pending = [];
+	let friend = [];
 	try {
 		let me = await get_me(token);
 		console.log(me);
 		if (me) {
-			friends_confirmed = me.friends_confirmed;
-			let friend = [];
+			friends_confirmed = me.friends_confirmed
 			for (let i = 0; i < friends_confirmed.length; i++) {
 				let new_friend = get_user_by_id(me.friends_confirmed[i]);
 				friend.push(new_friend);
 			}
 			friends_pending = me.friends_pending;
-			let pending = [];
 			for (let i = 0; i < friends_pending.length; i++) {
 				new_pending = get_user_by_id(pending[i]);
 				pending.push(new_pending);
 			}
+			console.log(friend);
 		} else {
 			console.log('No user found');
 		}
 	} catch (error) {
 		console.log('No user found');
 	}
+
 
 
 	async function rejectFriend(friend_id) {
@@ -59,8 +61,8 @@
 			</div>
 			<div class="friends-list">
 				<p v-if="friends_confirmed.length == 0" class="data-no-friend">Tu n'as pas d'ami·e LOOSER</p>
-				<div class="data-profil" v-for="friend in friends_confirmed">
-					<img :src="friend.avatar" alt="Photo de profil">
+				<div class="data-profil" v-for="friends in friend">
+					<img :src="friends.avatar" alt="Photo de profil">
 					<p>{{ friend.username }}</p>
 				</div>
 			</div>
@@ -71,9 +73,9 @@
 			</div>
 			<div class="friends-list">
 				<p v-if="friends_pending.length == 0" class="data-no-friend">Tu n'as pas d'ami·e en attente</p>
-				<div class="data-profil" v-for="pending in friends_pending">
-					<img :src="pending.avatar" alt="Photo de profil">
-					<p>{{ pending.username }}</p>
+				<div class="data-profil" v-for="pendings in pending">
+					<img :src="pendings.avatar" alt="Photo de profil">
+					<p>{{ pendings.username }}</p>
 					<button @click="acceptFriend(pending)">✔</button>
 					<button @click="rejectFriend(pending)">✘</button>
 				</div>
