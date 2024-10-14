@@ -18,17 +18,21 @@ let data = []
 // 	total_score = dashboard.total_score;
 // 	win_ratio = (dashboard.win_ratio * 100).toFixed(2);
 
-let all_user = await get_all_users(token);
-for (let user of all_user) {
-	let dashboard = await get_dashboard(user.pk, token);
-	data.push({
-		pk : user.pk,
-		nickname: user.user_nick,
-		username: user.user.username,
-		avatar: user.avatar,
-		match_wins: dashboard.match_wins,
-		win_ratio: (dashboard.win_ratio * 100).toFixed(2)
-	})
+try {
+	let all_user = await get_all_users(token);
+	for (let user of all_user) {
+		let dashboard = await get_dashboard(user.pk, token);
+		data.push({
+			pk : user.pk,
+			nickname: user.user_nick,
+			username: user.user.username,
+			avatar: user.avatar,
+			match_wins: dashboard.match_wins,
+			win_ratio: (dashboard.win_ratio * 100).toFixed(2)
+		})
+	}
+} catch (error) {
+	console.error(error);
 }
 
 console.log(data)

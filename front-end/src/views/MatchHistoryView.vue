@@ -9,18 +9,15 @@
 	let me = {
 		pk: -1,
 	}
+	let matches = [];
 	try {
 		me = await get_me(token);
-	} catch (error) {
-		console.log('No user found');
-	}
-	let matches = [];
-
-	try{
 		matches = await get_all_matches_of_user(me.pk, token);
 	} catch (error) {
-		console.log('No match found');
+		console.error(error);
+		console.log('No user found');
 	}
+
 	console.log(matches);
 	for (let match of matches) {
 		match.match_start_time = match.match_start_time.split('T')[0];

@@ -128,7 +128,7 @@ export async function get_id_by_username(username, token) {
          }
     });
     if (response.status != 200)
-        throw "Problem with the request (" + response.status + ")";
+        return -1;
     let data = await response.json();
     for (let i = 0; i < data.length; i++) {
         if (data[i].user.username === username) {
@@ -137,7 +137,7 @@ export async function get_id_by_username(username, token) {
             return data[i].pk;
         }
     }
-    throw "User not found";
+    return -1;
 }
 
 export async function get_user_by_id(id, token) {
