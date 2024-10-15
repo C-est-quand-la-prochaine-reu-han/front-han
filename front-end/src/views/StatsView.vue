@@ -27,7 +27,6 @@
 		total_hits = dashboard.total_hits;
 		total_score = dashboard.total_score;
 		win_ratio = (dashboard.win_ratio * 100).toFixed(2);
-	console.log(dashboard);
 	} catch (error) {
 		console.error(error);
 	}
