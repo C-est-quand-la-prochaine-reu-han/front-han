@@ -58,7 +58,7 @@
 				<h2>Liste d'ami·e·s</h2>
 			</div>
 			<div class="friends-list">
-				<p v-if="friends_confirmed.length == 0" class="data-no-friend">Tu n'as pas d'ami·e LOOSER</p>
+				<p v-if="friends_confirmed.length == 0" class="data-no-friend">Tu n'as pas d'ami·e LOSER</p>
 				<div class="data-profil" v-for="friend in friends_confirmed">
 					<img :src="friend.avatar" alt="Photo de profil">
 					<p>{{ friend.username }}</p>

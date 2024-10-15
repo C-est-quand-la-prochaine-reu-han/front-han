@@ -1,10 +1,16 @@
+<script setup>
+import { inject } from 'vue';
+
+const globalState = inject('globalState');
+</script>
+
 <template>
 	<div class="score-container">
 		<div class="score-item">
-			<h1>3</h1>
+			<h1>{{ globalState.controlledPlayerScore }}</h1>
 		</div>
 		<div class="score-item vertical-bar">
-			<h1>6</h1>
+			<h1>{{ globalState.otherPlayerScore }}</h1>
 		</div>
 	</div>
 </template>

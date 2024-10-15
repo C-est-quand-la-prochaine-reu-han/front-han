@@ -4,8 +4,8 @@
 
 <style scoped>
 	.paddle {
-		width: 20px;
-		height: 150px;
+		width: 10px;
+		height: 80px;
 		background-color: var(--vt-c-white);
 	}
 

@@ -5,6 +5,7 @@
 	import GameView from './GameView.vue';
 	import TournamentView from './TournamentView.vue';
 
+	
 	const showMainMenu = ref(true);
 	const showProfil = ref(false);
 	const showAllPlayers = ref(false);
@@ -12,9 +13,14 @@
 	// const showPlayNowDuo = ref(false);
 	const showTournament = ref(false);
 
+	//showMainMenu.value = sessionStorage.getItem("showMainMenu") || showMainMenu.value;
+	//showProfil.value = sessionStorage.getItem("showProfil") || showProfil.value;
+
 	function toggleProfil() {
 		showProfil.value = !showProfil.value;
 		showMainMenu.value = !showMainMenu.value;
+	//	sessionStorage.setItem("showProfil", showProfil.value);
+	//	sessionStorage.setItem("showMainMenu", showMainMenu.value);
 	}
 
 	function toggleAllPlayers() {
@@ -44,7 +50,7 @@
 			<button @click="toggleProfil">PROFIL</button>
 		</div>
 		<div class="menu-item">
-			<button @click="toggleAllPlayers">Liste des joueur·e·s</button>
+			<button @click="toggleAllPlayers">LISTE DES JOUEUR·SE·S</button>
 		</div>
 		<div class="menu-item">
 			<button @click="togglePlayNowSolo">PARTIE RAPIDE (SOLO)</button>

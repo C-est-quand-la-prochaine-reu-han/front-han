@@ -51,11 +51,11 @@
 			<h1>{{ match_played }}</h1>
 		</div>
 		<div class="dashboard-item">
-			<h2>Total hits</h2>
+			<h2>Coups totaux</h2>
 			<h1>{{ total_hits }}</h1>
 		</div>
 		<div class="dashboard-item border-ver-left">
-			<h2>Scores total</h2>
+			<h2>Score total</h2>
 			<h1>{{ total_score }}</h1>
 		</div>
 		<div class="dashboard-item border-ver-right">
@@ -63,7 +63,7 @@
 			<h1>{{ match_wins }}</h1>
 		</div>
 		<div class="dashboard-item">
-			<h2>Perfect hits</h2>
+			<h2>Coups parfaits</h2>
 			<h1>{{ perfect_hits }}</h1>
 		</div>
 		<div class="dashboard-item border-ver-left">
@@ -75,7 +75,7 @@
 			<h1>{{ win_ratio }}</h1>
 		</div>
 		<div class="dashboard-item">
-			<h2>Perfect hits (%)</h2>
+			<h2>Coups parfaits (%)</h2>
 			<h1>{{ perfect_hit_ratio }}</h1>
 		</div>
 	</div>
