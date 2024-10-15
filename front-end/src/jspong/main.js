@@ -141,6 +141,7 @@ export async function get_id_by_username(username, token) {
 }
 
 export async function get_user_by_id(id, token) {
+    console.log('ID > ' + id + '    TOKEN > ' + token);
     let response = await fetch(path + 'user/', {
         headers : {
             'Authorization': 'Token ' + token,
@@ -548,5 +549,22 @@ export async function request_refuse_friend(friend_id, token) {
     });
     if (response.status != 200)
         throw "Problem with the addition of the friend (" + response.status + ")";
+    return true;
+}
+
+export async function update_avatar(filename, avatar, token) {
+    let response = await fetch(path + 'user/update_avatar/', {
+        method: 'PUT',
+        headers: {
+            'Authorization': 'Token ' + token,
+            'Content-Disposition': 'attachment; filename=' + filename,
+            'Content-Type':'image/jpeg',
+            'Accept': 'image/jpeg',
+            'redirect': "follow"
+         },
+        body: avatar
+    });
+    if (response.status != 201)
+        throw "Problem with the change of the avatar (" + response.status + ")";
     return true;
 }
