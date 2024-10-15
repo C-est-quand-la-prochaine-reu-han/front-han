@@ -63,12 +63,7 @@
 		authStore.clearToken();
 	}
 
-	const fileInput = ref(null);
-
-	function triggerFileInput() {
-		const fileInput = ref('fileInput');
-		fileInput.value.click();
-	}
+	avatar = 'https://localhost:8443/api/media/bot.jpg';
 
 </script>
 
@@ -79,18 +74,9 @@
 				<img :src="avatar" alt="Photo de profil">
 				<p class="overlay">Modifier</p>
 			</button>
-			<input type="file" ref="fileInput" @change="handleFileChange" style="display: none;">
 			<div class="resume-name">
 				<h1>{{ user_Nickname }}</h1>
 				<h2>{{ username }}</h2>
-			</div>
-			<div>
-				<input
-				type="file"
-				@change="onFileChanged($event)"
-				accept="image/*"
-				capture
-				/>
 			</div>
 		</div>
 		<div>
