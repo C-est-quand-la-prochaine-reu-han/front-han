@@ -56,11 +56,18 @@ async function submitFriendRequest() {
 
 	.find-new-friends {
 		position: absolute;
-		background-color: rgb(from var(--vt-c-black-soft) r g b / 0.8);
+		background-color: rgb(from var(--vt-c-black-mute) r g b / 0.8);
 		width: 500px;
 	}
 
+	body.light-mode .find-new-friends {
+		background-color: rgb(from var(--vt-c-white-mute) r g b / 0.8);
+	}
+
 	.back-button {
+		position: relative;
+		top: 0px;
+		left: 0px;
 		margin: 10px;
 		border: none;
 		cursor: pointer;
@@ -69,6 +76,10 @@ async function submitFriendRequest() {
 	.back-button:hover {
 		background-color: var(--vt-c-black-mute);
 		transition: background-color 0.3s linear;
+	}
+
+	body.light-mode .back-button:hover {
+		background-color: var(--vt-c-white-mute);
 	}
 
 	.input-container {
@@ -91,11 +102,21 @@ async function submitFriendRequest() {
 		background-color: var(--vt-c-black-mute);
 	}
 
+	body.light-mode .input-container button:hover {
+		background-color: var(--vt-c-white-mute);
+	}
+
 	input {
 		flex: 1;
 		padding: 10px;
 		border: 1px solid var(--vt-c-divider-dark-1);
 		background: var(--vt-c-black-soft);
 		color: var(--vt-c-text-dark-2);
+	}
+
+	body.light-mode input {
+		border-color: var(--vt-c-divider-light-1);
+		background: var(--vt-c-white-soft);
+		color: var(--vt-c-text-light-2);
 	}
 </style>
