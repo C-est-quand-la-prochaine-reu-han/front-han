@@ -1,9 +1,15 @@
 <script setup>
-	import { ref, onMounted, computed, inject, onBeforeUnmount } from 'vue';
+	import { ref, onMounted, computed, inject, onBeforeUnmount, defineEmits } from 'vue';
 	import Paddle from './PongTools/Paddle.vue';
 	import Ball from './PongTools/Ball.vue';
 
+	defineEmits(['close-game']);
+
 	const globalState = inject('globalState');
+	const otherPlayerName = inject('otherPlayerName');
+
+	console.log(otherPlayerName.value);
+
 	let playerOnRight = false;
 
 	class Player {
@@ -145,6 +151,7 @@
 		}
 	}
 
+	// async function setup_socket(otherPlayerName.value)
 	async function setup_socket()
 	{
 		let socket = await new WebSocket("wss://localhost:8443/pong/");
@@ -196,7 +203,7 @@
 </script>
 
 <template>
-	<button class="back-button" v-if="isGameOver" @click="$emit('close')">
+	<button class="back-button" v-if="isGameOver" @click="$emit('close-game')">
 		<h1>←</h1>
 	</button>
 

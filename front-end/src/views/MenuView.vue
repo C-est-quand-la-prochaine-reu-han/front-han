@@ -1,18 +1,24 @@
+<!--
+ Il faut pouvoir distinguer quand on lance une partie contre le bot ou contre quelqu'un selon si on clique sur 'Partie rapide (solo)' ou 'Partie rapide (duo)'.
+-->
+
 <script setup>
-	import { ref } from 'vue';
+	import { provide, ref } from 'vue';
 	import ProfilView from './ProfilView.vue';
 	import AllPlayersView from './AllPlayersView.vue';
 	import GameView from './GameView.vue';
 	import TournamentView from './TournamentView.vue';
-	import CreateTournamentView from './CreateTournamentView.vue';
-
 	
 	const showMainMenu = ref(true);
 	const showProfil = ref(false);
 	const showAllPlayers = ref(false);
 	const showPlayNowSolo = ref(false);
-	// const showPlayNowDuo = ref(false);
+	const showPlayNowDuo = ref(false);
 	const showTournament = ref(false);
+
+	const otherPlayerName = ref('');
+
+	provide('otherPlayerName', otherPlayerName);
 
 	//showMainMenu.value = sessionStorage.getItem("showMainMenu") || showMainMenu.value;
 	//showProfil.value = sessionStorage.getItem("showProfil") || showProfil.value;
@@ -30,14 +36,18 @@
 	}
 
 	function togglePlayNowSolo() {
+		if (!showPlayNowSolo.value)
+			otherPlayerName.value = 'bot';
 		showPlayNowSolo.value = !showPlayNowSolo.value;
 		showMainMenu.value = !showMainMenu.value;
 	}
 
-	// function togglePlayNowDuo() {
-	// 	showPlayNowDuo.value = !showPlayNowDuo.value;
-	// 	showMainMenu.value = !showMainMenu.value;
-	// }
+	function togglePlayNowDuo() {
+		if (!showPlayNowDuo.value)
+			otherPlayerName.value = '*';
+		showPlayNowDuo.value = !showPlayNowDuo.value;
+		showMainMenu.value = !showMainMenu.value;
+	}
 
 	function toggleTournament() {
 		showTournament.value = !showTournament.value;
@@ -54,10 +64,11 @@
 			<button @click="toggleAllPlayers">LISTE DES JOUEUR·SE·S</button>
 		</div>
 		<div class="menu-item">
-			<button @click="togglePlayNowSolo">PARTIE RAPIDE (SOLO)</button>
+			<!-- <button @click="togglePlayNowSolo">PARTIE RAPIDE (SOLO)</button> -->
+			<button>PARTIE RAPIDE (SOLO)</button>
 		</div>
 		<div class="menu-item">
-			<button>PARTIE RAPIDE (DUO)</button>
+			<button @click="togglePlayNowDuo">PARTIE RAPIDE (DUO)</button>
 		</div>
 		<div class="menu-item">
 			<button @click="toggleTournament">TOURNOIS</button>
@@ -70,11 +81,7 @@
 		<AllPlayersView v-if="showAllPlayers" @close="toggleAllPlayers" />
 	</Suspense>
 
-	<GameView v-if="showPlayNowSolo" @close="togglePlayNowSolo" />
-
-	<Suspense>
-		<StatsView v-if="showStats" @close="toggleStats" />
-	</Suspense>
+	<GameView v-if="showPlayNowDuo" @close-game="togglePlayNowDuo" />
 
 	<TournamentView v-if="showTournament" @close="toggleTournament" />
 </template>
