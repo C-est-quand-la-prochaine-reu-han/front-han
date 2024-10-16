@@ -4,7 +4,9 @@
 </script>
 
 <template>
-	<PongView />
+	<Suspense>
+		<PongView />
+	</Suspense>
 
 	<ScoreView />
 </template>
