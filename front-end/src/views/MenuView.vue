@@ -5,7 +5,6 @@
 	import GameView from './GameView.vue';
 	import TournamentView from './TournamentView.vue';
 	import CreateTournamentView from './CreateTournamentView.vue';
-import AllPlayersView from './AllPlayersView.vue';
 
 	
 	const showMainMenu = ref(true);
