@@ -1,6 +1,7 @@
 <script setup>
 	import { ref } from 'vue';
 	import ProfilView from './ProfilView.vue';
+	import AllPlayersView from './AllPlayersView.vue';
 	import GameView from './GameView.vue';
 	import TournamentView from './TournamentView.vue';
 	import CreateTournamentView from './CreateTournamentView.vue';
@@ -59,6 +60,10 @@ import AllPlayersView from './AllPlayersView.vue';
 	</div>
 
 	<ProfilView v-if="showProfil" @close="toggleProfil" />
+
+	<Suspense>
+		<AllPlayersView v-if="showAllPlayers" @close="toggleAllPlayers" />
+	</Suspense>
 
 	<GameView v-if="showPlayNowSolo" @close="togglePlayNowSolo" />
 
