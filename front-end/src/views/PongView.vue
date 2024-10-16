@@ -117,7 +117,6 @@
 		if (event.data.startsWith("opponent:"))
 		{
 			other_player.value.name = event.data.split(":", 2)[1];
-			//controlled_player.value.name = "";
 		}
 		if (event.data.startsWith("mov:"))
 		{
@@ -130,10 +129,6 @@
 			let newpos = event.data.split(":");
 			ball.value.x = parseInt(newpos[2]);
 			ball.value.y = parseInt(newpos[1]);
-			// let ball_x = ball.value.x;
-			// let ball_y = ball.value.y * 600 / 1000;
-			// themeBall.left = ball_x + "px";
-			// themeBall.top = ball_y + "px";
 		}
 		if (controlled_player === undefined || other_player === undefined)
 			return ;
@@ -151,12 +146,12 @@
 		}
 	}
 
-	// async function setup_socket(otherPlayerName.value)
 	async function setup_socket()
 	{
 		let socket = await new WebSocket("wss://localhost:8443/pong/");
 		let promise = new Promise((resolve, reject) => {
 			socket.onopen = function (event) {
+				event.target.send("*"); // We want to play against whoever is available for a match
 				// FIXME: use actual player name from localstorage or api
 				controlled_player.value.name = `player${new Date().getTime()}`;
 				event.target.send(controlled_player.value.name);
