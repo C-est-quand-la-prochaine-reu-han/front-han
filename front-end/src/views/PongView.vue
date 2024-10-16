@@ -4,6 +4,7 @@
 	import Ball from './PongTools/Ball.vue';
 
 	const globalState = inject('globalState');
+	let playerOnRight = false;
 
 	class Player {
 		x = 40;
@@ -13,8 +14,8 @@
 	}
 
 	class Balle {
-		x = 500;
-		y = 500;
+		x = 505;
+		y = 505;
 		dirX = 0;
 		dirY = 0;
 		name = "Baballe";
@@ -38,6 +39,9 @@
 		left: other_player.value.x + 'px'
 	}));
 
+	const gameOverMessage = ref("");
+	const isGameOver = ref(false);
+
 	let updateInterval;
 
 	function handle_socket(event)
@@ -56,20 +60,23 @@
 				ball.value.x += delta * ball.value.dirX;
 				ball.value.y += delta * ball.value.dirY;
 
-				// // Real coordinates
-				// let ball_x = ball.value.x;
-				// let ball_y = ball.value.y * 600 / 1000;
-
-				// // CSS update
-				// themeBall.left = ball_x + "px";
-				// themeBall.top = ball_y + "px";
+				if (controlled_player.value.score >= 10 || other_player.value.score >= 10)
+				{
+					clearInterval(updateInterval);
+					socket.close();
+					if (controlled_player.value.score >= 10)
+						gameOverMessage.value = "You win!";
+					else
+						gameOverMessage.value = "You lose!";
+					alert(gameOverMessage.value);
+					isGameOver.value = true;
+					return;
+				}
 
 				if ((heldKeys.ArrowUp - heldKeys.ArrowDown) < 0)
 					socket.send("down");
 				else if ((heldKeys.ArrowUp - heldKeys.ArrowDown) > 0)
 					socket.send("up");
-				//controlled_player.value.y = Math.min(900, Math.max(0, controlled_player.value.y + (heldKeys.ArrowDown - heldKeys.ArrowUp) * 300 * delta));
-				//themeControlledPlayer.top = controlled_player.y + 'px';
 			}, 10);
 		}
 		if (event.data === "youare:1")
@@ -79,6 +86,7 @@
 		}
 		if (event.data === "youare:2")
 		{
+			playerOnRight = true;
 			controlled_player.value.x = 900;
 			other_player.value.x = 100;
 		}
@@ -89,11 +97,16 @@
 				controlled_player.value.score = parseInt(data[2]);
 			else if (data[1] == other_player.value.name)
 				other_player.value.score = parseInt(data[2]);
-			ball.value.x = 500;
-			ball.value.y = 500;
+			ball.value.x = 505;
+			ball.value.y = 505;
 			// Update scores in the global state
-			globalState.controlledPlayerScore = controlled_player.value.score;
-			globalState.otherPlayerScore = other_player.value.score;
+			if (playerOnRight) {
+				globalState.rightPlayerScore = controlled_player.value.score;
+				globalState.leftPlayerScore = other_player.value.score;
+			} else {
+				globalState.leftPlayerScore = controlled_player.value.score;
+				globalState.rightPlayerScore = other_player.value.score;
+			}
 		}
 		if (event.data.startsWith("opponent:"))
 		{
@@ -183,6 +196,10 @@
 </script>
 
 <template>
+	<button class="back-button" v-if="isGameOver" @click="$emit('close')">
+		<h1>←</h1>
+	</button>
+
 	<div class="game-field">
 		<div class="middle-line-left"></div>
 		<div class="middle-line-right"></div>
@@ -196,6 +213,25 @@
 </template>
 
 <style scoped>
+	.back-button {
+		position: fixed;
+		top: 100px;
+		left: 50px;
+		padding: 0 15px;
+		border: none;
+		cursor: pointer;
+		z-index: 10;
+	}
+
+	.back-button:hover {
+		background-color: var(--vt-c-black-mute);
+		transition: background-color 0.3s linear;
+	}
+
+	body.light-mode .back-button:hover {
+		background-color: var(--vt-c-white-mute);
+	}
+
 	.game-field {
 		margin: auto;
 		width: 1010px;
@@ -228,7 +264,5 @@
 
 	.right-paddle {
 		position: absolute;
-		right: 15px;
-		top: 225px;
 	}
 </style>

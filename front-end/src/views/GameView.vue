@@ -5,8 +5,8 @@
 
 	// Create a global reactive state
 	const globalState = reactive({
-	  controlledPlayerScore: 0,
-	  otherPlayerScore: 0
+	  leftPlayerScore: 0,
+	  rightPlayerScore: 0
 	});
 
 	// Provide the global state to child components
@@ -15,7 +15,7 @@
 
 <template>
 	<Suspense>
-		<PongView />
+		<PongView @close="$emit('close')" />
 	</Suspense>
 
 	<ScoreView />
