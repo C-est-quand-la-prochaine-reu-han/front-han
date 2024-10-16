@@ -9,21 +9,26 @@ const authStore = useAuthStore();
 const token = authStore.token;
 
 async function submitFriendRequest() {
-	console.log('submit friend request');
-	console.log(friend_username.value);
-	if (friend_username.value === '') {
-		alert('Username cannot be empty');
-		return;
+	try {
+		console.log('submit friend request');
+		console.log(friend_username.value);
+		if (friend_username.value === '') {
+			alert('Username cannot be empty');
+			return;
+		}
+		let friend_id;
+		friend_id = await get_id_by_username(friend_username.value, token);
+		if (friend_id === -1) {
+			alert('User not found');
+			return;
+		}
+		console.log(friend_id);
+		let response = await request_pending_friend(friend_id, token);
+		console.log(response);
+	} catch (error) {
+		console.error(error);
+		alert('An error occured');
 	}
-	let friend_id;
-	friend_id = await get_id_by_username(friend_username.value, token);
-	if (friend_id === undefined) {
-		alert('User not found');
-		return;
-	}
-	console.log(friend_id);
-	let response = await request_pending_friend(friend_id, token);
-	console.log(response);
 }
 
 </script>

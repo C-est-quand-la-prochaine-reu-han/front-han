@@ -49,8 +49,8 @@ export async function get_all_users(token) {
     return data;
 }
 
-export async function get_dashboard(token) {
-    let response = await fetch(path + 'user/2/dashboard/', {
+export async function get_dashboard(id, token) {
+    let response = await fetch(path + 'user/' + id +'/dashboard/', {
         headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -128,7 +128,7 @@ export async function get_id_by_username(username, token) {
          }
     });
     if (response.status != 200)
-        throw "Problem with the request (" + response.status + ")";
+        return -1;
     let data = await response.json();
     for (let i = 0; i < data.length; i++) {
         if (data[i].user.username === username) {
@@ -137,10 +137,11 @@ export async function get_id_by_username(username, token) {
             return data[i].pk;
         }
     }
-    throw "User not found";
+    return -1;
 }
 
 export async function get_user_by_id(id, token) {
+    console.log('ID > ' + id + '    TOKEN > ' + token);
     let response = await fetch(path + 'user/', {
         headers : {
             'Authorization': 'Token ' + token,
@@ -298,7 +299,7 @@ export async function get_all_users_of_tournament(id, token) {
  * @return Un json contenant les informations du match.
  */
 export async function get_match_by_id(id, token) {
-    let response = await fetch(path + 'match/' + id, { headers : {
+    let response = await fetch(path + 'match/' + id + '/', { headers : {
         'Authorization': 'Token ' + token,
         'Content-Type':'application/json',
         'Accept': 'application/json'
@@ -351,6 +352,7 @@ export async function login(username, password) {
         console.log(user.token);
     return user.token;
 }
+
 
 export async function change_password(password, token) {
     let data = {
@@ -507,7 +509,7 @@ export async function request_confirm_friend(friend_id, token) {
     let actuel_confirm = me.friends_confirmed;
     actuel_confirm.push(friend_id);
     let data = {
-        "friends_confirm": [friend_id]
+        "friends_confirmed": actuel_confirm
     }
     let response = await fetch(path + 'user/friends_confirm/', {
         method: 'POST',
@@ -520,7 +522,6 @@ export async function request_confirm_friend(friend_id, token) {
     });
     if (response.status != 200)
         throw "Problem with the addition of the friend (" + response.status + ")";
-    request_refuse_friend(friend_id, token);
     return true;
 }
 
@@ -548,5 +549,22 @@ export async function request_refuse_friend(friend_id, token) {
     });
     if (response.status != 200)
         throw "Problem with the addition of the friend (" + response.status + ")";
+    return true;
+}
+
+export async function update_avatar(filename, avatar, token) {
+    let response = await fetch(path + 'user/update_avatar/', {
+        method: 'PUT',
+        headers: {
+            'Authorization': 'Token ' + token,
+            'Content-Disposition': 'attachment; filename=' + filename,
+            'Content-Type':'image/jpeg',
+            'Accept': 'image/jpeg',
+            'redirect': "follow"
+         },
+        body: avatar
+    });
+    if (response.status != 201)
+        throw "Problem with the change of the avatar (" + response.status + ")";
     return true;
 }

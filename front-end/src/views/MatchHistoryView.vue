@@ -1,4 +1,28 @@
 <script setup>
+
+	import { get_all_matches_of_user, get_me, get_nickname_by_id } from '@/jspong/main';
+	import { useAuthStore } from '../stores/auth.js';
+
+	const authStore = useAuthStore();
+	const token = authStore.token;
+
+	let me = {
+		pk: -1,
+	}
+	let matches = [];
+	try {
+		me = await get_me(token);
+		matches = await get_all_matches_of_user(me.pk, token);
+	} catch (error) {
+		console.error(error);
+		console.log('No user found');
+	}
+
+	console.log(matches);
+	for (let match of matches) {
+		match.match_start_time = match.match_start_time.split('T')[0];
+	}
+
 </script>
 
 <template>
@@ -19,17 +43,17 @@
 			<p>Perfect hit J2</p>
 		</div>
 		<div class="data-match-container">
-			<!-- <p v-if="friends_confirmed.length == 0" class="data-no-friend">Tu n'as pas d'ami·e LOOSER</p> -->
-			<div class="data-match">
-				<p>23-09-1998</p>
-				<p>Gisele</p>
-				<p>42</p>
-				<p>42</p>
-				<p>42</p>
-				<p>Albert</p>
-				<p>21</p>
-				<p>42</p>
-				<p>0</p>
+			<div v-if="matches.length === 0" class="data-no-matches">Aucun match a ton actif</div>
+			<div v-else class="data-match" v-for="match in matches" :key="match.id">
+				<p>{{ match.match_start_time }}</p>
+				<p>{{ match.player1 }}</p>
+				<p>{{ match.player1_score }}</p>
+				<p>{{ match.player1_hit_nb }}</p>
+				<p>{{ match.player1_perfect_hit_nb }}</p>
+				<p>{{ match.player2 }}</p>
+				<p>{{ match.player2_score }}</p>
+				<p>{{ match.player2_hit_nb }}</p>
+				<p>{{ match.player2_perfect_hit_nb }}</p>
 			</div>
 		</div>
 	</div>
@@ -103,5 +127,10 @@
 
 	body.light-mode .data-match:hover {
 		background-color: var(--vt-c-white-mute);
+	}
+
+	.data-no-matches {
+		text-align: center;
+		padding: 10px;
 	}
 </style>

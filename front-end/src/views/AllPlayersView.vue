@@ -1,4 +1,42 @@
 <script setup>
+
+
+import { get_all_users, get_dashboard } from '@/jspong/main';
+import { useAuthStore } from '../stores/auth.js';
+
+const authStore = useAuthStore();
+const token = authStore.token;
+
+let data = []
+
+// 	fastest_ball = dashboard.fastest_ball;
+// 	match_played = dashboard.match_played;
+// 	match_wins = dashboard.match_wins;
+// 	perfect_hit_ratio = (dashboard.perfect_hit_ratio * 100).toFixed(2);
+// 	perfect_hits = dashboard.perfect_hits;
+// 	total_hits = dashboard.total_hits;
+// 	total_score = dashboard.total_score;
+// 	win_ratio = (dashboard.win_ratio * 100).toFixed(2);
+
+try {
+	let all_user = await get_all_users(token);
+	for (let user of all_user) {
+		let dashboard = await get_dashboard(user.pk, token);
+		data.push({
+			pk : user.pk,
+			nickname: user.user_nick,
+			username: user.user.username,
+			avatar: user.avatar,
+			match_wins: dashboard.match_wins,
+			win_ratio: (dashboard.win_ratio * 100).toFixed(2)
+		})
+	}
+} catch (error) {
+	console.error(error);
+}
+
+console.log(data)
+
 </script>
 
 <template>
@@ -15,21 +53,15 @@
 			<p>Matchs gagnés (%)</p>
 		</div>
 		<div class="data-players-container">
-			<!-- <p v-if="friends_confirmed.length == 0" class="data-no-friend">Tu n'as pas d'ami·e LOOSER</p> -->
-			<div class="data-players">
-				<img src="/src/assets/business-cat.png" alt="Photo de profil">
-				<p>Gisele</p>
-				<p>Gigi</p>
-				<p>42</p>
-				<p>42</p>
+			<p v-if="data.length === 0" class="data-no-matches">Aucun utilisateur trouvé</p>
+			<div v-else class="data-players" v-for="user in data" :key="user.pk">
+				<img :src="user.avatar" alt="Photo de profil">
+				<p>{{ user.username }}</p>
+				<p>{{ user.nickname }}</p>
+				<p>{{ user.match_wins }}</p>
+				<p>{{ user.win_ratio }}</p>
 			</div>
 		</div>
-	</div>
-
-
-
-	<div>
-
 	</div>
 </template>
 

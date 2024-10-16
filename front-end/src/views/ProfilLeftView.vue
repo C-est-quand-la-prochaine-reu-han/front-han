@@ -1,8 +1,9 @@
 <script setup>
-	import { ref } from 'vue';
+	import { ref, defineComponent } from 'vue';
 	import AddFriendsView from './AddFriendsView.vue';
 	import { useAuthStore } from '../stores/auth.js';
 	import { get_me, delete_user, change_user_nick, change_password } from '/src/jspong/main.js';
+	
 
 	const isAddFriendsViewShows = ref(false);
 
@@ -62,13 +63,15 @@
 		authStore.clearToken();
 	}
 
+	avatar = 'https://localhost:8443/api/media/bot.jpg';
+
 </script>
 
 <template>
 	<div class="left-part">
 		<div class="resume-container">
-			<button class="profile-image-container">
-				<img :src=avatar alt="Photo de profil">
+			<button class="profile-image-container" @click="triggerFileInput">
+				<img :src="avatar" alt="Photo de profil">
 				<p class="overlay">Modifier</p>
 			</button>
 			<div class="resume-name">

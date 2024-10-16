@@ -1,42 +1,39 @@
 <script setup>
 
-	import { get_dashboard } from '@/jspong/main';
+	import { get_dashboard, get_me } from '@/jspong/main';
 	import { useAuthStore } from '../stores/auth.js';
 
 	const authStore = useAuthStore();
 	const token = authStore.token;
 
+	let fastest_ball = -1;
+	let match_played = -1;
+	let match_wins = -1;
+	let perfect_hit_ratio = -1;
+	let perfect_hits = -1;
+	let total_hits = -1;
+	let total_score = -1;
+	let win_ratio = -1;
 
-	let dashboard = await get_dashboard(token);
-	console.log(dashboard);
+	try {
+		let me = await get_me(token);
 
-	let fastest_ball;
-	let match_played;
-	let match_wins;
-	let perfect_hit_ratio;
-	let perfect_hits;
-	let total_hits;
-	let total_score;
-	let win_ratio;
+		let dashboard = await get_dashboard(me.pk, token);
+		fastest_ball = dashboard.fastest_ball;
+		match_played = dashboard.match_played;
+		match_wins = dashboard.match_wins;
+		perfect_hit_ratio = (dashboard.perfect_hit_ratio * 100).toFixed(2);
+		perfect_hits = dashboard.perfect_hits;
+		total_hits = dashboard.total_hits;
+		total_score = dashboard.total_score;
+		win_ratio = (dashboard.win_ratio * 100).toFixed(2);
+	} catch (error) {
+		console.error(error);
+	}
 
 
-	fastest_ball = dashboard.fastest_ball;
-	match_played = dashboard.match_played;
-	match_wins = dashboard.match_wins;
-	perfect_hit_ratio = dashboard.perfect_hit_ratio.toFixed(2);
-	perfect_hits = dashboard.perfect_hits;
-	total_hits = dashboard.total_hits;
-	total_score = dashboard.total_score;
-	win_ratio = dashboard.win_ratio.toFixed(2);
 
-	console.log(fastest_ball);
-	console.log(match_played);
-	console.log(match_wins);
-	console.log(perfect_hit_ratio);
-	console.log(perfect_hits);
-	console.log(total_hits);
-	console.log(total_score);
-	console.log(win_ratio);
+
 
 </script>
 

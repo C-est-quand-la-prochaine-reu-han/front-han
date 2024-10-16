@@ -4,6 +4,8 @@
 	import AllPlayersView from './AllPlayersView.vue';
 	import GameView from './GameView.vue';
 	import TournamentView from './TournamentView.vue';
+	import CreateTournamentView from './CreateTournamentView.vue';
+import AllPlayersView from './AllPlayersView.vue';
 
 	
 	const showMainMenu = ref(true);
@@ -73,6 +75,10 @@
 
 	<Suspense>
 		<StatsView v-if="showStats" @close="toggleStats" />
+	</Suspense>
+	
+	<Suspense>
+		<AllPlayersView v-if="showAllPlayers" @close="toggleAllPlayers"/>
 	</Suspense>
 
 	<TournamentView v-if="showTournament" @close="toggleTournament" />
