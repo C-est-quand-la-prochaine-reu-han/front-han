@@ -37,7 +37,7 @@
 
 	</div>
 
-	<div v-if="showProfil">
+	<div v-if="showProfil" class="very-bottom-button">
 		<button @click="toggleStats">Statistiques</button>
 		
 		<button @click="toggleMatchHistory">Historique des matchs</button>
@@ -77,5 +77,33 @@
 		flex-direction: row;
 		margin: auto;
 		height: 460px;
+	}
+
+	.very-bottom-button {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		gap: 100px;
+		margin-bottom: 100px;
+	}
+
+	.very-bottom-button button {
+		padding: 10px 20px;
+		background-color: var(--vt-c-black-soft);
+		border: none;
+		cursor: pointer;
+	}
+
+	body.light-mode .very-bottom-button button {
+		background-color: var(--vt-c-white-soft);
+	}
+
+	.very-bottom-button button:hover {
+		background-color: var(--vt-c-black-mute);
+		transition: background-color 0.3s linear;
+	}
+
+	body.light-mode .very-bottom-button button:hover {
+		background-color: var(--vt-c-white-mute);
 	}
 </style>

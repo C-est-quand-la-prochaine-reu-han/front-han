@@ -282,6 +282,11 @@
 	}
 
 	.remove-account button:hover {
-		background-color: rgba(255, 0, 0, 0.5);
+		background-color: rgb(133, 6, 6);
+	}
+
+	body.light-mode .remove-account button:hover {
+		background-color: rgb(133, 6, 6);
+		color: var(--vt-c-text-dark-1);
 	}
 </style>
