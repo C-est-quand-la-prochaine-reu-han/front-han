@@ -75,10 +75,6 @@
 	<Suspense>
 		<StatsView v-if="showStats" @close="toggleStats" />
 	</Suspense>
-	
-	<Suspense>
-		<AllPlayersView v-if="showAllPlayers" @close="toggleAllPlayers"/>
-	</Suspense>
 
 	<TournamentView v-if="showTournament" @close="toggleTournament" />
 </template>
