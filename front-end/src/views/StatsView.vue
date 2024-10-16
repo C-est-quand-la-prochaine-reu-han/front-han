@@ -28,7 +28,7 @@
 		total_score = dashboard.total_score;
 		win_ratio = (dashboard.win_ratio * 100).toFixed(2);
 	} catch (error) {
-		console.error(error);
+		console.log(error);
 	}
 
 

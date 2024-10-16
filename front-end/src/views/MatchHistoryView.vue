@@ -14,7 +14,7 @@
 		me = await get_me(token);
 		matches = await get_all_matches_of_user(me.pk, token);
 	} catch (error) {
-		console.error(error);
+		console.log(error);
 		console.log('No user found');
 	}
 

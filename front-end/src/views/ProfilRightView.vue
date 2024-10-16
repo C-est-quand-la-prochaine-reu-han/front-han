@@ -36,7 +36,7 @@
 		pending = [];
 		friend = [];
 		console.log('CATCH ERROR');
-		console.error(error);
+		console.log(error);
 	}
 
 	async function rejectFriend(friend_id) {

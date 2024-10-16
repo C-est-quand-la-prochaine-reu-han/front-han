@@ -26,7 +26,7 @@ async function submitFriendRequest() {
 		let response = await request_pending_friend(friend_id, token);
 		console.log(response);
 	} catch (error) {
-		console.error(error);
+		console.log(error);
 		alert('An error occured');
 	}
 }
