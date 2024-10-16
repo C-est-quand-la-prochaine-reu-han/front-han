@@ -553,6 +553,8 @@ export async function request_refuse_friend(friend_id, token) {
 }
 
 export async function update_avatar(filename, avatar, token) {
+    let me = await get_me(token);
+    filename = Date.now() + "_" + filename;
     let response = await fetch(path + 'user/update_avatar/', {
         method: 'PUT',
         headers: {
@@ -566,5 +568,7 @@ export async function update_avatar(filename, avatar, token) {
     });
     if (response.status != 201)
         throw "Problem with the change of the avatar (" + response.status + ")";
+    if (debug)
+        console.log("Avatar changed");
     return true;
 }
