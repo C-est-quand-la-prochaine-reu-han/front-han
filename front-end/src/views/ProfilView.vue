@@ -28,7 +28,7 @@
 	<div class="profil-container" v-if="showProfil">
 
 		<Suspense>
-			<ProfilLeftView />
+			<ProfilLeftView @close="$emit('close')" />
 		</Suspense>
 
 		<Suspense>

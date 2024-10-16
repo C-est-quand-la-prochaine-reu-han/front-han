@@ -1,9 +1,10 @@
 <script setup>
-	import { ref, defineComponent } from 'vue';
+	import { ref, defineEmits } from 'vue';
 	import AddFriendsView from './AddFriendsView.vue';
 	import { useAuthStore } from '../stores/auth.js';
-	import { get_me, delete_user, change_user_nick, change_password } from '/src/jspong/main.js';
+	import { get_me, delete_user, change_user_nick, change_password, update_avatar } from '/src/jspong/main.js';
 	
+	const emit = defineEmits(['close']);
 
 	const isAddFriendsViewShows = ref(false);
 
@@ -17,6 +18,7 @@
 	let user_Nickname;
 	let username;
 	let avatar;
+	let imageData = null;
 
 	const new_nickname = ref('');
 	const new_password = ref('');
@@ -56,12 +58,23 @@
 		let response = change_user_nick(new_nickname.value, token);
 		console.log(response);
 		console.log(new_nickname.value);
+		emit('close');
+		alert('Surnom modifié !');
 	}
 
 	function deleteAccount() {
 		delete_user(token);
 		authStore.clearToken();
 	}
+
+
+	function updateImage() {
+		console.log('update image');
+		const file = event.target.files[0];
+		update_avatar('file_name', file, token);
+		console.log(file);
+	}
+
 
 	avatar = 'https://localhost:8443/api/media/bot.jpg';
 
@@ -74,6 +87,14 @@
 				<img :src="avatar" alt="Photo de profil">
 				<p class="overlay">Modifier</p>
 			</button>
+			<div>
+				<input
+					type="file"
+					accept="jpg, png"
+					@change="updateImage"
+				/>
+				<img v-if="imageData" :src="imageData" alt="Uploaded Image" />
+			</div>
 			<div class="resume-name">
 				<h1>{{ user_Nickname }}</h1>
 				<h2>{{ username }}</h2>
