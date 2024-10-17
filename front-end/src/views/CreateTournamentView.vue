@@ -26,7 +26,7 @@
 				<p>Surnom</p>
 			</div>
 		</div>
-		<button class="create-button">Creer un tournois</button>
+		<button class="create-button">Créer un tournoi</button>
 	</div>
 </template>
 
