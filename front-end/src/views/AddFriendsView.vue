@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref } from 'vue';	
+import { ref } from 'vue';
 import { useAuthStore } from '../stores/auth.js';
 import { request_pending_friend, get_id_by_username } from '/src/jspong/main.js';
 

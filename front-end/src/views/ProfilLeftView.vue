@@ -96,14 +96,6 @@
 				<h1>{{ user_Nickname }}</h1>
 				<h2>{{ username }}</h2>
 			</div>
-			<div>
-				<input
-					type="file"
-					accept="jpg, jpeg"
-					@change="updateImage"
-				/>
-				<img v-if="imageData" :src="imageData" alt="Uploaded Image" />
-			</div>
 		</div>
 		<div>
 			<div class="modif-data">

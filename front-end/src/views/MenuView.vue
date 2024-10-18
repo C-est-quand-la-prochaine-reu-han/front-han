@@ -64,8 +64,8 @@
 			<button @click="toggleAllPlayers">LISTE DES JOUEUR·SE·S</button>
 		</div>
 		<div class="menu-item">
-			<!-- <button @click="togglePlayNowSolo">PARTIE RAPIDE (SOLO)</button> -->
-			<button>PARTIE RAPIDE (SOLO)</button>
+			<button @click="togglePlayNowSolo">PARTIE RAPIDE (SOLO)</button>
+			<!-- <button>PARTIE RAPIDE (SOLO)</button> -->
 		</div>
 		<div class="menu-item">
 			<button @click="togglePlayNowDuo">PARTIE RAPIDE (DUO)</button>
@@ -80,6 +80,8 @@
 	<Suspense>
 		<AllPlayersView v-if="showAllPlayers" @close="toggleAllPlayers" />
 	</Suspense>
+
+	<GameView v-if="showPlayNowSolo" @close-game="togglePlayNowSolo" />
 
 	<GameView v-if="showPlayNowDuo" @close-game="togglePlayNowDuo" />
 
