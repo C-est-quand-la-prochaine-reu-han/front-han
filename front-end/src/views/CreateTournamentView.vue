@@ -73,8 +73,7 @@
 				<h1>Nom du tournoi</h1>
 			</div>
 			<div class="rename-tournament">
-				<input type="text" v-model="tournament_name" placeholder="Nommer le tournoi">
-				<button>Soumettre</button>
+				<input type="text" placeholder="Nommer le tournoi">
 			</div>
 		</div>
 		<div class="find-new-players">
@@ -112,10 +111,6 @@
 		flex-direction: row;
 		justify-content: space-between;
 		padding: 20px;
-	}
-
-	.rename-tournament button {
-		margin-left: 10px;
 	}
 
 	h1 {
