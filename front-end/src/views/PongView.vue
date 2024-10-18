@@ -20,8 +20,8 @@
 	}
 
 	class Balle {
-		x = 505;
-		y = 505;
+		x = 500 - 10;
+		y = 500 - 10;
 		dirX = 0;
 		dirY = 0;
 		name = "Baballe";
@@ -29,8 +29,8 @@
 
 	let ball = ref(new Balle());
 	const ball_style = computed(() => ({
-		top: ball.value.y * 600 / 1000 - 25 + 'px',
-		left: ball.value.x - 25 + 'px'
+		top: ball.value.y * 600 / 1000 + 'px',
+		left: ball.value.x + 'px'
 	}));
 	
 	let controlled_player = ref(new Player());
@@ -103,8 +103,8 @@
 				controlled_player.value.score = parseInt(data[2]);
 			else if (data[1] == other_player.value.name)
 				other_player.value.score = parseInt(data[2]);
-			ball.value.x = 505;
-			ball.value.y = 505;
+			ball.value.x = 500 - 10;
+			ball.value.y = 500 - 10;
 			// Update scores in the global state
 			if (playerOnRight) {
 				globalState.rightPlayerScore = controlled_player.value.score;
