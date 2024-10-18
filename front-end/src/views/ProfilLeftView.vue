@@ -2,8 +2,7 @@
 	import { ref, defineEmits } from 'vue';
 	import AddFriendsView from './AddFriendsView.vue';
 	import { useAuthStore } from '../stores/auth.js';
-	import { get_me, delete_user, change_user_nick, change_password, update_avatar } from '/src/jspong/main.js';
-	import { get_all_tournament } from '@/jspong/main';
+	import { get_me, delete_user, change_user_nick, change_password, update_avatar, get_final_avatar } from '/src/jspong/main.js';
 	
 	const emit = defineEmits(['close']);
 
@@ -18,18 +17,19 @@
 
 	let user_Nickname = ref('');
 	let username;
-	let avatar;
-	let imageData = null;
+	let avatar = ref('');
 
 	const new_nickname = ref('');
 	const new_password = ref('');
 
 	try {
 		let me = await get_me(token);
+		console.log(me);
 		if (me) {
 			user_Nickname.value = me.user_nick;
 			username = me.user.username;
-			avatar = me.avatar;
+			avatar.value = get_final_avatar(me.avatar);
+			console.log(avatar.value);
 		} else {
 			console.log('No user found');
 		}
@@ -38,28 +38,23 @@
 	}
 
 	function submitPassword() {
-		console.log('submit password');
-		console.log(token);
 		if (new_password.value === '') {
 			alert('Password cannot be empty');
 			return;
 		}
 		let response = change_password(new_password.value, token);
-		console.log(response);
-		console.log(new_password.value);
 	}
 
 	async function submitUserNick() {
-		console.log('submit nickname');
-		console.log(token);
 		if (new_nickname.value === '') {
 			alert('Nickname cannot be empty');
 			return;
 		}
 		let response = await change_user_nick(new_nickname.value, token);
-		console.log(response);
-		console.log(new_nickname.value);
-		user_Nickname.value = new_nickname.value;
+		if (response.status === 200)
+			user_Nickname.value = new_nickname.value;
+		else
+			alert('Erreur lors du changement de surnom');
 	}
 
 	async function deleteAccount() {
@@ -72,9 +67,9 @@
 		const file = event.target.files[0];
 		await update_avatar(file, token);
 		console.log(file);
+		let data = await get_me(token);
+		console.log(data);
 	}
-
-	avatar = 'https://localhost:8443/api/media/bot.jpg';
 
 </script>
 
@@ -91,7 +86,6 @@
 					accept="jpg, png"
 					@change="updateImage"
 				/>
-				<img v-if="imageData" :src="imageData" alt="Uploaded Image" />
 			</div>
 			<div class="resume-name">
 				<h1>{{ user_Nickname }}</h1>
