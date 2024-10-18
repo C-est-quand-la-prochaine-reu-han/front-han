@@ -441,6 +441,10 @@ export async function create_user(username, user_nick, password) {
 }
 // TODO: Gerer les pending
 export async function create_tournament(name, pending, token) {
+    pkusers = [];
+    for (let i = 0; i < pending.length; i++) {
+        pkusers.push(pending[i].pk);
+    }
     let data = {
         "name": name,
         "confirmed": pending
