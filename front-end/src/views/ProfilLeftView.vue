@@ -3,6 +3,7 @@
 	import AddFriendsView from './AddFriendsView.vue';
 	import { useAuthStore } from '../stores/auth.js';
 	import { get_me, delete_user, change_user_nick, change_password, update_avatar } from '/src/jspong/main.js';
+	import { get_all_tournament } from '@/jspong/main';
 	
 	const emit = defineEmits(['close']);
 
@@ -22,6 +23,9 @@
 
 	const new_nickname = ref('');
 	const new_password = ref('');
+
+	let tournaments = await get_all_tournament(token);
+	console.log(tournaments);
 
 	try {
 		let me = await get_me(token);
@@ -48,14 +52,14 @@
 		console.log(new_password.value);
 	}
 
-	function submitUserNick() {
+	async function submitUserNick() {
 		console.log('submit nickname');
 		console.log(token);
 		if (new_nickname.value === '') {
 			alert('Nickname cannot be empty');
 			return;
 		}
-		let response = change_user_nick(new_nickname.value, token);
+		let response = await change_user_nick(new_nickname.value, token);
 		console.log(response);
 		console.log(new_nickname.value);
 		user_Nickname.value = new_nickname.value;
