@@ -67,14 +67,12 @@
 		authStore.clearToken();
 	}
 
-
 	function updateImage() {
 		console.log('update image');
 		const file = event.target.files[0];
 		update_avatar('file_name', file, token);
 		console.log(file);
 	}
-
 
 	avatar = 'https://localhost:8443/api/media/bot.jpg';
 
@@ -98,6 +96,14 @@
 			<div class="resume-name">
 				<h1>{{ user_Nickname }}</h1>
 				<h2>{{ username }}</h2>
+			</div>
+			<div>
+				<input
+					type="file"
+					accept="jpg, png"
+					@change="updateImage"
+				/>
+				<img v-if="imageData" :src="imageData" alt="Uploaded Image" />
 			</div>
 		</div>
 		<div>

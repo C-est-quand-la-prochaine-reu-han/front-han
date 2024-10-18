@@ -19,7 +19,7 @@
 			authStore.setToken(token);
 		} catch (error) {
 			alert("Error creating user !");
-			console.error(error);
+			console.log(error);
 		}
 	}
 </script>

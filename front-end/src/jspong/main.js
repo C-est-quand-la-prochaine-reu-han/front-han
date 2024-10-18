@@ -561,8 +561,7 @@ export async function update_avatar(filename, avatar, token) {
             'Authorization': 'Token ' + token,
             'Content-Disposition': 'attachment; filename=' + filename,
             'Content-Type':'image/jpeg',
-            'Accept': 'image/jpeg',
-            'redirect': "follow"
+            'Accept': 'image/jpeg'
          },
         body: avatar
     });
