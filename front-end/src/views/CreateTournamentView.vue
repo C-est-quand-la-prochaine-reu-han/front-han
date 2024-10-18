@@ -8,13 +8,14 @@
 
 	import { ref } from 'vue';
 	import { useAuthStore } from '../stores/auth.js';
-	import { get_user_by_username, create_tournament, get_me } from '/src/jspong/main.js';
+	import { get_user_by_username, create_tournament } from '/src/jspong/main.js';
 
 	const authStore = useAuthStore();
 	const token = authStore.token;
 
 	let player_in_tournament = ref([]);
 	const username_to_add = ref('');
+	const tournament_name = ref('');
 
 	async function addUserToTournament() {
 		if (username_to_add.value === '') {
@@ -30,13 +31,14 @@
 		try {
 			let user = await get_user_by_username(username_to_add.value, token);
 			if (user) {
-				//Ajouter une verification pour voir si l'utilisateur est deja dans un tournois	
+				//TODO: Ajouter une verification pour voir si l'utilisateur est deja dans un tournois	
 				player_in_tournament.value.push(user);
 			} else {
 				alert('Utilisateur introuvable');
 			}
 		} catch (error) {
 			console.log(error);
+			alert('Utilisateur introuvable');
 		}
 	}
 
@@ -50,10 +52,13 @@
 			alert('Il faut au moins 3 joueur·se·s pour creer un tournois');
 			return;
 		}
+		if (tournament_name.value === '') {
+			alert('Le nom du tournois ne peut pas etre vide');
+			return;
+		}
 		try {
-			let me = await get_me(token);
-			await create_tournament("Tournois de " + me.user_nick, player_in_tournament.value, token);
-			//$emit('tournament-created');
+			await create_tournament(tournament_name.value, player_in_tournament.value, token);
+			//emit('tournament-created');
 		} catch (error) {
 			console.log(error);
 		}
@@ -63,6 +68,15 @@
 
 <template>
 	<div class="find-new-players-container">
+		<div>
+			<div>
+				<h1>Nom du tournoi</h1>
+			</div>
+			<div class="rename-tournament">
+				<input type="text" v-model="tournament_name" placeholder="Nommer le tournoi">
+				<button>Soumettre</button>
+			</div>
+		</div>
 		<div class="find-new-players">
 			<div>
 				<h1>Ajouter des joueur·se·s</h1>
@@ -91,6 +105,17 @@
 		flex-direction: column;
 		width: 500px;
 		margin: auto;
+	}
+
+	.rename-tournament {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		padding: 20px;
+	}
+
+	.rename-tournament button {
+		margin-left: 10px;
 	}
 
 	h1 {
