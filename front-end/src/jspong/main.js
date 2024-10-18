@@ -1,6 +1,6 @@
 let host = "https://localhost:8443/";
 let path = host + "api/appong/api/";
-let debug = true;
+let debug = false;
 
 
 export async function get(token) {
@@ -139,6 +139,26 @@ export async function get_id_by_username(username, token) {
     }
     return -1;
 }
+
+export async function get_user_by_username(username, token) {
+    console.log('Username > ' + username + '    TOKEN > ' + token);
+    let response = await fetch(path + 'user/', {
+        headers : {
+            'Authorization': 'Token ' + token,
+            'Content-Type':'application/json',
+            'Accept': 'application/json'
+        }
+    });
+    let data = await response.json();
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].user.username === username) {
+            if (debug)
+                console.log(data[i]);
+            return data[i];
+        }
+    }
+    throw "User not found";
+}     
 
 export async function get_user_by_id(id, token) {
     console.log('ID > ' + id + '    TOKEN > ' + token);
@@ -423,7 +443,7 @@ export async function create_user(username, user_nick, password) {
 export async function create_tournament(name, pending, token) {
     let data = {
         "name": name,
-        "pending": pending
+        "confirmed": pending
     };
     let response = await fetch(path + 'tournament/', {
         method: 'POST',
@@ -482,6 +502,7 @@ export async function request_pending_friend(friend_id, token) {
     let me = await get_me(token);
     let actuel_pending = me.friends_pending;
     actuel_pending.push(friend_id);
+    console.log(actuel_pending);
     let data = {
         "friends_pending": actuel_pending
     }
@@ -508,6 +529,7 @@ export async function request_confirm_friend(friend_id, token) {
     }
     let actuel_confirm = me.friends_confirmed;
     actuel_confirm.push(friend_id);
+    console.log('CONFIRM ' + actuel_confirm);
     let data = {
         "friends_confirmed": actuel_confirm
     }
@@ -552,22 +574,29 @@ export async function request_refuse_friend(friend_id, token) {
     return true;
 }
 
-export async function update_avatar(filename, avatar, token) {
-    let me = await get_me(token);
-    filename = Date.now() + "_" + filename;
-    let response = await fetch(path + 'user/update_avatar/', {
-        method: 'PUT',
-        headers: {
-            'Authorization': 'Token ' + token,
-            'Content-Disposition': 'attachment; filename=' + filename,
-            'Content-Type':'image/jpeg',
-            'Accept': 'image/jpeg'
-         },
-        body: avatar
-    });
-    if (response.status != 201)
-        throw "Problem with the change of the avatar (" + response.status + ")";
-    if (debug)
-        console.log("Avatar changed");
-    return true;
+export async function update_avatar(avatar, token) {
+    console.log("File type:", avatar.type);
+    console.log("File size:", avatar.size);
+    console.log("Filename:", avatar.name);
+    try {
+        let response = await fetch(path + 'user/update_avatar/', {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Token ' + token,
+                'Content-Disposition': 'attachment; filename=' + avatar.name,
+                'Content-Type': 'application/octet-stream'
+            },
+            body: avatar
+        });
+
+        if (!response.ok) {
+            const errorBody = await response.text();
+            console.error("Error response:", errorBody);
+            throw new Error(`Problem with the change of the avatar (${response.status}): ${errorBody}`);
+        }
+        return true;
+    } catch (error) {
+        console.log("Error in update_avatar:", error);
+        throw error;
+    }
 }

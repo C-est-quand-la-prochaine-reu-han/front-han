@@ -15,7 +15,7 @@
 	const authStore = useAuthStore();
 	const token = authStore.token;
 
-	let user_Nickname;
+	let user_Nickname = ref('');
 	let username;
 	let avatar;
 	let imageData = null;
@@ -26,7 +26,7 @@
 	try {
 		let me = await get_me(token);
 		if (me) {
-			user_Nickname = me.user_nick;
+			user_Nickname.value = me.user_nick;
 			username = me.user.username;
 			avatar = me.avatar;
 		} else {
@@ -58,19 +58,18 @@
 		let response = change_user_nick(new_nickname.value, token);
 		console.log(response);
 		console.log(new_nickname.value);
-		emit('close');
-		alert('Surnom modifié !');
+		user_Nickname.value = new_nickname.value;
 	}
 
-	function deleteAccount() {
-		delete_user(token);
+	async function deleteAccount() {
+		await delete_user(token);
 		authStore.clearToken();
 	}
 
-	function updateImage() {
+	async function updateImage() {
 		console.log('update image');
 		const file = event.target.files[0];
-		update_avatar('file_name', file, token);
+		await update_avatar(file, token);
 		console.log(file);
 	}
 
@@ -100,7 +99,7 @@
 			<div>
 				<input
 					type="file"
-					accept="jpg, png"
+					accept="jpg, jpeg"
 					@change="updateImage"
 				/>
 				<img v-if="imageData" :src="imageData" alt="Uploaded Image" />

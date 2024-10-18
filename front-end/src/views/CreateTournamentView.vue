@@ -5,6 +5,60 @@
 -->
 
 <script setup>
+
+	import { ref } from 'vue';
+	import { useAuthStore } from '../stores/auth.js';
+	import { get_user_by_username, create_tournament, get_me } from '/src/jspong/main.js';
+
+	const authStore = useAuthStore();
+	const token = authStore.token;
+
+	let player_in_tournament = ref([]);
+	const username_to_add = ref('');
+
+	async function addUserToTournament() {
+		if (username_to_add.value === '') {
+			alert('Le nom d\'utilisateur ne peut pas etre vide');
+			return;
+		}
+		for (let i = 0; i < player_in_tournament.value.length; i++) {
+			if (player_in_tournament.value[i].user.username === username_to_add.value) {
+				alert('Utilisateur deja dans le tournois');
+				return;
+			}
+		}
+		try {
+			let user = await get_user_by_username(username_to_add.value, token);
+			if (user) {
+				//Ajouter une verification pour voir si l'utilisateur est deja dans un tournois	
+				player_in_tournament.value.push(user);
+			} else {
+				alert('Utilisateur introuvable');
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
+	async function createTournament() {
+		console.log('create tournament');
+		if (player_in_tournament.value.length === 0) {
+			alert('Personne n\'est invite dans le tournois');
+			return;
+		}
+		if (player_in_tournament.value.length < 3) {
+			alert('Il faut au moins 3 joueur·se·s pour creer un tournois');
+			return;
+		}
+		try {
+			let me = await get_me(token);
+			await create_tournament("Tournois de " + me.user_nick, player_in_tournament.value, token);
+			//$emit('tournament-created');
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
 </script>
 
 <template>
@@ -14,19 +68,20 @@
 				<h1>Ajouter des joueur·se·s</h1>
 			</div>
 			<div class="input-container">
-				<input type="text" v-model="friend_username" placeholder="Rechercher un nom d'utilisateur">
-				<button type="button" @click="submitFriendRequest">Rechercher</button>
+				<input type="text" v-model="username_to_add" placeholder="Rechercher un nom d'utilisateur">
+				<button type="button" @click="addUserToTournament">Rechercher</button>
 			</div>
 		</div>
 		<div>
 			<h1>Liste des joueur·se·s</h1>
-			<div class="players-list" >
-				<img src="/src/assets/business-cat.png" alt="Photo de profil">
-				<p>Nom d'utilisateur</p>
-				<p>Surnom</p>
+			<p class="no-player" v-if="player_in_tournament.length === 0">Personne n'est invité dans le tournois</p>
+			<div v-else class="players-list" v-for="player in player_in_tournament">
+				<img :src="player.avatar" alt="Photo de profil">
+				<p>{{ player.user.username }}</p>
+				<p>{{ player.user_nick }}</p>
 			</div>
 		</div>
-		<button class="create-button">Créer un tournoi</button>
+		<button class="create-button" @click="createTournament()">Creer un tournois</button>
 	</div>
 </template>
 
@@ -96,5 +151,9 @@
 
 	.create-button {
 		margin-top: 30px;
+	}
+
+	.no-player {
+		text-align: center;
 	}
 </style>
