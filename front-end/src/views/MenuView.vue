@@ -8,6 +8,7 @@
 	import AllPlayersView from './AllPlayersView.vue';
 	import GameView from './GameView.vue';
 	import TournamentView from './TournamentView.vue';
+
 	const showMainMenu = ref(true);
 	const showProfil = ref(false);
 	const showAllPlayers = ref(false);

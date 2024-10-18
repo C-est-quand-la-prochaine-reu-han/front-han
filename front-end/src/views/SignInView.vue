@@ -16,7 +16,7 @@
 		}
 		catch(error) {
 			alert("Username or password incorrect dummy !");
-			console.error(error);
+			console.log(error);
 		}
 	}
 </script>

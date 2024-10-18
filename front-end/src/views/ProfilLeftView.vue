@@ -1,9 +1,10 @@
 <script setup>
-	import { ref, defineComponent } from 'vue';
+	import { ref, defineEmits } from 'vue';
 	import AddFriendsView from './AddFriendsView.vue';
 	import { useAuthStore } from '../stores/auth.js';
-	import { get_me, delete_user, change_user_nick, change_password } from '/src/jspong/main.js';
+	import { get_me, delete_user, change_user_nick, change_password, update_avatar } from '/src/jspong/main.js';
 	
+	const emit = defineEmits(['close']);
 
 	const isAddFriendsViewShows = ref(false);
 
@@ -14,9 +15,10 @@
 	const authStore = useAuthStore();
 	const token = authStore.token;
 
-	let user_Nickname;
+	let user_Nickname = ref('');
 	let username;
 	let avatar;
+	let imageData = null;
 
 	const new_nickname = ref('');
 	const new_password = ref('');
@@ -24,7 +26,7 @@
 	try {
 		let me = await get_me(token);
 		if (me) {
-			user_Nickname = me.user_nick;
+			user_Nickname.value = me.user_nick;
 			username = me.user.username;
 			avatar = me.avatar;
 		} else {
@@ -56,11 +58,19 @@
 		let response = change_user_nick(new_nickname.value, token);
 		console.log(response);
 		console.log(new_nickname.value);
+		user_Nickname.value = new_nickname.value;
 	}
 
-	function deleteAccount() {
-		delete_user(token);
+	async function deleteAccount() {
+		await delete_user(token);
 		authStore.clearToken();
+	}
+
+	async function updateImage() {
+		console.log('update image');
+		const file = event.target.files[0];
+		await update_avatar(file, token);
+		console.log(file);
 	}
 
 	avatar = 'https://localhost:8443/api/media/bot.jpg';
@@ -74,9 +84,25 @@
 				<img :src="avatar" alt="Photo de profil">
 				<p class="overlay">Modifier</p>
 			</button>
+			<div>
+				<input
+					type="file"
+					accept="jpg, png"
+					@change="updateImage"
+				/>
+				<img v-if="imageData" :src="imageData" alt="Uploaded Image" />
+			</div>
 			<div class="resume-name">
 				<h1>{{ user_Nickname }}</h1>
 				<h2>{{ username }}</h2>
+			</div>
+			<div>
+				<input
+					type="file"
+					accept="jpg, jpeg"
+					@change="updateImage"
+				/>
+				<img v-if="imageData" :src="imageData" alt="Uploaded Image" />
 			</div>
 		</div>
 		<div>

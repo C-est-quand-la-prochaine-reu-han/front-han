@@ -4,10 +4,12 @@
 	import ProfilRightView from './ProfilRightView.vue';
 	import StatsView from './StatsView.vue';
 	import MatchHistoryView from './MatchHistoryView.vue';
+	import RGPDView from './RGPDView.vue';
 
 	const showProfil = ref(true);
 	const showStats = ref(false);
 	const showMatchHistory = ref(false);
+	const showRGPD = ref(false);
 
 	function toggleStats() {
 		showStats.value = !showStats.value;
@@ -16,6 +18,11 @@
 
 	function toggleMatchHistory() {
 		showMatchHistory.value = !showMatchHistory.value;
+		showProfil.value = !showProfil.value;
+	}
+
+	function toggleRGPD() {
+		showRGPD.value = !showRGPD.value;
 		showProfil.value = !showProfil.value;
 	}
 </script>
@@ -28,7 +35,7 @@
 	<div class="profil-container" v-if="showProfil">
 
 		<Suspense>
-			<ProfilLeftView />
+			<ProfilLeftView @close="$emit('close')" />
 		</Suspense>
 
 		<Suspense>
@@ -41,6 +48,8 @@
 		<button @click="toggleStats">Statistiques</button>
 		
 		<button @click="toggleMatchHistory">Historique des matchs</button>
+
+		<button @click="toggleRGPD">Politique de confidentialité</button>
 	</div>
 
 	<Suspense>
@@ -50,6 +59,8 @@
 	<Suspense>
 		<MatchHistoryView v-if="showMatchHistory" @close="toggleMatchHistory" />
 	</Suspense>
+
+	<RGPDView v-if="showRGPD" @close="toggleRGPD" />
 </template>
 
 <style scoped>

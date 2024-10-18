@@ -32,7 +32,7 @@ try {
 		})
 	}
 } catch (error) {
-	console.error(error);
+	console.log(error);
 }
 
 console.log(data)
