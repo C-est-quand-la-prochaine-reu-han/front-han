@@ -24,9 +24,6 @@
 	const new_nickname = ref('');
 	const new_password = ref('');
 
-	let tournaments = await get_all_tournament(token);
-	console.log(tournaments);
-
 	try {
 		let me = await get_me(token);
 		if (me) {
