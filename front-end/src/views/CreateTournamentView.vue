@@ -70,7 +70,6 @@
 			</div>
 			<div class="rename-tournament">
 				<input type="text" placeholder="Nommer le tournoi">
-				<button>Soumettre</button>
 			</div>
 		</div>
 		<div class="find-new-players">
@@ -108,10 +107,6 @@
 		flex-direction: row;
 		justify-content: space-between;
 		padding: 20px;
-	}
-
-	.rename-tournament button {
-		margin-left: 10px;
 	}
 
 	h1 {
