@@ -4,21 +4,32 @@
 
 <script setup>
 	import { provide, ref } from 'vue';
+	import { useAuthStore } from '../stores/auth.js';
 	import ProfilView from './ProfilView.vue';
 	import AllPlayersView from './AllPlayersView.vue';
 	import GameView from './GameView.vue';
 	import TournamentView from './TournamentView.vue';
-	
+	import { get_me } from '/src/jspong/main.js';
+
 	const showMainMenu = ref(true);
 	const showProfil = ref(false);
 	const showAllPlayers = ref(false);
 	const showPlayNowSolo = ref(false);
 	const showPlayNowDuo = ref(false);
 	const showTournament = ref(false);
-
 	const otherPlayerName = ref('');
+	const authStore = useAuthStore();
+	const token = authStore.token;
 
 	provide('otherPlayerName', otherPlayerName);
+
+	try {
+		let me = get_me(token);
+		console.log(me);
+	} catch (error) {
+		console.log(error);
+	}
+
 
 	//showMainMenu.value = sessionStorage.getItem("showMainMenu") || showMainMenu.value;
 	//showProfil.value = sessionStorage.getItem("showProfil") || showProfil.value;
@@ -85,7 +96,9 @@
 
 	<GameView v-if="showPlayNowDuo" @close-game="togglePlayNowDuo" />
 
-	<TournamentView v-if="showTournament" @close="toggleTournament" />
+	<Suspense>
+		<TournamentView v-if="showTournament" @close="toggleTournament" />
+	</Suspense>
 </template>
 
 <style scoped>

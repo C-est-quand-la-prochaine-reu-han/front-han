@@ -17,42 +17,26 @@ let data = []
 // 	total_hits = dashboard.total_hits;
 // 	total_score = dashboard.total_score;
 // 	win_ratio = (dashboard.win_ratio * 100).toFixed(2);
-let all_user = [];
-try {
-	all_user = await get_all_users(token);
-} catch (error) {
-	console.log(error);
-}
 
-for (let user of all_user) {
-	console.log(user);
-	let dashboard = {};
-	try {
-		dashboard = await get_dashboard(user.pk, token);
-	} catch (error) {
-		console.log(error);
-	}
-	if (!dashboard) {
+try {
+	let all_user = await get_all_users(token);
+	for (let user of all_user) {
+		let dashboard = await get_dashboard(user.pk, token);
+		let data_avatar = get_final_avatar(user.avatar);
 		data.push({
 			pk : user.pk,
 			nickname: user.user_nick,
 			username: user.user.username,
-			avatar: get_final_avatar(user.avatar),
-			match_wins: 0,
-			win_ratio: (0 * 100).toFixed(2)
-		});
-		continue;
+			avatar: data_avatar,
+			match_wins: dashboard.match_wins,
+			win_ratio: (dashboard.win_ratio * 100).toFixed(2)
+		})
 	}
-	data.push({
-		pk : user.pk,
-		nickname: user.user_nick,
-		username: user.user.username,
-		avatar: get_final_avatar(user.avatar),
-		match_wins: dashboard.match_wins,
-		win_ratio: (dashboard.win_ratio * 100).toFixed(2)
-	});
-	console.log(data);
+} catch (error) {
+	console.log(error);
 }
+
+console.log(data)
 
 </script>
 

@@ -2,7 +2,7 @@
 
 	import { ref } from 'vue';
 	import { useAuthStore } from '../stores/auth.js';
-	import { get_me, get_user_by_id, get_final_avatar, get_dashboard } from '/src/jspong/main.js';
+	import { get_me, get_user_by_id, get_final_avatar } from '/src/jspong/main.js';
 
 	const authStore = useAuthStore();
 	const token = authStore.token;
@@ -19,8 +19,6 @@
 	{
 		try {
 			let me = await get_me(token);
-			console.log('MEEEE');
-			console.log(me);
 			if (me) {
 				// friends_confirmed.value = me.friends_confirmed
 				// friend.value = [];
@@ -32,10 +30,32 @@
 				pending.value = [];
 				for (let i = 0; i < friends_pending.value.length; i++) {
 					let new_pending = await get_user_by_id(me.friends_pending[i], token);
-					new_pending.avatar = get_final_avatar(new_pending.avatar);
-					let temp = await get_dashboard(new_pending.pk, token);
-					console.log(temp);
-					pending.value.push(new_pending);
+					console.log(new_pending);
+					let connected = false;
+					let formattedLastAccess = "";
+					
+					if (new_pending.last_access !== null) {
+						const lastAccessTime = new Date(new_pending.last_access);
+						const currentTime = new Date();
+						const timeDifference = currentTime.getTime() - lastAccessTime.getTime();
+						const minutesDifference = Math.floor(timeDifference / (1000 * 60));
+
+						if (minutesDifference < 1) {
+							connected = true;
+						}
+						formattedLastAccess = "Vu il y a " + minutesDifference + " minutes";
+					} else {
+						connected = true;
+					}
+					let data_avatar = get_final_avatar(new_pending.avatar);
+					let friend = {
+						avatar: data_avatar,
+						user_nick: new_pending.user_nick,
+						pk: new_pending.pk,
+						connected: connected,
+						last_access: formattedLastAccess
+					}
+					pending.value.push(friend);
 				}
 			} else {
 				pending.value = [];
@@ -84,9 +104,8 @@
 				<div class="data-profil" v-for="pendings in pending">
 					<img :src="pendings.avatar" alt="Photo de profil">
 					<p>{{ pendings.user_nick }}</p>
-					<!-- <p v-if="">(en ligne)</p>
-					<p v-else>(hors ligne)</p> -->
-					<p>{{ pendings }}</p>
+					<p v-if="pendings.connected">en ligne</p>
+					<p v-else>hors ligne ({{ pendings.last_access }})</p>
 					<!-- <button @click="acceptFriend(pendings)">✔</button>
 					<button @click="rejectFriend(pendings)">✖</button> -->
 				</div>
