@@ -1,7 +1,7 @@
 <script setup>
 
 
-import { get_all_users, get_dashboard } from '@/jspong/main';
+import { get_all_users, get_dashboard, get_final_avatar } from '@/jspong/main';
 import { useAuthStore } from '../stores/auth.js';
 
 const authStore = useAuthStore();
@@ -21,21 +21,25 @@ let data = []
 try {
 	let all_user = await get_all_users(token);
 	for (let user of all_user) {
-		let dashboard = await get_dashboard(user.pk, token);
+		let dashboard = {
+			match_wins: 0,
+			win_ratio: 0.00
+		};
+		dashboard = await get_dashboard(user.pk, token);
+		if (dashboard.status != 200)
+			continue;
 		data.push({
 			pk : user.pk,
 			nickname: user.user_nick,
 			username: user.user.username,
-			avatar: user.avatar,
+			avatar: get_final_avatar(user.avatar),
 			match_wins: dashboard.match_wins,
 			win_ratio: (dashboard.win_ratio * 100).toFixed(2)
-		})
+		});
 	}
 } catch (error) {
 	console.log(error);
 }
-
-console.log(data)
 
 </script>
 
