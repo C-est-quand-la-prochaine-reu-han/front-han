@@ -10,19 +10,30 @@
 		pk: -1,
 	}
 	let matches = [];
+	let final_macthes = [];
+
 	try {
 		me = await get_me(token);
 		matches = await get_all_matches_of_user(me.pk, token);
+		for (let match of matches) {
+			let player1 = await get_nickname_by_id(match.player1, token);
+			let player2 = await get_nickname_by_id(match.player2, token);
+			final_macthes.push({
+				player1: player1,
+				player1_score: match.player1_score,
+				player1_hit_nb: match.player1_hit_nb,
+				player1_perfect_hit_nb: match.player1_perfect_hit_nb,
+				player2: player2,
+				player2_score: match.player2_score,
+				player2_hit_nb: match.player2_hit_nb,
+				player2_perfect_hit_nb: match.player2_perfect_hit_nb
+			});
+		}
 	} catch (error) {
 		console.log(error);
 		console.log('No user found');
 	}
-
 	console.log(matches);
-	for (let match of matches) {
-		match.match_start_time = match.match_start_time.split('T')[0];
-	}
-
 </script>
 
 <template>
@@ -32,7 +43,6 @@
 
 	<div class="main-container">
 		<div class="data-match-title">
-			<p>Date</p>
 			<p>Joueur 1</p>
 			<p>Score J1</p>
 			<p>Hit J1</p>
@@ -44,8 +54,7 @@
 		</div>
 		<div class="data-match-container">
 			<div v-if="matches.length === 0" class="data-no-matches">Aucun match a ton actif</div>
-			<div v-else class="data-match" v-for="match in matches" :key="match.id">
-				<p>{{ match.match_start_time }}</p>
+			<div v-else class="data-match" v-for="match in final_macthes" :key="match.id">
 				<p>{{ match.player1 }}</p>
 				<p>{{ match.player1_score }}</p>
 				<p>{{ match.player1_hit_nb }}</p>
