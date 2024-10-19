@@ -43,6 +43,8 @@
 			return;
 		}
 		let response = change_password(new_password.value, token);
+		if (response.status != 200)
+			alert('Erreur lors du changement de mot de passe (status: ' + response.status + ')');
 	}
 
 	async function submitUserNick() {
@@ -65,10 +67,21 @@
 	async function updateImage() {
 		console.log('update image');
 		const file = event.target.files[0];
-		await update_avatar(file, token);
-		console.log(file);
-		let data = await get_me(token);
-		console.log(data);
+		let data = await update_avatar(file, token);
+		if (data.status === 200) {
+			try {
+				let me = await get_me(token);
+				if (me) {
+					avatar.value = get_final_avatar(me.avatar);
+				} else {
+					console.log('No user found');
+				}
+			} catch (error) {
+				console.log('No user found');
+			}
+		} else {
+			alert('Erreur lors de la mise à jour de l\'avatar');
+		}
 	}
 
 </script>
