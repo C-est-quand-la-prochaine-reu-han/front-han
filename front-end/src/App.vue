@@ -16,7 +16,6 @@
 	const authStore = useAuthStore()
 	
 	const isLightMode = ref(false)
-	const isConnected = computed(() => authStore.isConnected);
 
 	const flagImages = {
 		0: franceFlag,
@@ -70,7 +69,7 @@
 		</div>
 	</header>
 
-	<MenuView v-if="isConnected" />
+	<MenuView v-if="authStore.isConnected" />
 	<LogInView v-else />
 </template>
 
