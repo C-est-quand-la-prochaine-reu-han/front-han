@@ -1,4 +1,9 @@
 <script setup>
+	// Get the token
+	import { useAuthStore } from '../stores/auth.js';
+	const authStore = useAuthStore();
+	const token = authStore.token;
+
 	import { ref, onMounted, computed, inject, onBeforeUnmount, defineEmits } from 'vue';
 	import Paddle from './PongTools/Paddle.vue';
 	import Ball from './PongTools/Ball.vue';
@@ -132,7 +137,7 @@
 		}
 		if (controlled_player === undefined || other_player === undefined)
 			return ;
-		if (event.data.startsWith(controlled_player.value.name + ":"))
+		if (event.data.startsWith(token + ":"))
 		{
 			let newpos = event.data.split(":");
 			controlled_player.value.y = parseInt(newpos[1]);
@@ -151,10 +156,8 @@
 		let socket = await new WebSocket("wss://localhost:8443/pong/");
 		let promise = new Promise((resolve, reject) => {
 			socket.onopen = function (event) {
-				event.target.send("*"); // We want to play against whoever is available for a match
-				// FIXME: use actual player name from localstorage or api
-				controlled_player.value.name = `player${new Date().getTime()}`;
-				event.target.send(controlled_player.value.name);
+				event.target.send("*");
+				event.target.send(token);
 				resolve(socket);
 			}
 		});
