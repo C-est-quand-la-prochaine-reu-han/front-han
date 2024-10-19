@@ -7,6 +7,8 @@
 	import { ref, onMounted, computed, inject, onBeforeUnmount, defineEmits } from 'vue';
 	import Paddle from './PongTools/Paddle.vue';
 	import Ball from './PongTools/Ball.vue';
+	
+	import { get_me } from '/src/jspong/main.js';
 
 	defineEmits(['close-game']);
 
@@ -39,6 +41,7 @@
 	}));
 	
 	let controlled_player = ref(new Player());
+	controlled_player.value.name = "";
 	const controlled_player_style = computed(() => ({
 		top: controlled_player.value.y * 0.8 + 'px',
 		left: controlled_player.value.x * 0.8 + 'px'
@@ -137,7 +140,7 @@
 		}
 		if (controlled_player === undefined || other_player === undefined)
 			return ;
-		if (event.data.startsWith(token + ":"))
+		if (event.data.startsWith(controlled_player.value.name + ":"))
 		{
 			let newpos = event.data.split(":");
 			controlled_player.value.y = parseInt(newpos[1]);
@@ -186,10 +189,16 @@
 	};
 
 	onMounted(async () => {
-		socket = await setup_socket();
-
-		window.addEventListener('keydown', keydown);
-		window.addEventListener('keyup', keyup);
+		try {
+			const player = await get_me(token);
+			controlled_player.value.name = player.user_nick;
+			socket = await setup_socket();
+			window.addEventListener('keydown', keydown);
+			window.addEventListener('keyup', keyup);
+		} catch (e) {
+			console.error(e);
+			alert("u dummy");
+		}
 	});
 
 	onBeforeUnmount(() => {
