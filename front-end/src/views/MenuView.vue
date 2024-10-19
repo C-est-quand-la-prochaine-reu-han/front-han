@@ -17,6 +17,8 @@
 	const showPlayNowSolo = ref(false);
 	const showPlayNowDuo = ref(false);
 	const showTournament = ref(false);
+
+	const tournamentId = ref(0);
 	const otherPlayerName = ref('');
 	const authStore = useAuthStore();
 	const token = authStore.token;
@@ -47,15 +49,17 @@
 	}
 
 	function togglePlayNowSolo() {
-		if (!showPlayNowSolo.value)
+		if (!showPlayNowSolo.value) {
 			otherPlayerName.value = 'bot';
+		}
 		showPlayNowSolo.value = !showPlayNowSolo.value;
 		showMainMenu.value = !showMainMenu.value;
 	}
 
 	function togglePlayNowDuo() {
-		if (!showPlayNowDuo.value)
+		if (!showPlayNowDuo.value) {
 			otherPlayerName.value = '*';
+		}
 		showPlayNowDuo.value = !showPlayNowDuo.value;
 		showMainMenu.value = !showMainMenu.value;
 	}
@@ -64,6 +68,9 @@
 		showTournament.value = !showTournament.value;
 		showMainMenu.value = !showMainMenu.value;
 	}
+
+	provide('tournamentId', tournamentId);
+	provide('otherPlayerName', otherPlayerName);
 </script>
 
 <template>
@@ -76,7 +83,6 @@
 		</div>
 		<div class="menu-item">
 			<button @click="togglePlayNowSolo">PARTIE RAPIDE (SOLO)</button>
-			<!-- <button>PARTIE RAPIDE (SOLO)</button> -->
 		</div>
 		<div class="menu-item">
 			<button @click="togglePlayNowDuo">PARTIE RAPIDE (DUO)</button>

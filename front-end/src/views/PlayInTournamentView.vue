@@ -8,14 +8,17 @@
 	const token = authStore.token;
 
 	const showPlayTournament = ref(false);
+
+	const otherPlayerName = ref('');
 	const tournamentId = inject('tournamentId');
 
-	console.log('tournamentId', tournamentId);
+	provide('otherPlayerName', otherPlayerName);
+	provide('tournamentId', tournamentId);
+
 	let tournament = await get_tournament(tournamentId, token);
 	let players = tournament.pending;
 	let possible_matches = [];
 	let me = ref(null);
-	//let all_users_in_tournament = ref([]);
 	let all_matches_of_tournament = ref([]);
 
 	me.value = await get_me(token);
@@ -31,16 +34,6 @@
 		}
 		return temp_tournament;
 	}
-
-	// async function get_all_users_in_tournament() {
-	// 	try {
-	// 		console.log('PARAMS : ', tournamentId, token);
-	// 		all_users_in_tournament.value = await get_all_users_of_tournament(tournamentId, token);
-	// 		console.log('ALL USERS : ', all_users_in_tournament.value);
-	// 	} catch (error) {
-	// 		console.log(error);
-	// 	}
-	// }
 
 	async function set_all_possible_matches() {
 		let id = 0;
@@ -73,11 +66,9 @@
 		if (!showPlayTournament.value)
 		{
 			if (match.player1_pk === me.value.pk) {
-				provide('otherPlayerName', match.player2_username);
-				provide('tournamentId', tournamentId);
+				otherPlayerName.value = match.player2_username;
 			} else if (match.player2_pk === me.value.pk) {
-				provide('otherPlayerName', match.player1_username);
-				provide('tournamentId', tournamentId);
+				otherPlayerName.value = match.player1_username;
 			}
 		}
 		togglePlayTournament();
@@ -87,21 +78,11 @@
 		showPlayTournament.value = !showPlayTournament.value;
 	}
 
-	// function get_username_by_pk(pk) {
-	// 	console.log('all_users_in_tournament', all_users_in_tournament.value);
-	// 	for (let user of all_users_in_tournament.value) {
-	// 		if (user.pk === pk) {
-	// 			return user.username;
-	// 		}
-	// 	}
-	// }
-
-	//get_all_users_in_tournament();
 	await set_all_possible_matches();
 </script>
 
 <template>
-	<div class="play-tournament-container">
+	<div class="play-tournament-container" v-if="!showPlayTournament">
 		<div class="play-tournament" v-for="match in possible_matches" :key="match.pk">
 			<p>{{ match.pk }} : {{ match.player1_username }} VS {{ match.player2_username }}</p>
 			<button v-if="!match.already_played && (match.player1_pk === me.pk || match.player2_pk === me.pk)" @click="startGame(match)">JOUER</button>
@@ -110,7 +91,7 @@
 		</div>
 	</div>
 
-	<GameView v-if="showPlayNowSolo" @close-game="togglePlayTournament" />
+	<GameView v-if="showPlayTournament" @close-game="togglePlayTournament" />
 </template>
 
 <style scoped>

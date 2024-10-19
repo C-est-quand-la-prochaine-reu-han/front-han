@@ -14,6 +14,7 @@
 
 	const globalState = inject('globalState');
 	const otherPlayerName = inject('otherPlayerName');
+	const tournamentId = inject('tournamentId');
 
 	console.log(otherPlayerName.value);
 
