@@ -92,31 +92,4 @@
 	body.light-mode .back-button:hover {
 		background-color: var(--vt-c-white-mute);
 	}
-
-	.play-tournament {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		height: 100vh;
-	}
-
-	.play-tournament button {
-		padding: 10px 20px;
-		background-color: var(--vt-c-black-soft);
-		border: none;
-		cursor: pointer;
-		font-size: 2em;
-	}
-
-	body.light-mode .play-tournament button {
-		background-color: var(--vt-c-white-soft);
-	}
-
-	.play-tournament button:hover {
-		background-color: var(--vt-c-black-mute);
-	}
-
-	body.light-mode .play-tournament button:hover {
-		background-color: var(--vt-c-white-mute);
-	}
 </style>
