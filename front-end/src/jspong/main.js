@@ -355,8 +355,8 @@ export async function get_username_by_id(id, token) {
 export async function get_nickname_by_id(id, token) {
     let user = await get_user_by_id(id, token);
     if (debug)
-        console.log(user.user.username);
-    return user.user.user_nick;
+        console.log(user.user_nick);
+    return user.user_nick;
 }
 
 export async function login(username, password) {
