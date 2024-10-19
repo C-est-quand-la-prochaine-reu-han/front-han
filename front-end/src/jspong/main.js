@@ -610,7 +610,6 @@ export async function update_avatar(avatar, token) {
     }
 }
 
-
 export function get_final_avatar(avatar_path) {
     let final_avatar_path = avatar_path.replace("http://localhost", "/api");
     console.log("Avatar path:", final_avatar_path);

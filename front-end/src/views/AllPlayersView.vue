@@ -1,7 +1,7 @@
 <script setup>
 
 
-import { get_all_users, get_dashboard } from '@/jspong/main';
+import { get_all_users, get_dashboard, get_final_avatar } from '@/jspong/main';
 import { useAuthStore } from '../stores/auth.js';
 
 const authStore = useAuthStore();
@@ -22,11 +22,12 @@ try {
 	let all_user = await get_all_users(token);
 	for (let user of all_user) {
 		let dashboard = await get_dashboard(user.pk, token);
+		let data_avatar = get_final_avatar(user.avatar);
 		data.push({
 			pk : user.pk,
 			nickname: user.user_nick,
 			username: user.user.username,
-			avatar: user.avatar,
+			avatar: data_avatar,
 			match_wins: dashboard.match_wins,
 			win_ratio: (dashboard.win_ratio * 100).toFixed(2)
 		})
