@@ -2,7 +2,7 @@
 
 	import { ref } from 'vue';
 	import { useAuthStore } from '../stores/auth.js';
-	import { get_me, get_user_by_id, request_refuse_friend, request_confirm_friend } from '/src/jspong/main.js';
+	import { get_me, get_user_by_id, get_final_avatar, get_dashboard } from '/src/jspong/main.js';
 
 	const authStore = useAuthStore();
 	const token = authStore.token;
@@ -19,6 +19,8 @@
 	{
 		try {
 			let me = await get_me(token);
+			console.log('MEEEE');
+			console.log(me);
 			if (me) {
 				// friends_confirmed.value = me.friends_confirmed
 				// friend.value = [];
@@ -30,6 +32,9 @@
 				pending.value = [];
 				for (let i = 0; i < friends_pending.value.length; i++) {
 					let new_pending = await get_user_by_id(me.friends_pending[i], token);
+					new_pending.avatar = get_final_avatar(new_pending.avatar);
+					let temp = await get_dashboard(new_pending.pk, token);
+					console.log(temp);
 					pending.value.push(new_pending);
 				}
 			} else {
@@ -81,7 +86,7 @@
 					<p>{{ pendings.user_nick }}</p>
 					<!-- <p v-if="">(en ligne)</p>
 					<p v-else>(hors ligne)</p> -->
-					<p>(hors ligne)</p>
+					<p>{{ pendings }}</p>
 					<!-- <button @click="acceptFriend(pendings)">✔</button>
 					<button @click="rejectFriend(pendings)">✖</button> -->
 				</div>
