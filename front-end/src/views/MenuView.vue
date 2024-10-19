@@ -85,7 +85,9 @@
 
 	<GameView v-if="showPlayNowDuo" @close-game="togglePlayNowDuo" />
 
-	<TournamentView v-if="showTournament" @close="toggleTournament" />
+	<Suspense>
+		<TournamentView v-if="showTournament" @close="toggleTournament" />
+	</Suspense>
 </template>
 
 <style scoped>

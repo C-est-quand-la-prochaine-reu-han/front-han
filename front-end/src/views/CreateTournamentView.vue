@@ -6,9 +6,11 @@
 
 <script setup>
 
-	import { ref } from 'vue';
+	import { ref, defineEmits } from 'vue';
 	import { useAuthStore } from '../stores/auth.js';
 	import { get_user_by_username, create_tournament } from '/src/jspong/main.js';
+
+	const emit = defineEmits(['tournament-created']);
 
 	const authStore = useAuthStore();
 	const token = authStore.token;
@@ -52,13 +54,14 @@
 			alert('Il faut au moins 3 joueur·se·s pour creer un tournois');
 			return;
 		}
+		console.log(tournament_name.value);
 		if (tournament_name.value === '') {
 			alert('Le nom du tournois ne peut pas etre vide');
 			return;
 		}
 		try {
 			await create_tournament(tournament_name.value, player_in_tournament.value, token);
-			//emit('tournament-created');
+			emit('tournament-created');
 		} catch (error) {
 			console.log(error);
 		}
@@ -73,7 +76,7 @@
 				<h1>Nom du tournoi</h1>
 			</div>
 			<div class="rename-tournament">
-				<input type="text" placeholder="Nommer le tournoi">
+				<input type="text" v-model="tournament_name" placeholder="Nommer le tournoi">
 			</div>
 		</div>
 		<div class="find-new-players">
