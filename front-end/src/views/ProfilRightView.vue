@@ -43,7 +43,8 @@
 						if (minutesDifference < 1) {
 							connected = true;
 						}
-						formattedLastAccess = "Vu il y a " + minutesDifference + " minutes";
+
+						formattedLastAccess = "Vu il y a " + minutesDifference + " minute" + (minutesDifference > 1 ? "s" : "");
 					} else {
 						connected = true;
 					}
