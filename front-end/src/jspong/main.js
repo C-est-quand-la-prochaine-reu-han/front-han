@@ -1,10 +1,14 @@
-let host = "https://localhost:8443/";
-let path = host + "api/appong/api/";
+let host = "https://$HOSTNAME:8443/";
+if (host.includes("$HOSTNAME"))
+{
+    host = "https://localhost:8443/";
+}
+let full_path = host + "api/appong/api/";
 let debug = false;
 
 
 export async function get(token) {
-    let response = await fetch(path, {
+    let response = await fetch(full_path, {
          headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -18,7 +22,7 @@ export async function get(token) {
 }
 
 export async function get_me(token) {
-    let response = await fetch(path + 'user/me/', {
+    let response = await fetch(full_path + 'user/me/', {
         headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -36,7 +40,7 @@ export async function get_me(token) {
 }
 
 export async function get_all_users(token) {
-    let response = await fetch(path + 'user/', {
+    let response = await fetch(full_path + 'user/', {
         headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -50,7 +54,7 @@ export async function get_all_users(token) {
 }
 
 export async function get_dashboard(id, token) {
-    let response = await fetch(path + 'user/' + id +'/dashboard/', {
+    let response = await fetch(full_path + 'user/' + id +'/dashboard/', {
         headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -64,7 +68,7 @@ export async function get_dashboard(id, token) {
 }
 
 export async function get_all_tournament(token) {
-    let response = await fetch(path + 'tournament/', {
+    let response = await fetch(full_path + 'tournament/', {
         method: 'GET',
         headers : {
         'Authorization': 'Token ' + token,
@@ -78,7 +82,7 @@ export async function get_all_tournament(token) {
 }
 
 export async function get_number_of_matches(token) {
-    let response = await fetch(path + 'match/', {
+    let response = await fetch(full_path + 'match/', {
         headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -94,7 +98,7 @@ export async function get_number_of_matches(token) {
 
 export async function get_number_of_users(token) {
     
-    let response = await fetch(path + 'user/', {
+    let response = await fetch(full_path + 'user/', {
         headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -108,7 +112,7 @@ export async function get_number_of_users(token) {
 }
 
 export async function get_number_of_tournaments(token) {
-    let response = await fetch(path + 'tournament/', {
+    let response = await fetch(full_path + 'tournament/', {
         headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -122,7 +126,7 @@ export async function get_number_of_tournaments(token) {
 }
 
 export async function get_id_by_username(username, token) {
-    let response = await fetch(path + 'user/', {
+    let response = await fetch(full_path + 'user/', {
         headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -144,7 +148,7 @@ export async function get_id_by_username(username, token) {
 
 export async function get_user_by_username(username, token) {
     console.log('Username > ' + username + '    TOKEN > ' + token);
-    let response = await fetch(path + 'user/', {
+    let response = await fetch(full_path + 'user/', {
         headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -164,7 +168,7 @@ export async function get_user_by_username(username, token) {
 
 export async function get_user_by_id(id, token) {
     console.log('ID > ' + id + '    TOKEN > ' + token);
-    let response = await fetch(path + 'user/', {
+    let response = await fetch(full_path + 'user/', {
         headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -183,7 +187,7 @@ export async function get_user_by_id(id, token) {
 }
 
 export async function get_tournament_by_id(id, token) {
-    let response = await fetch(path + 'tournament/' + id + '/', { 
+    let response = await fetch(full_path + 'tournament/' + id + '/', { 
         method: 'GET',
         headers : {
         'Authorization': 'Token ' + token,
@@ -199,7 +203,7 @@ export async function get_tournament_by_id(id, token) {
 }
 
 export async function get_all_matches_of_user(id, token) {
-    let response = await fetch(path + 'match/', { headers : 
+    let response = await fetch(full_path + 'match/', { headers : 
         {
         'Authorization': 'Token ' + token,
         'Content-Type':'application/json',
@@ -219,7 +223,7 @@ export async function get_all_matches_of_user(id, token) {
 
 export async function is_match_tournament(id, token) {
     let value = false;
-    let response = await fetch(path + 'match/' + id, { headers : {
+    let response = await fetch(full_path + 'match/' + id, { headers : {
         'Authorization': 'Token ' + token,
         'Content-Type':'application/json',
         'Accept': 'application/json'
@@ -236,7 +240,7 @@ export async function is_match_tournament(id, token) {
 
 
 export async function get_all_matches_of_tournament(id, token) {
-    let response = await fetch(path + 'match/', { headers :
+    let response = await fetch(full_path + 'match/', { headers :
         {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -323,7 +327,7 @@ export async function get_all_users_of_tournament(id, token) {
  * @return Un json contenant les informations du match.
  */
 export async function get_match_by_id(id, token) {
-    let response = await fetch(path + 'match/' + id + '/', { headers : {
+    let response = await fetch(full_path + 'match/' + id + '/', { headers : {
         'Authorization': 'Token ' + token,
         'Content-Type':'application/json',
         'Accept': 'application/json'
@@ -384,8 +388,7 @@ export async function change_password(password, token) {
             "password": password
         },
     };
-    console.log(data);
-    let response = await fetch(path + 'user/update_user/', {
+    let response = await fetch(full_path + 'user/update_user/', {
         method: 'PUT',
         headers: {
             'Authorization': 'Token ' + token,
@@ -395,7 +398,7 @@ export async function change_password(password, token) {
         body: JSON.stringify(data)
     });
     if (response.status != 201)
-        throw "Problem with the change of the password (" + response.status + ")";
+        return false;
     if (debug)
         console.log("Password changed");
     return true;
@@ -405,7 +408,7 @@ export async function change_user_nick(user_nick, token) {
     let data = {
         "user_nick": user_nick
     };
-    let response = await fetch(path + 'user/update_user/', {
+    let response = await fetch(full_path + 'user/update_user/', {
         method: 'PUT',
         headers: {
             'Authorization': 'Token ' + token,
@@ -415,7 +418,7 @@ export async function change_user_nick(user_nick, token) {
         body: JSON.stringify(data)
     });
     if (response.status != 201)
-        throw "Problem with the change of the user nick (" + response.status + ")";
+        return false;
     return true;
 }
 
@@ -428,7 +431,7 @@ export async function create_user(username, user_nick, password) {
         },
         "user_nick": user_nick
     };    
-    let response = await fetch(path + 'register/', {
+    let response = await fetch(full_path + 'register/', {
         method: 'POST',
         headers: {
             'Content-Type':'application/json',
@@ -454,7 +457,7 @@ export async function create_tournament(name, pending, token) {
         "name": name,
         "pending": pkusers,
     };
-    let response = await fetch(path + 'tournament/', {
+    let response = await fetch(full_path + 'tournament/', {
         method: 'POST',
         headers: {
             'Authorization': 'Token ' + token,
@@ -478,7 +481,7 @@ export async function create_match(player1, player2, tournament, token) {
         "player1": player1,
         "player2": player2,
     };
-    let response = await fetch(path + 'match/', {
+    let response = await fetch(full_path + 'match/', {
         method: 'POST',
         headers: {
             'Authorization': 'Token ' + token,
@@ -494,7 +497,7 @@ export async function create_match(player1, player2, tournament, token) {
 }
 
 export async function delete_user(token) {
-    let response = await fetch(path + 'user/1/', {
+    let response = await fetch(full_path + 'user/1/', {
         method: 'DELETE',
         headers: {
             'Authorization': 'Token ' + token,
@@ -516,7 +519,7 @@ export async function request_pending_friend(friend_id, token) {
         "friends_pending": actuel_pending
     }
     console.log(token)
-    let response = await fetch(path + 'user/friends_pending/', {
+    let response = await fetch(full_path + 'user/friends_pending/', {
         method: 'POST',
         headers: {
             'Authorization': 'Token ' + token,
@@ -542,7 +545,7 @@ export async function request_confirm_friend(friend_id, token) {
     let data = {
         "friends_confirmed": actuel_confirm
     }
-    let response = await fetch(path + 'user/friends_confirm/', {
+    let response = await fetch(full_path + 'user/friends_confirm/', {
         method: 'POST',
         headers: {
             'Authorization': 'Token ' + token,
@@ -569,7 +572,7 @@ export async function request_refuse_friend(friend_id, token) {
     let data = {
         "friends_pending": pending
     }
-    let response = await fetch(path + 'user/friends_pending/', {
+    let response = await fetch(full_path + 'user/friends_pending/', {
         method: 'POST',
         headers: {
             'Authorization': 'Token ' + token,
@@ -588,7 +591,7 @@ export async function update_avatar(avatar, token) {
     console.log("File size:", avatar.size);
     console.log("Filename:", avatar.name);
     try {
-        let response = await fetch(path + 'user/update_avatar/', {
+        let response = await fetch(full_path + 'user/update_avatar/', {
             method: 'PUT',
             headers: {
                 'Authorization': 'Token ' + token,
@@ -599,14 +602,13 @@ export async function update_avatar(avatar, token) {
         });
 
         if (!response.ok) {
-            const errorBody = await response.text();
-            console.error("Error response:", errorBody);
-            throw new Error(`Problem with the change of the avatar (${response.status}): ${errorBody}`);
+            console.log("Error in update_avatar:", response);
+            return false;
         }
         return true;
     } catch (error) {
         console.log("Error in update_avatar:", error);
-        throw error;
+        return false;
     }
 }
 

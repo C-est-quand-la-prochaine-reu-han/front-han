@@ -1,18 +1,14 @@
-<template>
-	<div class="menu-container">
-		<RouterLink class="menu-item" to="/profile">Profil</RouterLink>
-		<RouterLink class="menu-item" to="/all-players">Liste des joueur·se·s</RouterLink>
-		<RouterLink class="menu-item" @click="toggleOpponent('bot')" to="/game">Partie rapide (solo)</RouterLink>
-		<RouterLink class="menu-item" @click="toggleOpponent('*')" to="/game">Partie rapide (duo)</RouterLink>
-		<RouterLink class="menu-item" to="/tournament">Tournois</RouterLink>
-	</div>
-</template>
-
 <script setup>
-	import { provide, ref, onUnmounted } from 'vue';
-	import { useAuthStore } from '@/stores/auth.js';
+	import { provide, ref } from 'vue';
+	import { useAuthStore } from '@/stores/auth';
 	import { useGameStore } from '@/stores/game';
-	import { get_me } from '@/jspong/main.js';
+
+	import { get_me } from '/src/jspong/main.js';
+
+	import ProfileView from '/src/views/ProfileView.vue';
+	import AllPlayersView from '/src/views/AllPlayersView.vue';
+	import GameView from '/src/views/GameView.vue';
+	import TournamentView from '/src/views/TournamentView.vue';
 
 	const authStore = useAuthStore();
 	const token = authStore.token;
@@ -29,9 +25,17 @@
 	function toggleOpponent(name) {
 		gameStore.setOpponent(name);
 	}
-
-
 </script>
+
+<template>
+	<div class="menu-container">
+		<RouterLink class="menu-item" to="/profile">Profil</RouterLink>
+		<RouterLink class="menu-item" to="/all-players">Liste des joueur·se·s</RouterLink>
+		<RouterLink class="menu-item" @click="toggleOpponent('bot')" to="/game">Partie rapide (solo)</RouterLink>
+		<RouterLink class="menu-item" @click="toggleOpponent('*')" to="/game">Partie rapide (duo)</RouterLink>
+		<RouterLink class="menu-item" to="/tournament">Tournois</RouterLink>
+	</div>
+</template>
 
 <style scoped>
 	.menu-container {

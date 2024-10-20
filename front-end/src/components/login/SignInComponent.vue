@@ -12,7 +12,7 @@
 
 <script setup>
 	import { ref } from 'vue';
-	import { login } from '@/jspong/main.js';
+	import { login } from '@/jspong/main';
 	import { useAuthStore } from '@/stores/auth.js';
 	import router from '@/router';
 

@@ -1,3 +1,85 @@
+<script setup>
+	import { ref, defineEmits } from 'vue';
+	import AddFriendsView from '/src/components/profile/AddFriendsComponent.vue';
+	import { useAuthStore } from '/src/stores/auth.js';
+	import { get_me, delete_user, change_user_nick, change_password, update_avatar, get_final_avatar } from '/src/jspong/main.js';
+	
+	const emit = defineEmits(['close']);
+
+	const isAddFriendsViewShows = ref(false);
+
+	function toggleAddFriends() {
+		isAddFriendsViewShows.value = !isAddFriendsViewShows.value;
+	}
+
+	const authStore = useAuthStore();
+	const token = authStore.token;
+
+	let user_Nickname = ref('');
+	let username;
+	let avatar = ref('');
+
+	const new_nickname = ref('');
+	const new_password = ref('');
+
+	try {
+		let me = await get_me(token);
+		console.log(me);
+		if (me) {
+			user_Nickname.value = me.user_nick;
+			username = me.user.username;
+			avatar.value = get_final_avatar(me.avatar);
+			console.log(avatar.value);
+		} else {
+			console.log('No user found');
+		}
+	} catch (error) {
+		console.log('No user found');
+	}
+
+	async function submitPassword() {
+		if (new_password.value === '') {
+			alert('Password cannot be empty');
+			return;
+		}
+		let response = await change_password(new_password.value, token);
+		if (response === true)
+			alert('Mot de passe changé avec succès');
+		else
+			alert('Erreur lors du changement de mot de passe');
+	}
+
+	async function submitUserNick() {
+		if (new_nickname.value === '') {
+			alert('Nickname cannot be empty');
+			return;
+		}
+		let response = await change_user_nick(new_nickname.value, token);
+		if (response === true)
+			user_Nickname.value = new_nickname.value;
+		else
+			alert('Erreur lors du changement de surnom');
+	}
+
+	async function deleteAccount() {
+		await delete_user(token);
+		authStore.clearToken();
+	}
+
+	async function updateImage() {
+		if (event.target.files.length === 0) {
+			return;
+		}
+		const file = event.target.files[0];
+		let data = await update_avatar(file, token);
+		if (data) {
+			avatar.value = get_final_avatar(data.avatar);
+		} else {
+			alert('Erreur lors de la mise à jour de l\'avatar');
+		}
+	}
+</script>
+
 <template>
 	<div class="left-part">
 		<div class="resume-container">
@@ -47,93 +129,6 @@
 
 	<AddFriendsComponent v-if="isAddFriendsViewShows" @close="toggleAddFriends" />
 </template>
-
-<script setup>
-	import { ref, defineEmits } from 'vue';
-	import { useAuthStore } from '@/stores/auth.js';
-	import { get_me, delete_user, change_user_nick, change_password, update_avatar, get_final_avatar } from '@/jspong/main.js';
-	import AddFriendsComponent from '@/components/profile/AddFriendsComponent.vue';
-	
-	const emit = defineEmits(['close']);
-
-	const isAddFriendsViewShows = ref(false);
-
-	function toggleAddFriends() {
-		isAddFriendsViewShows.value = !isAddFriendsViewShows.value;
-	}
-
-	const authStore = useAuthStore();
-	const token = authStore.token;
-
-	let user_Nickname = ref('');
-	let username;
-	let avatar = ref('');
-
-	const new_nickname = ref('');
-	const new_password = ref('');
-
-	try {
-		let me = await get_me(token);
-		console.log(me);
-		if (me) {
-			user_Nickname.value = me.user_nick;
-			username = me.user.username;
-			avatar.value = get_final_avatar(me.avatar);
-			console.log(avatar.value);
-		} else {
-			console.log('No user found');
-		}
-	} catch (error) {
-		console.log('No user found');
-	}
-
-	function submitPassword() {
-		if (new_password.value === '') {
-			alert('Password cannot be empty');
-			return;
-		}
-		let response = change_password(new_password.value, token);
-		if (response.status != 200)
-			alert('Erreur lors du changement de mot de passe (status: ' + response.status + ')');
-	}
-
-	async function submitUserNick() {
-		if (new_nickname.value === '') {
-			alert('Nickname cannot be empty');
-			return;
-		}
-		let response = await change_user_nick(new_nickname.value, token);
-		if (response.status === 200)
-			user_Nickname.value = new_nickname.value;
-		else
-			alert('Erreur lors du changement de surnom');
-	}
-
-	async function deleteAccount() {
-		await delete_user(token);
-		authStore.clearToken();
-	}
-
-	async function updateImage() {
-		console.log('update image');
-		const file = event.target.files[0];
-		let data = await update_avatar(file, token);
-		if (data.status === 200) {
-			try {
-				let me = await get_me(token);
-				if (me) {
-					avatar.value = get_final_avatar(me.avatar);
-				} else {
-					console.log('No user found');
-				}
-			} catch (error) {
-				console.log('No user found');
-			}
-		} else {
-			alert('Erreur lors de la mise à jour de l\'avatar');
-		}
-	}
-</script>
 
 <style scoped>
 	.left-part {

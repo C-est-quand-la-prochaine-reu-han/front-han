@@ -35,7 +35,7 @@
 	import { useAuthStore } from '@/stores/auth.js';
 	import { useGameStore } from '@/stores/game';
 	import { get_user_by_username, create_tournament } from '@/jspong/main.js';
-
+	import { get_final_avatar } from '@/jspong/main.js';
 	const emit = defineEmits(['tournament-created']);
 
 	const authStore = useAuthStore();
@@ -61,6 +61,11 @@
 		try {
 			let user = await get_user_by_username(username_to_add.value, token);
 			if (user) {
+				if (user_is_in_tournament(user.pk, token)) {
+					alert('Utilisateur deja dans un tournois');
+					return;
+				}
+				user.avatar = get_final_avatar(user.avatar);
 				player_in_tournament.value.push(user);
 			} else {
 				alert('Utilisateur introuvable');
