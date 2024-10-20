@@ -18,7 +18,11 @@
 		for (let match of matches) {
 			let player1 = await get_nickname_by_id(match.player1, token);
 			let player2 = await get_nickname_by_id(match.player2, token);
+			let new_date = match.match_start_time.split('T')[0];
+			let new_hour = match.match_start_time.split('T')[1].split('.')[0];
+			let formated_date = new_date + '\n' + new_hour;
 			final_macthes.push({
+				date: formated_date,
 				player1: player1,
 				player1_score: match.player1_score,
 				player1_hit_nb: match.player1_hit_nb,
@@ -43,6 +47,7 @@
 
 	<div class="main-container">
 		<div class="data-match-title">
+			<p>Date</p>
 			<p>Joueur 1</p>
 			<p>Score J1</p>
 			<p>Hit J1</p>
@@ -55,6 +60,7 @@
 		<div class="data-match-container">
 			<div v-if="matches.length === 0" class="data-no-matches">Aucun match a ton actif</div>
 			<div v-else class="data-match" v-for="match in final_macthes" :key="match.id">
+				<p>{{ match.date }}</p>
 				<p>{{ match.player1 }}</p>
 				<p>{{ match.player1_score }}</p>
 				<p>{{ match.player1_hit_nb }}</p>
