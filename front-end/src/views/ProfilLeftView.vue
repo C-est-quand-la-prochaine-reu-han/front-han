@@ -37,14 +37,16 @@
 		console.log('No user found');
 	}
 
-	function submitPassword() {
+	async function submitPassword() {
 		if (new_password.value === '') {
 			alert('Password cannot be empty');
 			return;
 		}
-		let response = change_password(new_password.value, token);
-		if (response.status != 200)
-			alert('Erreur lors du changement de mot de passe (status: ' + response.status + ')');
+		let response = await change_password(new_password.value, token);
+		if (response === true)
+			alert('Mot de passe changé avec succès');
+		else
+			alert('Erreur lors du changement de mot de passe');
 	}
 
 	async function submitUserNick() {
@@ -53,7 +55,7 @@
 			return;
 		}
 		let response = await change_user_nick(new_nickname.value, token);
-		if (response.status === 200)
+		if (response === true)
 			user_Nickname.value = new_nickname.value;
 		else
 			alert('Erreur lors du changement de surnom');
@@ -68,19 +70,15 @@
 		console.log('update image');
 		const file = event.target.files[0];
 		let data = await update_avatar(file, token);
-		if (data.status === 200) {
-			try {
-				let me = await get_me(token);
-				if (me) {
-					avatar.value = get_final_avatar(me.avatar);
-				} else {
-					console.log('No user found');
-				}
-			} catch (error) {
+		try {
+			let me = await get_me(token);
+			if (me) {
+				avatar.value = get_final_avatar(me.avatar);
+			} else {
 				console.log('No user found');
 			}
-		} else {
-			alert('Erreur lors de la mise à jour de l\'avatar');
+		} catch (error) {
+			console.log('No user found');
 		}
 	}
 
