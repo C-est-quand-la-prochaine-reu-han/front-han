@@ -76,7 +76,7 @@
 		const seconds = time_moy_per_match % 60;
 		string_moy_per_match = minutes + "m " + seconds + "s";
 	} else {
-		string_moy_per_match = time_moy_per_match + "s";
+		string_moy_per_match = Math.floor(time_moy_per_match) + "s";
 	}
 	if (all_matches.length === 0) {
 		string_moy_per_match = "0s";
