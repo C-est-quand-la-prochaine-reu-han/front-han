@@ -194,7 +194,7 @@
 
 	.data-match-title {
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 		padding: 10px;
 		border-bottom: 2px solid var(--vt-c-divider-dark-1);
 		text-align: center;
@@ -212,7 +212,7 @@
 
 	.data-match {
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 		padding: 10px;
 		text-align: center;
 	}

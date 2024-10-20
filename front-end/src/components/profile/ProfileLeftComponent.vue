@@ -31,6 +31,7 @@
 			username = me.user.username;
 			avatar.value = get_final_avatar(me.avatar);
 			console.log(avatar.value);
+			router.push("/profile");
 		} else {
 			console.log('No user found');
 		}
@@ -116,23 +117,23 @@
 					<h2 class="form-title">Modifier le surnom</h2>
 					<div class="form-group">
 						<input type="text" v-model="new_nickname" id="nickname" name="nickname" placeholder="Nouveau surnom">
-						<button type="button" @click="submitUserNick">Soumettre</button>
+						<input type="button" @click="submitUserNick">Soumettre</button>
 					</div>
 				</form>
 				<form class="modif-form">
 					<h2 class="form-title">Modifier le mot de passe</h2>
 					<div class="form-group">
 						<input type="password" v-model="new_password" id="new-password" name="new-password" placeholder="Nouveau mot de passe">
-						<button type="button" @click="submitPassword">Soumettre</button>
+						<input type="button" @click="submitPassword">Soumettre</button>
 					</div>
 				</form>
 			</div>
 			<div class="bottom-button">
 				<div class="form-group">
-					<button type="button" @click="toggleAddFriends">Ajouter un·e ami·e</button>
+					<input type="button" @click="toggleAddFriends">Ajouter un·e ami·e</button>
 				</div>
 				<div class="form-group remove-account">
-					<button type="button" @click="deleteAccount">Supprimer le compte</button>
+					<input type="button" @click="deleteAccount">Supprimer le compte</button>
 				</div>
 			</div>
 		</div>

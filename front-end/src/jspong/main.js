@@ -1,8 +1,4 @@
 let host = "https://REPLACE_ME:8443/";
-if (host.includes("REPLACE_ME"))
-{
-    host = "https://localhost:8443/";
-}
 let full_path = host + "api/appong/api/";
 let debug = false;
 
