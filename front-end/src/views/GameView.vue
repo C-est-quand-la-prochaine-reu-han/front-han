@@ -1,7 +1,15 @@
+<template>
+	<Suspense>
+		<PongView @close-game="$emit('close-game')" />
+	</Suspense>
+
+	<ScoreView />
+</template>
+
 <script setup>
-	import { reactive, provide, inject, defineEmits } from 'vue';
-	import ScoreView from './ScoreView.vue';
-	import PongView from './PongView.vue';
+	import { reactive, provide, defineEmits } from 'vue';
+	import ScoreView from '@/components/game/ScoreComponent.vue';
+	import PongView from '@/components/game/PongComponent.vue';
 
 	defineEmits(['close-game']);
 
@@ -12,11 +20,3 @@
 
 	provide('globalState', globalState);
 </script>
-
-<template>
-	<Suspense>
-		<PongView @close-game="$emit('close-game')" />
-	</Suspense>
-
-	<ScoreView />
-</template>

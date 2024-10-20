@@ -1,24 +1,42 @@
+<template>
+	<div class="wrapper">
+		<nav>
+			<button @click="toggleSignIn">Se connecter</button>
+			<button @click="toggleSignUp">S'inscrire</button>
+		</nav>
+
+		<SignInComponent v-if="toSignIn" />
+		<SignUpComponent v-if="toSignUp" />
+	</div>
+</template>
+
 <script setup>
-	import { RouterLink, RouterView } from 'vue-router';
+	import { ref } from 'vue';
+	import SignInComponent from '@/components/login/SignInComponent.vue';
+	import SignUpComponent from '@/components/login/SignUpComponent.vue';
 
 	let token;
+
+	const toSignIn = ref(true);
+	const toSignUp = ref(false);
 
 	function test(receivedToken) {
 		token = receivedToken;
 		console.log('Token recu : ', token);
 	}
+
+	function toggleSignIn() {
+		if (toSignIn.value) return;
+		toSignIn.value = !toSignIn.value;
+		toSignUp.value = !toSignUp.value;
+	}
+
+	function toggleSignUp() {
+		if (toSignUp.value) return;
+		toSignIn.value = !toSignIn.value;
+		toSignUp.value = !toSignUp.value;
+	}
 </script>
-
-<template>
-	<div class="wrapper">
-		<nav>
-			<RouterLink to="/">Se connecter</RouterLink>
-			<RouterLink to="/signup">S'inscrire</RouterLink>
-		</nav>
-
-		<RouterView @isConnected="test"/>
-	</div>
-</template>
 
 <style scoped>
 	.wrapper {

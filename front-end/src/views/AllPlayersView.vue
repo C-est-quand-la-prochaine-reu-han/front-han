@@ -1,50 +1,4 @@
-<script setup>
-
-
-import { get_all_users, get_dashboard, get_final_avatar } from '@/jspong/main';
-import { useAuthStore } from '../stores/auth.js';
-
-const authStore = useAuthStore();
-const token = authStore.token;
-
-let data = []
-
-// 	fastest_ball = dashboard.fastest_ball;
-// 	match_played = dashboard.match_played;
-// 	match_wins = dashboard.match_wins;
-// 	perfect_hit_ratio = (dashboard.perfect_hit_ratio * 100).toFixed(2);
-// 	perfect_hits = dashboard.perfect_hits;
-// 	total_hits = dashboard.total_hits;
-// 	total_score = dashboard.total_score;
-// 	win_ratio = (dashboard.win_ratio * 100).toFixed(2);
-
-try {
-	let all_user = await get_all_users(token);
-	for (let user of all_user) {
-		let dashboard = await get_dashboard(user.pk, token);
-		let data_avatar = get_final_avatar(user.avatar);
-		data.push({
-			pk : user.pk,
-			nickname: user.user_nick,
-			username: user.user.username,
-			avatar: data_avatar,
-			match_wins: dashboard.match_wins,
-			win_ratio: (dashboard.win_ratio * 100).toFixed(2)
-		})
-	}
-} catch (error) {
-	console.log(error);
-}
-
-console.log(data)
-
-</script>
-
 <template>
-	<button class="back-button" @click="$emit('close')">
-		<h1>←</h1>
-	</button>
-
 	<div class="main-container">
 		<div class="data-players-title">
 			<p>Photo de profil</p>
@@ -65,6 +19,37 @@ console.log(data)
 		</div>
 	</div>
 </template>
+
+<script setup>
+	import { get_all_users, get_dashboard, get_final_avatar } from '@/jspong/main';
+	import { useAuthStore } from '@/stores/auth.js';
+
+	const authStore = useAuthStore();
+	const token = authStore.token;
+
+	let data = []
+
+	try {
+		let all_user = await get_all_users(token);
+		for (let user of all_user) {
+			let dashboard = await get_dashboard(user.pk, token);
+			let data_avatar = get_final_avatar(user.avatar);
+			data.push({
+				pk : user.pk,
+				nickname: user.user_nick,
+				username: user.user.username,
+				avatar: data_avatar,
+				match_wins: dashboard.match_wins,
+				win_ratio: (dashboard.win_ratio * 100).toFixed(2)
+			})
+		}
+	} catch (error) {
+		console.log(error);
+	}
+
+
+	console.log(data);
+</script>
 
 <style scoped>
 	.back-button {

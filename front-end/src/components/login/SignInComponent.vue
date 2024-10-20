@@ -1,26 +1,3 @@
-<script setup>
-	import { ref } from 'vue';
-	import { login } from '/src/jspong/main.js';
-	import { useAuthStore } from '../stores/auth.js';
-
-	const username = ref('');
-	const password = ref('');
-	const authStore = useAuthStore();
-	
-	let token;
-
-	async function toggleConnection() {
-		try {
-			token = await login(username.value, password.value);
-			authStore.setToken(token);
-		}
-		catch(error) {
-			alert("Username or password incorrect dummy !");
-			console.log(error);
-		}
-	}
-</script>
-
 <template>
 	<form>
 		<div class="input-wrapper">
@@ -32,6 +9,33 @@
 		<button type="button" @click="toggleConnection">Se connecter</button>
 	</form>
 </template>
+
+<script setup>
+	import { ref } from 'vue';
+	import { login } from '@/jspong/main.js';
+	import { useAuthStore } from '@/stores/auth.js';
+	import router from '@/router';
+
+	const username = ref('');
+	const password = ref('');
+	const authStore = useAuthStore();
+	
+	let token;
+
+	async function toggleConnection() {
+		console.log('Logging in...');
+		try {
+			token = await login(username.value, password.value);
+			authStore.setToken(token);
+			if (token)
+				router.push('/menu');
+		}
+		catch(error) {
+			alert("Username or password incorrect dummy !");
+			console.log(error);
+		}
+	}
+</script>
 
 <style scoped>
 	.input-wrapper {

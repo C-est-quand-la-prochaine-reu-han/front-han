@@ -1,7 +1,38 @@
-<script setup>
+<template>
+	<button class="back-button" @click="$emit('close')">
+		<h1>←</h1>
+	</button>
 
+	<div class="main-container">
+		<div class="data-match-title">
+			<p>Joueur 1</p>
+			<p>Score J1</p>
+			<p>Hit J1</p>
+			<p>Perfect hit J1</p>
+			<p>Joueur 2</p>
+			<p>Score J2</p>
+			<p>Hit J2</p>
+			<p>Perfect hit J2</p>
+		</div>
+		<div class="data-match-container">
+			<div v-if="matches.length === 0" class="data-no-matches">Aucun match a ton actif</div>
+			<div v-else class="data-match" v-for="match in final_macthes" :key="match.id">
+				<p>{{ match.player1 }}</p>
+				<p>{{ match.player1_score }}</p>
+				<p>{{ match.player1_hit_nb }}</p>
+				<p>{{ match.player1_perfect_hit_nb }}</p>
+				<p>{{ match.player2 }}</p>
+				<p>{{ match.player2_score }}</p>
+				<p>{{ match.player2_hit_nb }}</p>
+				<p>{{ match.player2_perfect_hit_nb }}</p>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script setup>
 	import { get_all_matches_of_user, get_me, get_nickname_by_id } from '@/jspong/main';
-	import { useAuthStore } from '../stores/auth.js';
+	import { useAuthStore } from '@/stores/auth';
 
 	const authStore = useAuthStore();
 	const token = authStore.token;
@@ -35,44 +66,6 @@
 	}
 	console.log(matches);
 </script>
-
-<template>
-	<button class="back-button" @click="$emit('close')">
-		<h1>←</h1>
-	</button>
-
-	<div class="main-container">
-		<div class="data-match-title">
-			<p>Joueur 1</p>
-			<p>Score J1</p>
-			<p>Hit J1</p>
-			<p>Perfect hit J1</p>
-			<p>Joueur 2</p>
-			<p>Score J2</p>
-			<p>Hit J2</p>
-			<p>Perfect hit J2</p>
-		</div>
-		<div class="data-match-container">
-			<div v-if="matches.length === 0" class="data-no-matches">Aucun match a ton actif</div>
-			<div v-else class="data-match" v-for="match in final_macthes" :key="match.id">
-				<p>{{ match.player1 }}</p>
-				<p>{{ match.player1_score }}</p>
-				<p>{{ match.player1_hit_nb }}</p>
-				<p>{{ match.player1_perfect_hit_nb }}</p>
-				<p>{{ match.player2 }}</p>
-				<p>{{ match.player2_score }}</p>
-				<p>{{ match.player2_hit_nb }}</p>
-				<p>{{ match.player2_perfect_hit_nb }}</p>
-			</div>
-		</div>
-	</div>
-
-
-
-	<div>
-
-	</div>
-</template>
 
 <style scoped>
 	.back-button {

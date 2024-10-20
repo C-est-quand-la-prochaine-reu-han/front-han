@@ -1,22 +1,40 @@
+<template>
+	<button class="back-button" v-if="isGameOver" @click="$emit('close-game')">
+		<h1>←</h1>
+	</button>
+
+	<div class="game-field">
+		<div class="middle-line-left"></div>
+		<div class="middle-line-right"></div>
+
+		<PaddleComponent class="left-paddle" :style="controlled_player_style" />
+
+		<PaddleComponent class="right-paddle" :style="other_player_style" />
+
+		<BallComponent class="ball" :style="ball_style" />
+	</div>
+</template>
+
 <script setup>
-	// Get the token
-	import { useAuthStore } from '../stores/auth.js';
+	import { ref, onMounted, computed, inject, onBeforeUnmount, defineEmits } from 'vue';
+	import { useAuthStore } from '@/stores/auth';
+	import { useGameStore } from '@/stores/game';
+	import { get_me } from '@/jspong/main';
+	import PaddleComponent from '@/components/game/PaddleComponent.vue';
+	import BallComponent from '@/components/game/BallComponent.vue';
+
 	const authStore = useAuthStore();
 	const token = authStore.token;
-
-	import { ref, onMounted, computed, inject, onBeforeUnmount, defineEmits } from 'vue';
-	import Paddle from './PongTools/Paddle.vue';
-	import Ball from './PongTools/Ball.vue';
-	
-	import { get_me } from '/src/jspong/main.js';
 
 	defineEmits(['close-game']);
 
 	const globalState = inject('globalState');
-	const otherPlayerName = inject('otherPlayerName');
-	const tournamentId = inject('tournamentId');
 
-	console.log(otherPlayerName.value);
+	const gameStore = useGameStore();
+	const opponent = gameStore.opponent;
+	const tournamentId = gameStore.tournamentId;
+
+	console.log(opponent);
 
 	let playerOnRight = false;
 
@@ -209,23 +227,6 @@
 		socket.close();
 	});
 </script>
-
-<template>
-	<button class="back-button" v-if="isGameOver" @click="$emit('close-game')">
-		<h1>←</h1>
-	</button>
-
-	<div class="game-field">
-		<div class="middle-line-left"></div>
-		<div class="middle-line-right"></div>
-
-		<Paddle class="left-paddle" :style="controlled_player_style" />
-
-		<Paddle class="right-paddle" :style="other_player_style" />
-
-		<Ball class="ball" :style="ball_style" />
-	</div>
-</template>
 
 <style scoped>
 	.back-button {

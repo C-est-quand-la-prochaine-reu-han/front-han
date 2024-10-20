@@ -621,28 +621,20 @@ export async function tournament_is_finish(id, token) {
     let tournament = await get_tournament_by_id(id, token);
     let possible_match = tournament.pending.length * (tournament.pending.length - 1) / 2;
     if (matches.length === possible_match) {
-        console.log("FEURRRRRRRRRRRRR");
         return true;
     }
     return false;
 }
 
 export async function user_is_in_tournament(id, token) {
-    console.log("ID > " + id);
     let tournaments = await get_all_tournament(token);
     for (let i = 0; i < tournaments.length; i++) {
-        console.log("DATA DU TOURNOI > " + tournaments[i]);
-        console.log("LISTE DES JOUEURS > " + tournaments[i].pending);
         if (!tournaments[i].pending.includes(id))
             continue;
-        console.log("ID DU TOURNOI > " + tournaments[i].pk);
         if (await tournament_is_finish(tournaments[i].pk, token)) {
-            console.log("x Tournament is finish");
             return -1;
         }
-        console.log("x User is in tournament");
         return tournaments[i].pk;
     }
-    console.log("x User is not in tournament");
     return -1;
 }

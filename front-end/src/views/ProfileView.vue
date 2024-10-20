@@ -1,10 +1,40 @@
+<template>
+	<div class="profil-container" v-if="showProfil">
+		<Suspense>
+			<ProfileLeftComponent @close="$emit('close')" />
+		</Suspense>
+
+		<Suspense>
+			<ProfileRightComponent />
+		</Suspense>
+	</div>
+
+	<div v-if="showProfil" class="very-bottom-button">
+		<button @click="toggleStats">Statistiques</button>
+		
+		<button @click="toggleMatchHistory">Historique des matchs</button>
+
+		<button @click="toggleRGPD">Politique de confidentialité</button>
+	</div>
+
+	<Suspense>
+		<StatsComponent v-if="showStats" @close="toggleStats" />
+	</Suspense>
+
+	<Suspense>
+		<MatchHistoryComponent v-if="showMatchHistory" @close="toggleMatchHistory" />
+	</Suspense>
+
+	<RGPDComponent v-if="showRGPD" @close="toggleRGPD" />
+</template>
+
 <script setup>
 	import { ref } from 'vue';
-	import ProfilLeftView from './ProfilLeftView.vue';
-	import ProfilRightView from './ProfilRightView.vue';
-	import StatsView from './StatsView.vue';
-	import MatchHistoryView from './MatchHistoryView.vue';
-	import RGPDView from './RGPDView.vue';
+	import MatchHistoryComponent from '@/components/profile/MatchHistoryComponent.vue';
+	import ProfileLeftComponent from '@/components/profile/ProfileLeftComponent.vue';
+	import ProfileRightComponent from '@/components/profile/ProfileRightComponent.vue';
+	import RGPDComponent from '@/components/profile/RGPDComponent.vue';
+	import StatsComponent from '@/components/profile/StatsComponent.vue';
 
 	const showProfil = ref(true);
 	const showStats = ref(false);
@@ -26,42 +56,6 @@
 		showProfil.value = !showProfil.value;
 	}
 </script>
-
-<template>
-	<button class="back-button" @click="$emit('close')">
-		<h1>←</h1>
-	</button>
-
-	<div class="profil-container" v-if="showProfil">
-
-		<Suspense>
-			<ProfilLeftView @close="$emit('close')" />
-		</Suspense>
-
-		<Suspense>
-			<ProfilRightView />
-		</Suspense>
-
-	</div>
-
-	<div v-if="showProfil" class="very-bottom-button">
-		<button @click="toggleStats">Statistiques</button>
-		
-		<button @click="toggleMatchHistory">Historique des matchs</button>
-
-		<button @click="toggleRGPD">Politique de confidentialité</button>
-	</div>
-
-	<Suspense>
-		<StatsView v-if="showStats" @close="toggleStats" />
-	</Suspense>
-
-	<Suspense>
-		<MatchHistoryView v-if="showMatchHistory" @close="toggleMatchHistory" />
-	</Suspense>
-
-	<RGPDView v-if="showRGPD" @close="toggleRGPD" />
-</template>
 
 <style scoped>
 	.back-button {

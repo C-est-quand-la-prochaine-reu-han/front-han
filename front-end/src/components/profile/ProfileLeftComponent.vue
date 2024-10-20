@@ -1,8 +1,58 @@
+<template>
+	<div class="left-part">
+		<div class="resume-container">
+			<button class="profile-image-container" @click="triggerFileInput">
+				<img :src="avatar" alt="Photo de profil">
+				<p class="overlay">Modifier</p>
+			</button>
+			<div>
+				<input
+					type="file"
+					accept="jpg, png"
+					@change="updateImage"
+				/>
+			</div>
+			<div class="resume-name">
+				<h1>{{ user_Nickname }}</h1>
+				<h2>{{ username }}</h2>
+			</div>
+		</div>
+		<div>
+			<div class="modif-data">
+				<form class="modif-form">
+					<h2 class="form-title">Modifier le surnom</h2>
+					<div class="form-group">
+						<input type="text" v-model="new_nickname" id="nickname" name="nickname" placeholder="Nouveau surnom">
+						<button type="button" @click="submitUserNick">Soumettre</button>
+					</div>
+				</form>
+				<form class="modif-form">
+					<h2 class="form-title">Modifier le mot de passe</h2>
+					<div class="form-group">
+						<input type="password" v-model="new_password" id="new-password" name="new-password" placeholder="Nouveau mot de passe">
+						<button type="button" @click="submitPassword">Soumettre</button>
+					</div>
+				</form>
+			</div>
+			<div class="bottom-button">
+				<div class="form-group">
+					<button type="button" @click="toggleAddFriends">Ajouter un·e ami·e</button>
+				</div>
+				<div class="form-group remove-account">
+					<button type="button" @click="deleteAccount">Supprimer le compte</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<AddFriendsComponent v-if="isAddFriendsViewShows" @close="toggleAddFriends" />
+</template>
+
 <script setup>
 	import { ref, defineEmits } from 'vue';
-	import AddFriendsView from './AddFriendsView.vue';
-	import { useAuthStore } from '../stores/auth.js';
-	import { get_me, delete_user, change_user_nick, change_password, update_avatar, get_final_avatar } from '/src/jspong/main.js';
+	import { useAuthStore } from '@/stores/auth.js';
+	import { get_me, delete_user, change_user_nick, change_password, update_avatar, get_final_avatar } from '@/jspong/main.js';
+	import AddFriendsComponent from '@/components/profile/AddFriendsComponent.vue';
 	
 	const emit = defineEmits(['close']);
 
@@ -83,58 +133,7 @@
 			alert('Erreur lors de la mise à jour de l\'avatar');
 		}
 	}
-
 </script>
-
-<template>
-	<div class="left-part">
-		<div class="resume-container">
-			<button class="profile-image-container" @click="triggerFileInput">
-				<img :src="avatar" alt="Photo de profil">
-				<p class="overlay">Modifier</p>
-			</button>
-			<div>
-				<input
-					type="file"
-					accept="jpg, png"
-					@change="updateImage"
-				/>
-			</div>
-			<div class="resume-name">
-				<h1>{{ user_Nickname }}</h1>
-				<h2>{{ username }}</h2>
-			</div>
-		</div>
-		<div>
-			<div class="modif-data">
-				<form class="modif-form">
-					<h2 class="form-title">Modifier le surnom</h2>
-					<div class="form-group">
-						<input type="text" v-model="new_nickname" id="nickname" name="nickname" placeholder="Nouveau surnom">
-						<button type="button" @click="submitUserNick">Soumettre</button>
-					</div>
-				</form>
-				<form class="modif-form">
-					<h2 class="form-title">Modifier le mot de passe</h2>
-					<div class="form-group">
-						<input type="password" v-model="new_password" id="new-password" name="new-password" placeholder="Nouveau mot de passe">
-						<button type="button" @click="submitPassword">Soumettre</button>
-					</div>
-				</form>
-			</div>
-			<div class="bottom-button">
-				<div class="form-group">
-					<button type="button" @click="toggleAddFriends">Ajouter un·e ami·e</button>
-				</div>
-				<div class="form-group remove-account">
-					<button type="button" @click="deleteAccount">Supprimer le compte</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<AddFriendsView v-if="isAddFriendsViewShows" @close="toggleAddFriends" />
-</template>
 
 <style scoped>
 	.left-part {

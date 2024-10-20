@@ -1,7 +1,7 @@
 <script setup>
-import { inject } from 'vue';
+	import { inject } from 'vue';
 
-const globalState = inject('globalState');
+	const globalState = inject('globalState');
 </script>
 
 <template>

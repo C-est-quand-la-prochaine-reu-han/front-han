@@ -1,19 +1,32 @@
+<template>
+	<div class="play-tournament-container" v-if="!showPlayTournament">
+		<div class="play-tournament" v-for="match in possible_matches" :key="match.pk">
+			<p>{{ match.pk }} : {{ match.player1_username }} VS {{ match.player2_username }}</p>
+			<button v-if="!match.already_played && (match.player1_pk === me.pk || match.player2_pk === me.pk)" @click="startGame(match)">JOUER</button>
+			<p v-else-if="match.already_played && (match.player1_pk === me.pk || match.player2_pk === me.pk)">Deja joue</p>
+			<p v-else >Pas pour toi</p>
+		</div>
+	</div>
+</template>
+
 <script setup>
-	import { ref, provide, inject } from 'vue';
-	import GameView from './GameView.vue';
-	import { get_tournament_by_id, get_user_by_id, get_me, get_all_matches_of_tournament} from '/src/jspong/main.js';
-	import { useAuthStore } from '../stores/auth.js';
+	import { ref } from 'vue';
+	import { get_tournament_by_id, get_user_by_id, get_me, get_all_matches_of_tournament, user_is_in_tournament} from '@/jspong/main.js';
+	import { useAuthStore } from '@/stores/auth.js';
+	import { useGameStore } from '@/stores/game';
+	import router from '@/router';
 
 	const authStore = useAuthStore();
 	const token = authStore.token;
 
-	const showPlayTournament = ref(false);
+	const gameStore = useGameStore();
+	const tournamentId = gameStore.tournamentId;
+	if (tournamentId === -1) {
+		console.log('Not in tournament COMPOSANT');
+		router.push('/menu');
+	} 
 
-	const otherPlayerName = ref('');
-	const tournamentId = inject('tournamentId');
-
-	provide('otherPlayerName', otherPlayerName);
-	provide('tournamentId', tournamentId);
+	console.log('tournamentId', tournamentId);
 
 	let tournament = await get_tournament(tournamentId, token);
 	let players = tournament.pending;
@@ -63,36 +76,17 @@
 	}
 
 	function startGame(match) {
-		if (!showPlayTournament.value)
-		{
-			if (match.player1_pk === me.value.pk) {
-				otherPlayerName.value = match.player2_username;
-			} else if (match.player2_pk === me.value.pk) {
-				otherPlayerName.value = match.player1_username;
-			}
+		if (match.player1_pk === me.value.pk) {
+			gameStore.setOpponent(match.player2_pk);
+		} else if (match.player2_pk === me.value.pk) {
+			gameStore.setOpponent(match.player1_pk);
 		}
-		togglePlayTournament();
-	}
-
-	function togglePlayTournament() {
-		showPlayTournament.value = !showPlayTournament.value;
+		gameStore.setTournamentId(tournamentId);
+		router.push('/game');
 	}
 
 	await set_all_possible_matches();
 </script>
-
-<template>
-	<div class="play-tournament-container" v-if="!showPlayTournament">
-		<div class="play-tournament" v-for="match in possible_matches" :key="match.pk">
-			<p>{{ match.pk }} : {{ match.player1_username }} VS {{ match.player2_username }}</p>
-			<button v-if="!match.already_played && (match.player1_pk === me.pk || match.player2_pk === me.pk)" @click="startGame(match)">JOUER</button>
-			<p v-else-if="match.already_played && (match.player1_pk === me.pk || match.player2_pk === me.pk)">Deja joue</p>
-			<p v-else >Pas pour toi</p>
-		</div>
-	</div>
-
-	<GameView v-if="showPlayTournament" @close-game="togglePlayTournament" />
-</template>
 
 <style scoped>
 	.play-tournament-container {

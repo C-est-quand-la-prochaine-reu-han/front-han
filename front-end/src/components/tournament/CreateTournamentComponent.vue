@@ -1,74 +1,3 @@
-<!--
- La liste des joueurs s'affiche au fur et a mesure que tu ajoutes des gens au tournois.
- On ne peut inviter que des gens qui ne sont pas deja dans un tournois.
- Lorsqu'on a fini d'ajouter des gens, on cree le tournois. On doit emettre un signal 'tournament-created' pour que le composant 'TournamentView' sache qu'on est dans un tournois.
--->
-
-<script setup>
-
-	import { ref, defineEmits } from 'vue';
-	import { useAuthStore } from '../stores/auth.js';
-	import { get_user_by_username, create_tournament } from '/src/jspong/main.js';
-
-	const emit = defineEmits(['tournament-created']);
-
-	const authStore = useAuthStore();
-	const token = authStore.token;
-
-	let player_in_tournament = ref([]);
-	const username_to_add = ref('');
-	const tournament_name = ref('');
-
-	async function addUserToTournament() {
-		if (username_to_add.value === '') {
-			alert('Le nom d\'utilisateur ne peut pas etre vide');
-			return;
-		}
-		for (let i = 0; i < player_in_tournament.value.length; i++) {
-			if (player_in_tournament.value[i].user.username === username_to_add.value) {
-				alert('Utilisateur deja dans le tournois');
-				return;
-			}
-		}
-		try {
-			let user = await get_user_by_username(username_to_add.value, token);
-			if (user) {
-				//TODO: Ajouter une verification pour voir si l'utilisateur est deja dans un tournois	
-				player_in_tournament.value.push(user);
-			} else {
-				alert('Utilisateur introuvable');
-			}
-		} catch (error) {
-			console.log(error);
-			alert('Utilisateur introuvable');
-		}
-	}
-
-	async function createTournament() {
-		console.log('create tournament');
-		if (player_in_tournament.value.length === 0) {
-			alert('Personne n\'est invite dans le tournois');
-			return;
-		}
-		if (player_in_tournament.value.length < 3) {
-			alert('Il faut au moins 3 joueur·se·s pour creer un tournois');
-			return;
-		}
-		console.log(tournament_name.value);
-		if (tournament_name.value === '') {
-			alert('Le nom du tournois ne peut pas etre vide');
-			return;
-		}
-		try {
-			await create_tournament(tournament_name.value, player_in_tournament.value, token);
-			emit('tournament-created');
-		} catch (error) {
-			console.log(error);
-		}
-	}
-
-</script>
-
 <template>
 	<div class="find-new-players-container">
 		<div>
@@ -100,6 +29,72 @@
 		<button class="create-button" @click="createTournament()">Creer un tournois</button>
 	</div>
 </template>
+
+<script setup>
+	import { ref, defineEmits } from 'vue';
+	import { useAuthStore } from '@/stores/auth.js';
+	import { useGameStore } from '@/stores/game';
+	import { get_user_by_username, create_tournament } from '@/jspong/main.js';
+
+	const emit = defineEmits(['tournament-created']);
+
+	const authStore = useAuthStore();
+	const token = authStore.token;
+
+	const gameStore = useGameStore();
+
+	let player_in_tournament = ref([]);
+	const username_to_add = ref('');
+	const tournament_name = ref('');
+
+	async function addUserToTournament() {
+		if (username_to_add.value === '') {
+			alert('Le nom d\'utilisateur ne peut pas etre vide');
+			return;
+		}
+		for (let i = 0; i < player_in_tournament.value.length; i++) {
+			if (player_in_tournament.value[i].user.username === username_to_add.value) {
+				alert('Utilisateur deja dans le tournois');
+				return;
+			}
+		}
+		try {
+			let user = await get_user_by_username(username_to_add.value, token);
+			if (user) {
+				player_in_tournament.value.push(user);
+			} else {
+				alert('Utilisateur introuvable');
+			}
+		} catch (error) {
+			console.log(error);
+			alert('Utilisateur introuvable');
+		}
+	}
+
+	async function createTournament() {
+		console.log('create tournament');
+		if (player_in_tournament.value.length === 0) {
+			alert('Personne n\'est invite dans le tournois');
+			return;
+		}
+		if (player_in_tournament.value.length < 3) {
+			alert('Il faut au moins 3 joueur·se·s pour creer un tournois');
+			return;
+		}
+		console.log(tournament_name.value);
+		if (tournament_name.value === '') {
+			alert('Le nom du tournois ne peut pas etre vide');
+			return;
+		}
+		try {
+			let tournament = await create_tournament(tournament_name.value, player_in_tournament.value, token);
+			gameStore.setTournamentId(tournament.pk);
+			emit('tournament-created');
+		} catch (error) {
+			console.log(error);
+		}
+	}
+</script>
 
 <style scoped>
 	.find-new-players-container {

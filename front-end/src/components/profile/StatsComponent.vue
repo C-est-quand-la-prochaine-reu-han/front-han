@@ -1,42 +1,3 @@
-<script setup>
-
-	import { get_dashboard, get_me } from '@/jspong/main';
-	import { useAuthStore } from '../stores/auth.js';
-
-	const authStore = useAuthStore();
-	const token = authStore.token;
-
-	let fastest_ball = -1;
-	let match_played = -1;
-	let match_wins = -1;
-	let perfect_hit_ratio = -1;
-	let perfect_hits = -1;
-	let total_hits = -1;
-	let total_score = -1;
-	let win_ratio = -1;
-
-	try {
-		let me = await get_me(token);
-
-		let dashboard = await get_dashboard(me.pk, token);
-		fastest_ball = dashboard.fastest_ball;
-		match_played = dashboard.match_played;
-		match_wins = dashboard.match_wins;
-		perfect_hit_ratio = (dashboard.perfect_hit_ratio * 100).toFixed(2);
-		perfect_hits = dashboard.perfect_hits;
-		total_hits = dashboard.total_hits;
-		total_score = dashboard.total_score;
-		win_ratio = (dashboard.win_ratio * 100).toFixed(2);
-	} catch (error) {
-		console.log(error);
-	}
-
-
-
-
-
-</script>
-
 <template>
 	<button class="back-button" @click="$emit('close')">
 		<h1>←</h1>
@@ -77,6 +38,39 @@
 		</div>
 	</div>
 </template>
+
+<script setup>
+	import { get_dashboard, get_me } from '@/jspong/main';
+	import { useAuthStore } from '@/stores/auth';
+
+	const authStore = useAuthStore();
+	const token = authStore.token;
+
+	let fastest_ball = -1;
+	let match_played = -1;
+	let match_wins = -1;
+	let perfect_hit_ratio = -1;
+	let perfect_hits = -1;
+	let total_hits = -1;
+	let total_score = -1;
+	let win_ratio = -1;
+
+	try {
+		let me = await get_me(token);
+
+		let dashboard = await get_dashboard(me.pk, token);
+		fastest_ball = dashboard.fastest_ball;
+		match_played = dashboard.match_played;
+		match_wins = dashboard.match_wins;
+		perfect_hit_ratio = (dashboard.perfect_hit_ratio * 100).toFixed(2);
+		perfect_hits = dashboard.perfect_hits;
+		total_hits = dashboard.total_hits;
+		total_score = dashboard.total_score;
+		win_ratio = (dashboard.win_ratio * 100).toFixed(2);
+	} catch (error) {
+		console.log(error);
+	}
+</script>
 
 <style scoped>
 	.back-button {
