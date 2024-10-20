@@ -14,8 +14,9 @@
 	let total_score = -1;
 	let win_ratio = -1;
 	let total_play_time = -1;
-	let string_total_play_time = "";
 	let time_moy_per_match = -1;
+	let string_total_play_time = "";
+	let string_moy_per_match = "";
 
 	let all_matches = [];
 
@@ -60,22 +61,26 @@
 	} else {
 		string_total_play_time = total_play_time + "s";
 	}
+	if (total_play_time === -1) {
+		string_total_play_time = "0s";
+	}
 
 	time_moy_per_match = total_play_time / all_matches.length;
 	if (time_moy_per_match > 3600) {
 		const hours = Math.floor(time_moy_per_match / 3600);
 		const minutes = Math.floor((time_moy_per_match % 3600) / 60);
 		const seconds = time_moy_per_match % 60;
-		time_moy_per_match = hours + "h " + minutes + "m " + seconds + "s";
+		string_moy_per_match = hours + "h " + minutes + "m " + seconds + "s";
 	} else if (time_moy_per_match > 60) {
 		const minutes = Math.floor(time_moy_per_match / 60);
 		const seconds = time_moy_per_match % 60;
-		time_moy_per_match = minutes + "m " + seconds + "s";
+		string_moy_per_match = minutes + "m " + seconds + "s";
 	} else {
-		time_moy_per_match = time_moy_per_match + "s";
+		string_moy_per_match = time_moy_per_match + "s";
 	}
-
-
+	if (all_matches.length === 0) {
+		string_moy_per_match = "0s";
+	}
 
 
 </script>
@@ -116,7 +121,7 @@
 		</div>
 		<div class="dashboard-item">
 			<h2>Temps Moyen par match</h2>
-			<h1>{{ time_moy_per_match }}</h1>
+			<h1>{{ string_moy_per_match }}</h1>
 		</div>
 	</div>
 </template>
