@@ -64,7 +64,9 @@ export async function get_dashboard(id, token) {
 }
 
 export async function get_all_tournament(token) {
-    let response = await fetch(path + 'tournament/', { headers : {
+    let response = await fetch(path + 'tournament/', {
+        method: 'GET',
+        headers : {
         'Authorization': 'Token ' + token,
         'Content-Type':'application/json',
         'Accept': 'application/json'
@@ -181,7 +183,9 @@ export async function get_user_by_id(id, token) {
 }
 
 export async function get_tournament_by_id(id, token) {
-    let response = await fetch(path + 'tournament/' + id, { headers : {
+    let response = await fetch(path + 'tournament/' + id + '/', { 
+        method: 'GET',
+        headers : {
         'Authorization': 'Token ' + token,
         'Content-Type':'application/json',
         'Accept': 'application/json'
@@ -610,4 +614,27 @@ export function get_final_avatar(avatar_path) {
     let final_avatar_path = avatar_path.replace("http://localhost", "/api");
     console.log("Avatar path:", final_avatar_path);
     return final_avatar_path;
+}
+
+export async function tournament_is_finish(id, token) {
+    let matches = await get_all_matches_of_tournament(id, token);
+    let tournament = await get_tournament_by_id(id, token);
+    let possible_match = tournament.pending.length * (tournament.pending.length - 1) / 2;
+    if (matches.length === possible_match) {
+        return true;
+    }
+    return false;
+}
+
+export async function user_is_in_tournament(id, token) {
+    let tournaments = await get_all_tournament(token);
+    for (let i = 0; i < tournaments.length; i++) {
+        if (!tournaments[i].pending.includes(id))
+            continue;
+        if (await tournament_is_finish(tournaments[i].pk, token)) {
+            return -1;
+        }
+        return tournaments[i].pk;
+    }
+    return -1;
 }

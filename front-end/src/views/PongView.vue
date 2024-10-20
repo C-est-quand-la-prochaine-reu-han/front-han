@@ -1,4 +1,9 @@
 <script setup>
+	// Get the token
+	import { useAuthStore } from '../stores/auth.js';
+	const authStore = useAuthStore();
+	const token = authStore.token;
+
 	import { ref, onMounted, computed, inject, onBeforeUnmount, defineEmits } from 'vue';
 	import Paddle from './PongTools/Paddle.vue';
 	import Ball from './PongTools/Ball.vue';
@@ -13,15 +18,15 @@
 	let playerOnRight = false;
 
 	class Player {
-		x = 40;
-		y = 425;
+		x = 0;
+		y = 450;
 		score = 0;
 		name = "";
 	}
 
 	class Balle {
-		x = 505;
-		y = 505;
+		x = 400;
+		y = 400;
 		dirX = 0;
 		dirY = 0;
 		name = "Baballe";
@@ -29,20 +34,20 @@
 
 	let ball = ref(new Balle());
 	const ball_style = computed(() => ({
-		top: ball.value.y * 600 / 1000 - 25 + 'px',
-		left: ball.value.x - 25 + 'px'
+		top: ball.value.y * 0.8 - 10 + 'px',
+		left: ball.value.x * 0.8 - 10 + 'px'
 	}));
 	
 	let controlled_player = ref(new Player());
 	const controlled_player_style = computed(() => ({
-		top: controlled_player.value.y * 600 / 1000 + 'px',
-		left: controlled_player.value.x + 'px'
+		top: controlled_player.value.y * 0.8 + 'px',
+		left: controlled_player.value.x * 0.8 + 'px'
 	}));
 	
 	let other_player = ref(new Player());
 	const other_player_style = computed(() => ({
-		top: other_player.value.y * 600 / 1000 + 'px',
-		left: other_player.value.x + 'px'
+		top: other_player.value.y * 0.8 + 'px',
+		left: other_player.value.x * 0.8 + 'px'
 	}));
 
 	const gameOverMessage = ref("");
@@ -103,8 +108,8 @@
 				controlled_player.value.score = parseInt(data[2]);
 			else if (data[1] == other_player.value.name)
 				other_player.value.score = parseInt(data[2]);
-			ball.value.x = 505;
-			ball.value.y = 505;
+			ball.value.x = 400;
+			ball.value.y = 400;
 			// Update scores in the global state
 			if (playerOnRight) {
 				globalState.rightPlayerScore = controlled_player.value.score;
@@ -132,7 +137,7 @@
 		}
 		if (controlled_player === undefined || other_player === undefined)
 			return ;
-		if (event.data.startsWith(controlled_player.value.name + ":"))
+		if (event.data.startsWith(token + ":"))
 		{
 			let newpos = event.data.split(":");
 			controlled_player.value.y = parseInt(newpos[1]);
@@ -151,10 +156,8 @@
 		let socket = await new WebSocket("wss://localhost:8443/pong/");
 		let promise = new Promise((resolve, reject) => {
 			socket.onopen = function (event) {
-				event.target.send("*"); // We want to play against whoever is available for a match
-				// FIXME: use actual player name from localstorage or api
-				controlled_player.value.name = `player${new Date().getTime()}`;
-				event.target.send(controlled_player.value.name);
+				event.target.send("*");
+				event.target.send(token);
 				resolve(socket);
 			}
 		});
@@ -236,8 +239,8 @@
 
 	.game-field {
 		margin: auto;
-		width: 1010px;
-		height: 610px;
+		width: 810px;
+		height: 810px;
 		border: 5px;
 		border-style: solid dashed;
 		display: flex;

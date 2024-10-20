@@ -6,21 +6,56 @@
 -->
 
 <script setup>
-	import { ref } from 'vue';
+	import { ref, provide } from 'vue';
+	import { user_is_in_tournament, get_me } from '/src/jspong/main.js';
 	import CreateTournamentView from './CreateTournamentView.vue';
-	import GameView from './GameView.vue';
+	import PlayInTournamentView from './PlayInTournamentView.vue';
+	import { useAuthStore } from '../stores/auth.js';
 
 	const isInTournament = ref(false);
-	const showPlayTournament = ref(false);
+	const tournamentId = ref(null);
+	const authStore = useAuthStore();
+	const token = authStore.token;
+
+	async function checkIsInTournament() {
+		let me = {};
+		try {
+			me = await get_me(token);
+		} catch (error) {
+			me = null;
+			console.log(error);
+		}
+		if (!me) {
+			return -1;
+		}
+		console.log('ME');
+		console.log(me);
+		let final_value = -1;
+		try {
+			final_value = await user_is_in_tournament(me.pk, token);
+		} catch (error) {
+			console.log(error);
+			return -1;
+		}
+		console.log
+		if (final_value === -1) {
+			return -1;
+		}
+		isInTournament.value = true;
+		tournamentId.value = final_value;
+
+		console.log("is it in a tournament ? " + 'isInTournament', isInTournament.value);
+		console.log("what is the tournament id ? " + 'tournamentId', tournamentId.value);
+
+		return final_value;
+	}
+
+	const id = await checkIsInTournament();
+
+	provide('tournamentId', id);
 
 	function toggleIsInTournament() {
 		isInTournament.value = !isInTournament.value;
-	}
-
-	function togglePlayTournament() {
-		if (!showPlayTournament.value)
-			provide('otherPlayerName', 'player');
-		showPlayTournament.value = !showPlayTournament.value;
 	}
 </script>
 
@@ -29,15 +64,13 @@
 		<h1>←</h1>
 	</button>
 
-	<CreateTournamentView v-if="!isInTournament" @tournament-created="toggleIsInTournament" />
+	<Suspense>
+		<CreateTournamentView v-if="!isInTournament" @tournament-created="toggleIsInTournament" />
+	</Suspense>
 
-	<div v-else>
-		<div class="play-tournament">
-			<button @click="togglePlayTournament">JOUER</button>
-		</div>
-	</div>
-
-	<GameView v-if="showPlayNowSolo" @close-game="togglePlayTournament" />
+	<Suspense>
+		<PlayInTournamentView v-if="isInTournament" />
+	</Suspense>
 </template>
 
 <style>
