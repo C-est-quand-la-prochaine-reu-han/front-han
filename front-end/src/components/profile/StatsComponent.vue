@@ -113,7 +113,7 @@
 		</div>
 		<div class="dashboard-item border-ver-left">
 			<h2>Vitesse max</h2>
-			<h1>{{ fastest_ball }}</h1>
+			<h1>{{ fastest_ball }}px/s</h1>
 		</div>
 		<div class="dashboard-item border-ver-right">
 			<h2>Matchs gagnés (%)</h2>
