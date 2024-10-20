@@ -167,7 +167,6 @@ export async function get_user_by_username(username, token) {
 }     
 
 export async function get_user_by_id(id, token) {
-    console.log('ID > ' + id + '    TOKEN > ' + token);
     let response = await fetch(full_path + 'user/', {
         headers : {
             'Authorization': 'Token ' + token,
@@ -177,7 +176,7 @@ export async function get_user_by_id(id, token) {
     });
     let data = await response.json();
     for (let i = 0; i < data.length; i++) {
-        if (data[i].pk === id) {
+        if (data[i].pk == id) {
             if (debug)
                 console.log(data[i]);
             return data[i];
@@ -196,6 +195,20 @@ export async function get_tournament_by_id(id, token) {
      }});
     if (response.status == 404)
         throw "Tournament not found";
+    let data = await response.json();
+    if (debug)
+        console.log(data);
+    return data;
+}
+
+
+export async function get_all_matches(id, token) {
+    let response = await fetch(full_path + 'match/', { headers : 
+        {
+        'Authorization': 'Token ' + token,
+        'Content-Type':'application/json',
+        'Accept': 'application/json'
+     } });
     let data = await response.json();
     if (debug)
         console.log(data);
@@ -285,7 +298,7 @@ export async function get_all_tournaments_confirm_of_user(id, token) {
     return tournaments;
 }
 
-export async function get_all_tournaments_pending_of_user(id, token) {
+export async function get_all_tournaments_of_user(id, token) {
     let data = await get_all_tournament(token);
     let tournaments = [];
     for (let i = 0; i < data.length; i++) {
