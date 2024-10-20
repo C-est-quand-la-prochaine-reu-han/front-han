@@ -223,7 +223,7 @@
 	onMounted(async () => {
 		try {
 			const player = await get_me(token);
-			controlled_player.value.name = player.user.usernick;
+			controlled_player.value.name = player.user.username;
 			socket = await setup_socket();
 			window.addEventListener('keydown', keydown);
 			window.addEventListener('keyup', keyup);
