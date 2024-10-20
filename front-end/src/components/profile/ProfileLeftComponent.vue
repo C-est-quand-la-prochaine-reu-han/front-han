@@ -85,14 +85,14 @@
 		<div class="resume-container">
 			<button class="profile-image-container" @click="triggerFileInput">
 				<img :src="avatar" alt="Photo de profil">
-				<p class="overlay">Modifier</p>
 			</button>
 			<div>
+				<p class="modify-avatar">Modifier avatar</p>
 				<input
 					type="file"
 					accept="jpg, png"
 					@change="updateImage"
-				/>
+				>
 			</div>
 			<div class="resume-name">
 				<h1>{{ user_Nickname }}</h1>
@@ -309,4 +309,15 @@
 		background-color: rgb(133, 6, 6);
 		color: var(--vt-c-text-dark-1);
 	}
+
+	.modify-avatar {
+		margin: 0;
+		font-size: 1em;
+		color: var(--vt-c-text-dark-2);
+	}
+
+	body.light-mode .modify-avatar {
+		color: var(--vt-c-text-light-2);
+	}
+
 </style>
