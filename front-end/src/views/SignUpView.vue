@@ -13,12 +13,16 @@
 
 	async function handleSubmit() {
 		console.log('Creating user...');
+		if (username.value === '' || userNick.value === '' || password.value === '') {
+			alert('Tous les champs doivent être remplis');
+			return;
+		}
 		try {
 			await create_user(username.value, userNick.value, password.value);
 			token = await login(username.value, password.value);
 			authStore.setToken(token);
 		} catch (error) {
-			alert("Error creating user !");
+			alert("Erreur lors de la création de l'utilisateur");
 			console.log(error);
 		}
 	}
