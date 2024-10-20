@@ -14,6 +14,8 @@
 		
 		<button @click="toggleMatchHistory">Historique des matchs</button>
 
+		<button @click="toggleTournamentHistory">Historique des tournois</button>
+
 		<button @click="toggleRGPD">Politique de confidentialité</button>
 	</div>
 
@@ -25,12 +27,17 @@
 		<MatchHistoryComponent v-if="showMatchHistory" @close="toggleMatchHistory" />
 	</Suspense>
 
+	<Suspense>
+		<TournamentHistoryComponent v-if="showTournamentHistory" @close="toggleTournamentHistory" />
+	</Suspense>
+
 	<RGPDComponent v-if="showRGPD" @close="toggleRGPD" />
 </template>
 
 <script setup>
 	import { ref } from 'vue';
 	import MatchHistoryComponent from '@/components/profile/MatchHistoryComponent.vue';
+	import TournamentHistoryComponent from '@/components/profile/TournamentHistoryComponent.vue';
 	import ProfileLeftComponent from '@/components/profile/ProfileLeftComponent.vue';
 	import ProfileRightComponent from '@/components/profile/ProfileRightComponent.vue';
 	import RGPDComponent from '@/components/profile/RGPDComponent.vue';
@@ -38,6 +45,7 @@
 
 	const showProfil = ref(true);
 	const showStats = ref(false);
+	const showTournamentHistory = ref(false);
 	const showMatchHistory = ref(false);
 	const showRGPD = ref(false);
 
@@ -53,6 +61,11 @@
 
 	function toggleRGPD() {
 		showRGPD.value = !showRGPD.value;
+		showProfil.value = !showProfil.value;
+	}
+
+	function toggleTournamentHistory() {
+		showTournamentHistory.value = !showTournamentHistory.value;
 		showProfil.value = !showProfil.value;
 	}
 </script>

@@ -1,5 +1,5 @@
 <script setup>
-	import { get_all_matches_of_user, get_me, get_nickname_by_id } from '@/jspong/main';
+	import { get_all_matches, get_me, get_nickname_by_id } from '@/jspong/main';
 	import { useAuthStore } from '@/stores/auth';
 
 	const authStore = useAuthStore();
@@ -13,7 +13,7 @@
 
 	try {
 		me = await get_me(token);
-		matches = await get_all_matches_of_user(me.pk, token);
+		matches = await get_all_matches(me.pk, token);
 		for (let match of matches) {
 			let player1 = await get_nickname_by_id(match.player1, token);
 			let player2 = await get_nickname_by_id(match.player2, token);
@@ -50,8 +50,8 @@
 
 	<div class="main-container">
 		<div class="data-match-title">
-			<p>Date</p>
-			<p>Date de Fin</p>
+			<p>Début</p>
+			<p>Fin</p>
 			<p>Vitesse de la balle</p>
 			<p>Joueur 1</p>
 			<p>Score J1</p>
