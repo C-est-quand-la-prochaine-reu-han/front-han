@@ -1,8 +1,6 @@
 let host = "https://$HOSTNAME:8443/";
 if (host.includes("$HOSTNAME"))
-{
-    host = "https://localhost:8443/";
-}
+    host = "https://localhost:8443/"; // Debug
 let full_path = host + "api/appong/api/";
 let debug = false;
 
