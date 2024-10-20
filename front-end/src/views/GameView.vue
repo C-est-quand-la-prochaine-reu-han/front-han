@@ -14,8 +14,8 @@
 	defineEmits(['close-game']);
 
 	const globalState = reactive({
-	  leftPlayerScore: 0,
-	  rightPlayerScore: 0
+		leftPlayerScore: 0,
+		rightPlayerScore: 0
 	});
 
 	provide('globalState', globalState);

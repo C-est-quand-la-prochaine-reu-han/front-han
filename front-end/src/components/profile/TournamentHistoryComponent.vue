@@ -1,5 +1,5 @@
 <script setup>
-	import { get_me, get_all_tournament, get_all_matches_of_tournament, get_nickname_by_id, get_user_by_id } from '@/jspong/main';
+	import { get_all_tournament, get_all_matches_of_tournament, get_user_by_id } from '@/jspong/main';
 	import { useAuthStore } from '@/stores/auth';
 
 	const authStore = useAuthStore();
@@ -7,10 +7,8 @@
 	console.log(token);
 
 	let final_values = [];
-	let me;
 	let tournament = [];
 
-	me = await get_me(token);
 	tournament = await get_all_tournament(token);
 
 	for (let data of tournament) {

@@ -188,7 +188,7 @@
 	{
 		let url = "wss://REPLACE_ME:8443/pong/";
 		let socket = await new WebSocket(url);
-		let promise = new Promise((resolve, reject) => {
+		let promise = new Promise((resolve) => {
 			socket.onopen = function (event) {
 				event.target.send(opponent);
 				event.target.send("tournament:" + tournamentId);
