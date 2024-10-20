@@ -34,7 +34,7 @@
 	import { ref, defineEmits } from 'vue';
 	import { useAuthStore } from '@/stores/auth.js';
 	import { useGameStore } from '@/stores/game';
-	import { get_user_by_username, create_tournament } from '@/jspong/main.js';
+	import { get_user_by_username, create_tournament, user_is_in_tournament } from '@/jspong/main.js';
 	import { get_final_avatar } from '@/jspong/main.js';
 	const emit = defineEmits(['tournament-created']);
 
@@ -48,6 +48,10 @@
 	const tournament_name = ref('');
 
 	async function addUserToTournament() {
+		if (username_to_add.value === 'bot') {
+			alert("Il est pas assez payé pour ça");
+			return;
+		}
 		if (username_to_add.value === '') {
 			alert('Le nom d\'utilisateur ne peut pas etre vide');
 			return;
@@ -61,7 +65,7 @@
 		try {
 			let user = await get_user_by_username(username_to_add.value, token);
 			if (user) {
-				if (user_is_in_tournament(user.pk, token)) {
+				if (await user_is_in_tournament(user.pk, token) !== -1) {
 					alert('Utilisateur deja dans un tournois');
 					return;
 				}

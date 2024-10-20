@@ -186,11 +186,14 @@
 
 	async function setup_socket()
 	{
-		let socket = await new WebSocket("wss://localhost:8443/pong/");
+		let url = "wss://$HOSTNAME:8443/pong/";
+		if (url.includes('$HOSTNAME'))
+			url = "wss://localhost:8443/pong/"; // Debug
+		let socket = await new WebSocket(url);
 		let promise = new Promise((resolve, reject) => {
 			socket.onopen = function (event) {
 				event.target.send(opponent);
-				// event.target.send("tournament:" + tournamentId); // TODO Fix in server
+				event.target.send("tournament:" + tournamentId);
 				event.target.send(token);
 				resolve(socket);
 			}

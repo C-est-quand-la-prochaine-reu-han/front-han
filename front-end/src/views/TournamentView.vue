@@ -12,12 +12,14 @@
 	import { ref, provide } from 'vue';
 	import { user_is_in_tournament, get_me } from '@/jspong/main.js';
 	import { useAuthStore } from '@/stores/auth.js';
+	import { useGameStore } from '@/stores/game.js';
 	import CreateTournamentView from '@/components/tournament/CreateTournamentComponent.vue';
 	import PlayInTournamentView from '@/components/tournament/PlayInTournamentComponent.vue';
 
+	let tournamentId = -1;
 	const isInTournament = ref(false);
-	const tournamentId = ref(-1);
 	const authStore = useAuthStore();
+	const gameStore = useGameStore();
 	const token = authStore.token;
 
 	async function checkIsInTournament() {
@@ -30,6 +32,7 @@
 		}
 		let tournamentId = -1;
 		try {
+			console.log(me.pk);
 			tournamentId = await user_is_in_tournament(me.pk, token);
 		} catch (error) {
 			console.log(error);
@@ -38,17 +41,18 @@
 	}
 
 	const id = await checkIsInTournament();
+	console.log("The user is in the tournament " + id);
+
 	if (id === -1) {
-		tournamentId.value = -1;
+		tournamentId = -1;
 		isInTournament.value = false;
 		console.log('Not in tournament');
 	} else {
-		tournamentId.value = id;
+		tournamentId = id;
 		isInTournament.value = true;
-		provide('tournamentId', id);
+		gameStore.tournamentId = tournamentId;
 		console.log('In tournament');
 	}
-
 
 	function toggleIsInTournament() {
 		isInTournament.value = !isInTournament.value;

@@ -29,7 +29,6 @@
 	console.log('tournamentId', tournamentId);
 
 	let tournament = await get_tournament(tournamentId, token);
-	let players = tournament.pending;
 	let possible_matches = [];
 	let me = ref(null);
 	let all_matches_of_tournament = ref([]);
@@ -48,7 +47,7 @@
 		return temp_tournament;
 	}
 
-	async function set_all_possible_matches() {
+	async function set_all_possible_matches(players) {
 		let id = 0;
 		for (let i = 0; i < players.length; i++) {
 			for (let j = i + 1; j < players.length; j++) {
@@ -77,15 +76,15 @@
 
 	function startGame(match) {
 		if (match.player1_pk === me.value.pk) {
-			gameStore.setOpponent(match.player2_pk);
+			gameStore.setOpponent(match.player2_username);
 		} else if (match.player2_pk === me.value.pk) {
-			gameStore.setOpponent(match.player1_pk);
+			gameStore.setOpponent(match.player1_username);
 		}
 		gameStore.setTournamentId(tournamentId);
 		router.push('/game');
 	}
 
-	await set_all_possible_matches();
+	await set_all_possible_matches(tournament.pending);
 </script>
 
 <style scoped>

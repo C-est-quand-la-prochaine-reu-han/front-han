@@ -243,7 +243,8 @@ export async function get_all_matches_of_tournament(id, token) {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
             'Accept': 'application/json'
-        }});
+        }
+    });
     let data = await response.json();
     let matches = [];
     for (let i = 0; i < data.length; i++) {
@@ -616,9 +617,8 @@ export function get_final_avatar(avatar_path) {
     return final_avatar_path;
 }
 
-export async function tournament_is_finish(id, token) {
-    let matches = await get_all_matches_of_tournament(id, token);
-    let tournament = await get_tournament_by_id(id, token);
+async function tournament_is_finish(tournament, token) {
+    let matches = await get_all_matches_of_tournament(tournament.pk, token);
     let possible_match = tournament.pending.length * (tournament.pending.length - 1) / 2;
     if (matches.length === possible_match) {
         return true;
@@ -628,10 +628,11 @@ export async function tournament_is_finish(id, token) {
 
 export async function user_is_in_tournament(id, token) {
     let tournaments = await get_all_tournament(token);
+    console.log(tournaments);
     for (let i = 0; i < tournaments.length; i++) {
         if (!tournaments[i].pending.includes(id))
             continue;
-        if (await tournament_is_finish(tournaments[i].pk, token)) {
+        if (await tournament_is_finish(tournaments[i], token)) {
             return -1;
         }
         return tournaments[i].pk;

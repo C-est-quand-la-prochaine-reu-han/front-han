@@ -2,6 +2,7 @@
 	import { ref } from 'vue';
 	import { create_user, login } from '/src/jspong/main.js';
 	import { useAuthStore } from '/src/stores/auth.js';
+	import router from '@/router';
 
 	const username = ref('');
 	const userNick = ref('');
@@ -20,6 +21,8 @@
 			await create_user(username.value, userNick.value, password.value);
 			token = await login(username.value, password.value);
 			authStore.setToken(token);
+			if (token)
+				router.push("/menu");
 		} catch (error) {
 			alert("Erreur lors de la création de l'utilisateur");
 			console.log(error);
