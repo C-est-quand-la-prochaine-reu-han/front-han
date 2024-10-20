@@ -62,6 +62,20 @@
 		string_total_play_time = total_play_time + "s";
 	}
 
+	time_moy_per_match = total_play_time / all_matches.length;
+	if (time_moy_per_match > 3600) {
+		const hours = Math.floor(time_moy_per_match / 3600);
+		const minutes = Math.floor((time_moy_per_match % 3600) / 60);
+		const seconds = time_moy_per_match % 60;
+		time_moy_per_match = hours + "h " + minutes + "m " + seconds + "s";
+	} else if (time_moy_per_match > 60) {
+		const minutes = Math.floor(time_moy_per_match / 60);
+		const seconds = time_moy_per_match % 60;
+		time_moy_per_match = minutes + "m " + seconds + "s";
+	} else {
+		time_moy_per_match = time_moy_per_match + "s";
+	}
+
 
 
 
@@ -103,7 +117,7 @@
 		</div>
 		<div class="dashboard-item">
 			<h2>Temps Moyen par match</h2>
-			<h1>{{ perfect_hit_ratio }}</h1>
+			<h1>{{ time_moy_per_match }}</h1>
 		</div>
 	</div>
 </template>
