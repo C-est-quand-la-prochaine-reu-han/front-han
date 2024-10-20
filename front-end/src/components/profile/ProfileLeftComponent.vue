@@ -1,7 +1,7 @@
 <script setup>
 	import { ref, defineEmits } from 'vue';
-	import AddFriendsView from './AddFriendsView.vue';
-	import { useAuthStore } from '../stores/auth.js';
+	import AddFriendsView from '/src/components/profile/AddFriendsComponent.vue';
+	import { useAuthStore } from '/src/stores/auth.js';
 	import { get_me, delete_user, change_user_nick, change_password, update_avatar, get_final_avatar } from '/src/jspong/main.js';
 	
 	const emit = defineEmits(['close']);
@@ -78,7 +78,6 @@
 			alert('Erreur lors de la mise à jour de l\'avatar');
 		}
 	}
-
 </script>
 
 <template>
@@ -128,7 +127,7 @@
 		</div>
 	</div>
 
-	<AddFriendsView v-if="isAddFriendsViewShows" @close="toggleAddFriends" />
+	<AddFriendsComponent v-if="isAddFriendsViewShows" @close="toggleAddFriends" />
 </template>
 
 <style scoped>

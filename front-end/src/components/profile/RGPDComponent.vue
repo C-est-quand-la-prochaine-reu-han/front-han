@@ -1,6 +1,3 @@
-<script setup>
-</script>
-
 <template>
 	<button class="back-button" @click="$emit('close')">
 		<h1>←</h1>
@@ -343,6 +340,9 @@
 		</ul>
 	</div>
 </template>
+
+<script setup>
+</script>
 
 <style scoped>
 	.back-button {

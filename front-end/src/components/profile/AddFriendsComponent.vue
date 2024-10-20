@@ -1,38 +1,3 @@
-<script setup>
-
-import { ref } from 'vue';
-import { useAuthStore } from '../stores/auth.js';
-import { request_pending_friend, get_id_by_username } from '/src/jspong/main.js';
-
-const friend_username = ref('');
-const authStore = useAuthStore();
-const token = authStore.token;
-
-async function submitFriendRequest() {
-	try {
-		console.log('submit friend request');
-		console.log(friend_username.value);
-		if (friend_username.value === '') {
-			alert('Username cannot be empty');
-			return;
-		}
-		let friend_id;
-		friend_id = await get_id_by_username(friend_username.value, token);
-		if (friend_id === -1) {
-			alert('User not found');
-			return;
-		}
-		console.log(friend_id);
-		let response = await request_pending_friend(friend_id, token);
-		console.log(response);
-	} catch (error) {
-		console.log(error);
-		alert('An error occured');
-	}
-}
-
-</script>
-
 <template>
 	<div class="find-new-friends-container">
 		<div class="find-new-friends">
@@ -46,6 +11,39 @@ async function submitFriendRequest() {
 		</div>
 	</div>
 </template>
+
+<script setup>
+	import { ref } from 'vue';
+	import { useAuthStore } from '@/stores/auth.js';
+	import { request_pending_friend, get_id_by_username } from '@/jspong/main.js';
+
+	const friend_username = ref('');
+	const authStore = useAuthStore();
+	const token = authStore.token;
+
+	async function submitFriendRequest() {
+		try {
+			console.log('submit friend request');
+			console.log(friend_username.value);
+			if (friend_username.value === '') {
+				alert('Username cannot be empty');
+				return;
+			}
+			let friend_id;
+			friend_id = await get_id_by_username(friend_username.value, token);
+			if (friend_id === -1) {
+				alert('User not found');
+				return;
+			}
+			console.log(friend_id);
+			let response = await request_pending_friend(friend_id, token);
+			console.log(response);
+		} catch (error) {
+			console.log(error);
+			alert('An error occured');
+		}
+	}
+</script>
 
 <style scoped>
 	.find-new-friends-container {

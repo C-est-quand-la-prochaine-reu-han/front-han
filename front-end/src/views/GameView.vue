@@ -1,23 +1,3 @@
-<script setup>
-	import { reactive, provide, inject, defineEmits } from 'vue';
-	import ScoreView from './ScoreView.vue';
-	import PongView from './PongView.vue';
-
-	defineEmits(['close-game']);
-
-	// Create a global reactive state
-	const globalState = reactive({
-	  leftPlayerScore: 0,
-	  rightPlayerScore: 0
-	});
-
-	const otherPlayerName = inject('otherPlayerName');
-
-	// Provide the global state to child components
-	provide('globalState', globalState);
-	provide('otherPlayerName', otherPlayerName);
-</script>
-
 <template>
 	<Suspense>
 		<PongView @close-game="$emit('close-game')" />
@@ -25,3 +5,18 @@
 
 	<ScoreView />
 </template>
+
+<script setup>
+	import { reactive, provide, defineEmits } from 'vue';
+	import ScoreView from '@/components/game/ScoreComponent.vue';
+	import PongView from '@/components/game/PongComponent.vue';
+
+	defineEmits(['close-game']);
+
+	const globalState = reactive({
+	  leftPlayerScore: 0,
+	  rightPlayerScore: 0
+	});
+
+	provide('globalState', globalState);
+</script>

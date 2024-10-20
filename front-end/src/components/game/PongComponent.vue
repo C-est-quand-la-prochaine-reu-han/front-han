@@ -1,19 +1,41 @@
+<template>
+	<button class="back-button" v-if="isGameOver" @click="$emit('close-game')">
+		<h1>←</h1>
+	</button>
+
+	<div class="game-field">
+		<div class="middle-line-left"></div>
+		<div class="middle-line-right"></div>
+
+		<PaddleComponent class="left-paddle" :style="controlled_player_style" />
+
+		<PaddleComponent class="right-paddle" :style="other_player_style" />
+
+		<BallComponent class="ball" :style="ball_style" />
+	</div>
+</template>
+
 <script setup>
-	// Get the token
-	import { useAuthStore } from '../stores/auth.js';
+	import { ref, onMounted, computed, inject, onBeforeUnmount, defineEmits } from 'vue';
+	import { useAuthStore } from '@/stores/auth';
+	import { useGameStore } from '@/stores/game';
+	import { get_me } from '@/jspong/main';
+	import router from '@/router';
+	import PaddleComponent from '@/components/game/PaddleComponent.vue';
+	import BallComponent from '@/components/game/BallComponent.vue';
+
 	const authStore = useAuthStore();
 	const token = authStore.token;
-
-	import { ref, onMounted, computed, inject, onBeforeUnmount, defineEmits } from 'vue';
-	import Paddle from './PongTools/Paddle.vue';
-	import Ball from './PongTools/Ball.vue';
 
 	defineEmits(['close-game']);
 
 	const globalState = inject('globalState');
-	const otherPlayerName = inject('otherPlayerName');
 
-	console.log(otherPlayerName.value);
+	const gameStore = useGameStore();
+	const opponent = gameStore.opponent;
+	const tournamentId = gameStore.tournamentId;
+
+	console.log(opponent);
 
 	let playerOnRight = false;
 
@@ -39,6 +61,7 @@
 	}));
 	
 	let controlled_player = ref(new Player());
+	controlled_player.value.name = "";
 	const controlled_player_style = computed(() => ({
 		top: controlled_player.value.y * 0.8 + 'px',
 		left: controlled_player.value.x * 0.8 + 'px'
@@ -137,7 +160,7 @@
 		}
 		if (controlled_player === undefined || other_player === undefined)
 			return ;
-		if (event.data.startsWith(token + ":"))
+		if (event.data.startsWith(controlled_player.value.name + ":"))
 		{
 			let newpos = event.data.split(":");
 			controlled_player.value.y = parseInt(newpos[1]);
@@ -149,14 +172,28 @@
 			other_player.value.y = parseInt(newpos[1]);
 			other_player.value.x = parseInt(newpos[2]);
 		}
+		if (event.data.startsWith("winner:"))
+		{
+			if (event.data.endsWith("aborted"))
+				alert("Match cancelled, your opponent is a chicken !");
+			else if (event.data.endsWith(other_player.value.name))
+				alert("You lose");
+			else
+				alert("You win !");
+			router.push("/menu");
+		}
 	}
 
 	async function setup_socket()
 	{
-		let socket = await new WebSocket("wss://localhost:8443/pong/");
+		let url = "wss://$HOSTNAME:8443/pong/";
+		if (url.includes('$HOSTNAME'))
+			url = "wss://localhost:8443/pong/"; // Debug
+		let socket = await new WebSocket(url);
 		let promise = new Promise((resolve, reject) => {
 			socket.onopen = function (event) {
-				event.target.send("*");
+				event.target.send(opponent);
+				event.target.send("tournament:" + tournamentId);
 				event.target.send(token);
 				resolve(socket);
 			}
@@ -186,10 +223,16 @@
 	};
 
 	onMounted(async () => {
-		socket = await setup_socket();
-
-		window.addEventListener('keydown', keydown);
-		window.addEventListener('keyup', keyup);
+		try {
+			const player = await get_me(token);
+			controlled_player.value.name = player.user_nick;
+			socket = await setup_socket();
+			window.addEventListener('keydown', keydown);
+			window.addEventListener('keyup', keyup);
+		} catch (e) {
+			console.error(e);
+			alert("u dummy");
+		}
 	});
 
 	onBeforeUnmount(() => {
@@ -199,23 +242,6 @@
 		socket.close();
 	});
 </script>
-
-<template>
-	<button class="back-button" v-if="isGameOver" @click="$emit('close-game')">
-		<h1>←</h1>
-	</button>
-
-	<div class="game-field">
-		<div class="middle-line-left"></div>
-		<div class="middle-line-right"></div>
-
-		<Paddle class="left-paddle" :style="controlled_player_style" />
-
-		<Paddle class="right-paddle" :style="other_player_style" />
-
-		<Ball class="ball" :style="ball_style" />
-	</div>
-</template>
 
 <style scoped>
 	.back-button {

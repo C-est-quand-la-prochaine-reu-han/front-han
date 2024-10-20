@@ -1,7 +1,6 @@
 <script setup>
-
 	import { get_dashboard, get_me, get_all_matches_of_user } from '@/jspong/main';
-	import { useAuthStore } from '../stores/auth.js';
+	import { useAuthStore } from '/src/stores/auth.js';
 
 	const authStore = useAuthStore();
 	const token = authStore.token;

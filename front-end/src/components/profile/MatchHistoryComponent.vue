@@ -1,7 +1,6 @@
 <script setup>
-
 	import { get_all_matches_of_user, get_me, get_nickname_by_id } from '@/jspong/main';
-	import { useAuthStore } from '../stores/auth.js';
+	import { useAuthStore } from '@/stores/auth';
 
 	const authStore = useAuthStore();
 	const token = authStore.token;

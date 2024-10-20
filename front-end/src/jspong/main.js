@@ -1,15 +1,12 @@
-
-const hostName = import.meta.env.VITE_HOSTNAME;
-console.log(`hostName: ${hostName}`);
-
-let host = 'https://' + hostName + ':8443/';
-let chemin = host + "api/appong/api/";
-console.log(`chemin: ${chemin}`);
+let host = "https://$HOSTNAME:8443/";
+if (host.includes("$HOSTNAME"))
+    host = "https://localhost:8443/"; // Debug
+let full_path = host + "api/appong/api/";
 let debug = false;
 
 
 export async function get(token) {
-    let response = await fetch(chemin, {
+    let response = await fetch(full_path, {
          headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -23,7 +20,7 @@ export async function get(token) {
 }
 
 export async function get_me(token) {
-    let response = await fetch(chemin + 'user/me/', {
+    let response = await fetch(full_path + 'user/me/', {
         headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -41,7 +38,7 @@ export async function get_me(token) {
 }
 
 export async function get_all_users(token) {
-    let response = await fetch(chemin + 'user/', {
+    let response = await fetch(full_path + 'user/', {
         headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -55,7 +52,7 @@ export async function get_all_users(token) {
 }
 
 export async function get_dashboard(id, token) {
-    let response = await fetch(chemin + 'user/' + id +'/dashboard/', {
+    let response = await fetch(full_path + 'user/' + id +'/dashboard/', {
         headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -69,7 +66,7 @@ export async function get_dashboard(id, token) {
 }
 
 export async function get_all_tournament(token) {
-    let response = await fetch(chemin + 'tournament/', {
+    let response = await fetch(full_path + 'tournament/', {
         method: 'GET',
         headers : {
         'Authorization': 'Token ' + token,
@@ -83,7 +80,7 @@ export async function get_all_tournament(token) {
 }
 
 export async function get_number_of_matches(token) {
-    let response = await fetch(chemin + 'match/', {
+    let response = await fetch(full_path + 'match/', {
         headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -99,7 +96,7 @@ export async function get_number_of_matches(token) {
 
 export async function get_number_of_users(token) {
     
-    let response = await fetch(chemin + 'user/', {
+    let response = await fetch(full_path + 'user/', {
         headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -113,7 +110,7 @@ export async function get_number_of_users(token) {
 }
 
 export async function get_number_of_tournaments(token) {
-    let response = await fetch(chemin + 'tournament/', {
+    let response = await fetch(full_path + 'tournament/', {
         headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -127,7 +124,7 @@ export async function get_number_of_tournaments(token) {
 }
 
 export async function get_id_by_username(username, token) {
-    let response = await fetch(chemin + 'user/', {
+    let response = await fetch(full_path + 'user/', {
         headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -149,7 +146,7 @@ export async function get_id_by_username(username, token) {
 
 export async function get_user_by_username(username, token) {
     console.log('Username > ' + username + '    TOKEN > ' + token);
-    let response = await fetch(chemin + 'user/', {
+    let response = await fetch(full_path + 'user/', {
         headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -169,7 +166,7 @@ export async function get_user_by_username(username, token) {
 
 export async function get_user_by_id(id, token) {
     console.log('ID > ' + id + '    TOKEN > ' + token);
-    let response = await fetch(chemin + 'user/', {
+    let response = await fetch(full_path + 'user/', {
         headers : {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
@@ -188,7 +185,7 @@ export async function get_user_by_id(id, token) {
 }
 
 export async function get_tournament_by_id(id, token) {
-    let response = await fetch(chemin + 'tournament/' + id + '/', { 
+    let response = await fetch(full_path + 'tournament/' + id + '/', { 
         method: 'GET',
         headers : {
         'Authorization': 'Token ' + token,
@@ -204,7 +201,7 @@ export async function get_tournament_by_id(id, token) {
 }
 
 export async function get_all_matches_of_user(id, token) {
-    let response = await fetch(chemin + 'match/', { headers : 
+    let response = await fetch(full_path + 'match/', { headers : 
         {
         'Authorization': 'Token ' + token,
         'Content-Type':'application/json',
@@ -224,7 +221,7 @@ export async function get_all_matches_of_user(id, token) {
 
 export async function is_match_tournament(id, token) {
     let value = false;
-    let response = await fetch(chemin + 'match/' + id, { headers : {
+    let response = await fetch(full_path + 'match/' + id, { headers : {
         'Authorization': 'Token ' + token,
         'Content-Type':'application/json',
         'Accept': 'application/json'
@@ -241,12 +238,13 @@ export async function is_match_tournament(id, token) {
 
 
 export async function get_all_matches_of_tournament(id, token) {
-    let response = await fetch(chemin + 'match/', { headers :
+    let response = await fetch(full_path + 'match/', { headers :
         {
             'Authorization': 'Token ' + token,
             'Content-Type':'application/json',
             'Accept': 'application/json'
-        }});
+        }
+    });
     let data = await response.json();
     let matches = [];
     for (let i = 0; i < data.length; i++) {
@@ -328,7 +326,7 @@ export async function get_all_users_of_tournament(id, token) {
  * @return Un json contenant les informations du match.
  */
 export async function get_match_by_id(id, token) {
-    let response = await fetch(chemin + 'match/' + id + '/', { headers : {
+    let response = await fetch(full_path + 'match/' + id + '/', { headers : {
         'Authorization': 'Token ' + token,
         'Content-Type':'application/json',
         'Accept': 'application/json'
@@ -389,7 +387,7 @@ export async function change_password(password, token) {
             "password": password
         },
     };
-    let response = await fetch(chemin + 'user/update_user/', {
+    let response = await fetch(full_path + 'user/update_user/', {
         method: 'PUT',
         headers: {
             'Authorization': 'Token ' + token,
@@ -409,7 +407,7 @@ export async function change_user_nick(user_nick, token) {
     let data = {
         "user_nick": user_nick
     };
-    let response = await fetch(chemin + 'user/update_user/', {
+    let response = await fetch(full_path + 'user/update_user/', {
         method: 'PUT',
         headers: {
             'Authorization': 'Token ' + token,
@@ -432,7 +430,7 @@ export async function create_user(username, user_nick, password) {
         },
         "user_nick": user_nick
     };    
-    let response = await fetch(chemin + 'register/', {
+    let response = await fetch(full_path + 'register/', {
         method: 'POST',
         headers: {
             'Content-Type':'application/json',
@@ -458,7 +456,7 @@ export async function create_tournament(name, pending, token) {
         "name": name,
         "pending": pkusers,
     };
-    let response = await fetch(chemin + 'tournament/', {
+    let response = await fetch(full_path + 'tournament/', {
         method: 'POST',
         headers: {
             'Authorization': 'Token ' + token,
@@ -482,7 +480,7 @@ export async function create_match(player1, player2, tournament, token) {
         "player1": player1,
         "player2": player2,
     };
-    let response = await fetch(chemin + 'match/', {
+    let response = await fetch(full_path + 'match/', {
         method: 'POST',
         headers: {
             'Authorization': 'Token ' + token,
@@ -498,7 +496,7 @@ export async function create_match(player1, player2, tournament, token) {
 }
 
 export async function delete_user(token) {
-    let response = await fetch(chemin + 'user/1/', {
+    let response = await fetch(full_path + 'user/1/', {
         method: 'DELETE',
         headers: {
             'Authorization': 'Token ' + token,
@@ -520,7 +518,7 @@ export async function request_pending_friend(friend_id, token) {
         "friends_pending": actuel_pending
     }
     console.log(token)
-    let response = await fetch(chemin + 'user/friends_pending/', {
+    let response = await fetch(full_path + 'user/friends_pending/', {
         method: 'POST',
         headers: {
             'Authorization': 'Token ' + token,
@@ -546,7 +544,7 @@ export async function request_confirm_friend(friend_id, token) {
     let data = {
         "friends_confirmed": actuel_confirm
     }
-    let response = await fetch(chemin + 'user/friends_confirm/', {
+    let response = await fetch(full_path + 'user/friends_confirm/', {
         method: 'POST',
         headers: {
             'Authorization': 'Token ' + token,
@@ -573,7 +571,7 @@ export async function request_refuse_friend(friend_id, token) {
     let data = {
         "friends_pending": pending
     }
-    let response = await fetch(chemin + 'user/friends_pending/', {
+    let response = await fetch(full_path + 'user/friends_pending/', {
         method: 'POST',
         headers: {
             'Authorization': 'Token ' + token,
@@ -592,7 +590,7 @@ export async function update_avatar(avatar, token) {
     console.log("File size:", avatar.size);
     console.log("Filename:", avatar.name);
     try {
-        let response = await fetch(chemin + 'user/update_avatar/', {
+        let response = await fetch(full_path + 'user/update_avatar/', {
             method: 'PUT',
             headers: {
                 'Authorization': 'Token ' + token,
@@ -619,9 +617,8 @@ export function get_final_avatar(avatar_path) {
     return final_avatar_path;
 }
 
-export async function tournament_is_finish(id, token) {
-    let matches = await get_all_matches_of_tournament(id, token);
-    let tournament = await get_tournament_by_id(id, token);
+async function tournament_is_finish(tournament, token) {
+    let matches = await get_all_matches_of_tournament(tournament.pk, token);
     let possible_match = tournament.pending.length * (tournament.pending.length - 1) / 2;
     if (matches.length === possible_match) {
         return true;
@@ -631,10 +628,11 @@ export async function tournament_is_finish(id, token) {
 
 export async function user_is_in_tournament(id, token) {
     let tournaments = await get_all_tournament(token);
+    console.log(tournaments);
     for (let i = 0; i < tournaments.length; i++) {
         if (!tournaments[i].pending.includes(id))
             continue;
-        if (await tournament_is_finish(tournaments[i].pk, token)) {
+        if (await tournament_is_finish(tournaments[i], token)) {
             return -1;
         }
         return tournaments[i].pk;
