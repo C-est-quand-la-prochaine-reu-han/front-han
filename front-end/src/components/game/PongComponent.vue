@@ -20,6 +20,7 @@
 	import { useAuthStore } from '@/stores/auth';
 	import { useGameStore } from '@/stores/game';
 	import { get_me } from '@/jspong/main';
+	import router from '@/router';
 	import PaddleComponent from '@/components/game/PaddleComponent.vue';
 	import BallComponent from '@/components/game/BallComponent.vue';
 
@@ -171,6 +172,16 @@
 			other_player.value.y = parseInt(newpos[1]);
 			other_player.value.x = parseInt(newpos[2]);
 		}
+		if (event.data.startsWith("winner:"))
+		{
+			if (event.data.endsWith("aborted"))
+				alert("Match cancelled, your opponent is a chicken !");
+			else if (event.data.endsWith(other_player.value.name))
+				alert("You lose");
+			else
+				alert("You win !");
+			router.push("/menu");
+		}
 	}
 
 	async function setup_socket()
@@ -178,7 +189,8 @@
 		let socket = await new WebSocket("wss://localhost:8443/pong/");
 		let promise = new Promise((resolve, reject) => {
 			socket.onopen = function (event) {
-				event.target.send("*");
+				event.target.send(opponent);
+				// event.target.send("tournament:" + tournamentId); // TODO Fix in server
 				event.target.send(token);
 				resolve(socket);
 			}
