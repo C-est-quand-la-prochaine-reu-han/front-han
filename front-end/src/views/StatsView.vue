@@ -1,6 +1,6 @@
 <script setup>
 
-	import { get_dashboard, get_me } from '@/jspong/main';
+	import { get_dashboard, get_me, get_all_matches_of_user } from '@/jspong/main';
 	import { useAuthStore } from '../stores/auth.js';
 
 	const authStore = useAuthStore();
@@ -14,6 +14,11 @@
 	let total_hits = -1;
 	let total_score = -1;
 	let win_ratio = -1;
+	let total_play_time = -1;
+	let string_total_play_time = "";
+	let time_moy_per_match = -1;
+
+	let all_matches = [];
 
 	try {
 		let me = await get_me(token);
@@ -31,6 +36,31 @@
 		console.log(error);
 	}
 
+	try {
+		let me = await get_me(token);
+		all_matches = await get_all_matches_of_user(me.pk, token);
+	} catch (error) {
+		console.log(error);
+	}
+
+	for (let match of all_matches) {
+		console.log(match);
+		const matchDuration = Math.floor((new Date(match.match_end_time) - new Date(match.match_start_time)) / 1000);
+		total_play_time += matchDuration;
+	}
+
+	if (total_play_time > 3600) {
+		const hours = Math.floor(total_play_time / 3600);
+		const minutes = Math.floor((total_play_time % 3600) / 60);
+		const seconds = total_play_time % 60;
+		string_total_play_time = hours + "h " + minutes + "m " + seconds + "s";
+	} else if (total_play_time > 60) {
+		const minutes = Math.floor(total_play_time / 60);
+		const seconds = total_play_time % 60;
+		string_total_play_time = minutes + "m " + seconds + "s";
+	} else {
+		string_total_play_time = total_play_time + "s";
+	}
 
 
 
@@ -60,8 +90,8 @@
 			<h1>{{ match_wins }}</h1>
 		</div>
 		<div class="dashboard-item">
-			<h2>Coups parfaits</h2>
-			<h1>{{ perfect_hits }}</h1>
+			<h2>Temps de jeu total</h2>
+			<h1>{{ string_total_play_time }}</h1>
 		</div>
 		<div class="dashboard-item border-ver-left">
 			<h2>Vitesse max</h2>
@@ -72,7 +102,7 @@
 			<h1>{{ win_ratio }}</h1>
 		</div>
 		<div class="dashboard-item">
-			<h2>Coups parfaits (%)</h2>
+			<h2>Temps Moyen par match</h2>
 			<h1>{{ perfect_hit_ratio }}</h1>
 		</div>
 	</div>
