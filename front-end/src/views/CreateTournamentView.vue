@@ -9,6 +9,7 @@
 	import { ref, defineEmits } from 'vue';
 	import { useAuthStore } from '../stores/auth.js';
 	import { get_user_by_username, create_tournament } from '/src/jspong/main.js';
+import { get_final_avatar } from '@/jspong/main.js';
 
 	const emit = defineEmits(['tournament-created']);
 
@@ -33,7 +34,11 @@
 		try {
 			let user = await get_user_by_username(username_to_add.value, token);
 			if (user) {
-				//TODO: Ajouter une verification pour voir si l'utilisateur est deja dans un tournois	
+				if (user_is_in_tournament(user.pk, token)) {
+					alert('Utilisateur deja dans un tournois');
+					return;
+				}
+				user.avatar = get_final_avatar(user.avatar);
 				player_in_tournament.value.push(user);
 			} else {
 				alert('Utilisateur introuvable');
