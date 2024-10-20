@@ -186,9 +186,7 @@
 
 	async function setup_socket()
 	{
-		let url = "wss://$HOSTNAME:8443/pong/";
-		if (url.includes('$HOSTNAME'))
-			url = "wss://localhost:8443/pong/"; // Debug
+		let url = "wss://REPLACE_ME:8443/pong/";
 		let socket = await new WebSocket(url);
 		let promise = new Promise((resolve, reject) => {
 			socket.onopen = function (event) {

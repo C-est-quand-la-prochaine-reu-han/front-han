@@ -1,6 +1,8 @@
-let host = "https://$HOSTNAME:8443/";
-if (host.includes("$HOSTNAME"))
-    host = "https://localhost:8443/"; // Debug
+let host = "https://REPLACE_ME:8443/";
+if (host.includes("REPLACE_ME"))
+{
+    host = "https://c1r7p4:8443/";
+}
 let full_path = host + "api/appong/api/";
 let debug = false;
 
@@ -612,7 +614,7 @@ export async function update_avatar(avatar, token) {
 }
 
 export function get_final_avatar(avatar_path) {
-    let final_avatar_path = avatar_path.replace("http://localhost", "/api");
+    let final_avatar_path = avatar_path.replace("http://REPLACE_ME", "/api");
     console.log("Avatar path:", final_avatar_path);
     return final_avatar_path;
 }

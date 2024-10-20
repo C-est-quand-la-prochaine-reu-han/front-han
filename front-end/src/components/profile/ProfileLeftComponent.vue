@@ -3,6 +3,7 @@
 	import AddFriendsView from '/src/components/profile/AddFriendsComponent.vue';
 	import { useAuthStore } from '/src/stores/auth.js';
 	import { get_me, delete_user, change_user_nick, change_password, update_avatar, get_final_avatar } from '/src/jspong/main.js';
+	import router from '@/router';
 	
 	const emit = defineEmits(['close']);
 
@@ -62,8 +63,18 @@
 	}
 
 	async function deleteAccount() {
-		await delete_user(token);
-		authStore.clearToken();
+		if (confirm("vraiment ?"))
+		{
+			if (confirm("pour de vrai ?"))
+			{
+				if (confirm("de vrai de vrai ?"))
+				{
+					await delete_user(token);
+					authStore.clearToken();
+					router.push("/");
+				}
+			}
+		}
 	}
 
 	async function updateImage() {

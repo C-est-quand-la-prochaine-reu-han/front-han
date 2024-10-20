@@ -56,6 +56,7 @@
 		position: absolute;
 		background-color: rgb(from var(--vt-c-black-mute) r g b / 0.8);
 		width: 500px;
+		z-index: 999;
 	}
 
 	body.light-mode .find-new-friends {
