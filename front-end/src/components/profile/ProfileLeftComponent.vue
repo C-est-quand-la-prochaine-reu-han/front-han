@@ -113,27 +113,23 @@
 		</div>
 		<div>
 			<div class="modif-data">
-				<form class="modif-form">
-					<h2 class="form-title">Modifier le surnom</h2>
-					<div class="form-group">
-						<input type="text" v-model="new_nickname" id="nickname" name="nickname" placeholder="Nouveau surnom">
-						<input type="button" @click="submitUserNick">Soumettre</button>
-					</div>
-				</form>
-				<form class="modif-form">
-					<h2 class="form-title">Modifier le mot de passe</h2>
-					<div class="form-group">
-						<input type="password" v-model="new_password" id="new-password" name="new-password" placeholder="Nouveau mot de passe">
-						<input type="button" @click="submitPassword">Soumettre</button>
-					</div>
-				</form>
+				<h2 class="form-title">Modifier le surnom</h2>
+				<div class="form-group">
+					<input type="text" v-model="new_nickname" id="nickname" name="nickname" placeholder="Nouveau surnom">
+					<button type="button" @click="submitUserNick">Soumettre</button>
+				</div>
+				<h2 class="form-title">Modifier le mot de passe</h2>
+				<div class="form-group">
+					<input type="password" @submit.prevent v-model="new_password" id="new-password" name="new-password" placeholder="Nouveau mot de passe">
+					<button type="button" @click="submitPassword">Soumettre</button>
+				</div>
 			</div>
 			<div class="bottom-button">
 				<div class="form-group">
-					<input type="button" @click="toggleAddFriends">Ajouter un·e ami·e</button>
+					<button type="button" @click="toggleAddFriends">Ajouter un·e ami·e</button>
 				</div>
 				<div class="form-group remove-account">
-					<input type="button" @click="deleteAccount">Supprimer le compte</button>
+					<button type="button" @click="deleteAccount">Supprimer le compte</button>
 				</div>
 			</div>
 		</div>
