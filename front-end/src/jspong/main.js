@@ -384,7 +384,6 @@ export async function change_password(password, token) {
             "password": password
         },
     };
-    console.log(data);
     let response = await fetch(path + 'user/update_user/', {
         method: 'PUT',
         headers: {
@@ -395,7 +394,7 @@ export async function change_password(password, token) {
         body: JSON.stringify(data)
     });
     if (response.status != 201)
-        throw "Problem with the change of the password (" + response.status + ")";
+        return false;
     if (debug)
         console.log("Password changed");
     return true;
@@ -415,7 +414,7 @@ export async function change_user_nick(user_nick, token) {
         body: JSON.stringify(data)
     });
     if (response.status != 201)
-        throw "Problem with the change of the user nick (" + response.status + ")";
+        return false;
     return true;
 }
 
