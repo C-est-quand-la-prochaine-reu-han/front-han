@@ -67,18 +67,15 @@
 	}
 
 	async function updateImage() {
-		console.log('update image');
+		if (event.target.files.length === 0) {
+			return;
+		}
 		const file = event.target.files[0];
 		let data = await update_avatar(file, token);
-		try {
-			let me = await get_me(token);
-			if (me) {
-				avatar.value = get_final_avatar(me.avatar);
-			} else {
-				console.log('No user found');
-			}
-		} catch (error) {
-			console.log('No user found');
+		if (data) {
+			avatar.value = get_final_avatar(data.avatar);
+		} else {
+			alert('Erreur lors de la mise à jour de l\'avatar');
 		}
 	}
 

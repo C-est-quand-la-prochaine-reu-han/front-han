@@ -598,14 +598,13 @@ export async function update_avatar(avatar, token) {
         });
 
         if (!response.ok) {
-            const errorBody = await response.text();
-            console.error("Error response:", errorBody);
-            throw new Error(`Problem with the change of the avatar (${response.status}): ${errorBody}`);
+            console.log("Error in update_avatar:", response);
+            return false;
         }
         return true;
     } catch (error) {
         console.log("Error in update_avatar:", error);
-        throw error;
+        return false;
     }
 }
 
