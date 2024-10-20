@@ -40,11 +40,10 @@
 						const timeDifference = currentTime.getTime() - lastAccessTime.getTime();
 						const minutesDifference = Math.floor(timeDifference / (1000 * 60));
 
-						if (minutesDifference < 1) {
+						if (minutesDifference < 1 || new_pending.user.username === 'bot') {
 							connected = true;
 						}
-
-						formattedLastAccess = "Vu il y a " + minutesDifference + " minute" + (minutesDifference > 1 ? "s" : "");
+						formattedLastAccess = minutesDifference + "m";
 					} else {
 						connected = true;
 					}
