@@ -22,7 +22,6 @@
 </template>
 
 <script setup>
-	import { useAuthStore } from '@/stores/auth';
 	import { ref, computed } from 'vue';
 
 	import franceFlag from '@/assets/france.svg';
@@ -34,8 +33,6 @@
 	import sunIcon from '@/assets/sun.svg';
 	import moonIcon from '@/assets/moon.svg';
 
-	const authStore = useAuthStore();
-	
 	const isLightMode = ref(false);
 
 	const flagImages = {

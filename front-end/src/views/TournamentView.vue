@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-	import { ref, provide } from 'vue';
+	import { ref } from 'vue';
 	import { user_is_in_tournament, get_me } from '@/jspong/main.js';
 	import { useAuthStore } from '@/stores/auth.js';
 	import { useGameStore } from '@/stores/game.js';

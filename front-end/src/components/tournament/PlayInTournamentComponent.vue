@@ -11,7 +11,7 @@
 
 <script setup>
 	import { ref } from 'vue';
-	import { get_tournament_by_id, get_user_by_id, get_me, get_all_matches_of_tournament, user_is_in_tournament} from '@/jspong/main.js';
+	import { get_tournament_by_id, get_user_by_id, get_me, get_all_matches_of_tournament} from '@/jspong/main.js';
 	import { useAuthStore } from '@/stores/auth.js';
 	import { useGameStore } from '@/stores/game';
 	import router from '@/router';
